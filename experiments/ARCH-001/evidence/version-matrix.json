@@ -1,0 +1,150 @@
+{
+  "capturedAt": "2026-10-30T08:33:00.540Z",
+  "selectionDate": "2026-10-30",
+  "runtime": {
+    "node": "v24.22.1",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "supportSources": {
+    "node": "https://nodejs.org/en/about/previous-releases",
+    "nextStandalone": "https://nextjs.org/docs/app/api-reference/config/next-config-js/output",
+    "pnpmBuildPermissions": "https://pnpm.io/settings/build#allowbuilds"
+  },
+  "selectionBasis": "Exact stable versions selected from npm registry on the selection date; peer ranges checked with pnpm peers check and the production build/test suite. Node 24 is the owner-provided supported LTS runtime, not a claim that Node 26 was unavailable.",
+  "direct": [
+    {
+      "name": "next",
+      "version": "16.4.3",
+      "releasedAt": "2026-10-23T13:40:24.922Z",
+      "registryLatestAtCapture": "16.4.3",
+      "declaredNodeEngines": ">=20.9.0"
+    },
+    {
+      "name": "react",
+      "version": "19.3.1",
+      "releasedAt": "2026-10-14T16:47:15.290Z",
+      "registryLatestAtCapture": "19.3.1",
+      "declaredNodeEngines": ">=0.10.0"
+    },
+    {
+      "name": "react-dom",
+      "version": "19.3.1",
+      "releasedAt": "2026-10-14T16:49:10.081Z",
+      "registryLatestAtCapture": "19.3.1",
+      "declaredNodeEngines": null
+    },
+    {
+      "name": "@nestjs/common",
+      "version": "12.3.2",
+      "releasedAt": "2026-10-27T12:03:22.778Z",
+      "registryLatestAtCapture": "12.3.2",
+      "declaredNodeEngines": null
+    },
+    {
+      "name": "@nestjs/core",
+      "version": "12.3.2",
+      "releasedAt": "2026-10-27T12:03:26.824Z",
+      "registryLatestAtCapture": "12.3.2",
+      "declaredNodeEngines": ">= 20"
+    },
+    {
+      "name": "@nestjs/platform-express",
+      "version": "12.3.2",
+      "releasedAt": "2026-10-27T12:03:10.748Z",
+      "registryLatestAtCapture": "12.3.2",
+      "declaredNodeEngines": null
+    },
+    {
+      "name": "rxjs",
+      "version": "7.8.2",
+      "releasedAt": "2025-02-22T03:00:42.711Z",
+      "registryLatestAtCapture": "7.8.2",
+      "declaredNodeEngines": null
+    },
+    {
+      "name": "reflect-metadata",
+      "version": "0.2.2",
+      "releasedAt": "2024-03-29T01:38:46.117Z",
+      "registryLatestAtCapture": "0.2.2",
+      "declaredNodeEngines": null
+    },
+    {
+      "name": "typescript",
+      "version": "7.0.2",
+      "releasedAt": "2026-07-08T15:55:18.431Z",
+      "registryLatestAtCapture": "7.0.2",
+      "declaredNodeEngines": ">=16.20.0"
+    },
+    {
+      "name": "pnpm",
+      "version": "11.23.0",
+      "releasedAt": "2026-08-23T14:56:00.221Z",
+      "registryLatestAtCapture": "12.16.1",
+      "declaredNodeEngines": ">=22.13"
+    },
+    {
+      "name": "tsx",
+      "version": "4.23.15",
+      "releasedAt": "2026-09-20T07:22:17.792Z",
+      "registryLatestAtCapture": "4.23.15",
+      "declaredNodeEngines": ">=18.0.0"
+    },
+    {
+      "name": "marked",
+      "version": "18.1.2",
+      "releasedAt": "2026-10-26T14:54:49.753Z",
+      "registryLatestAtCapture": "18.1.2",
+      "declaredNodeEngines": ">= 20"
+    },
+    {
+      "name": "gray-matter",
+      "version": "4.0.3",
+      "releasedAt": "2021-04-24T03:06:31.539Z",
+      "registryLatestAtCapture": "4.0.3",
+      "declaredNodeEngines": ">=6.0"
+    },
+    {
+      "name": "sanitize-html",
+      "version": "2.18.1",
+      "releasedAt": "2026-10-14T18:15:44.574Z",
+      "registryLatestAtCapture": "2.18.1",
+      "declaredNodeEngines": ">=22.12.0"
+    },
+    {
+      "name": "@types/node",
+      "version": "24.19.2",
+      "releasedAt": "2026-10-09T18:44:25.189Z",
+      "registryLatestAtCapture": "26.6.6",
+      "declaredNodeEngines": null
+    },
+    {
+      "name": "@types/react",
+      "version": "19.3.0",
+      "releasedAt": "2026-09-09T18:08:49.750Z",
+      "registryLatestAtCapture": "19.3.0",
+      "declaredNodeEngines": null
+    },
+    {
+      "name": "@types/react-dom",
+      "version": "19.3.0",
+      "releasedAt": "2026-09-09T18:07:51.886Z",
+      "registryLatestAtCapture": "19.3.0",
+      "declaredNodeEngines": null
+    },
+    {
+      "name": "@types/express",
+      "version": "5.0.6",
+      "releasedAt": "2025-12-01T20:35:51.488Z",
+      "registryLatestAtCapture": "5.0.6",
+      "declaredNodeEngines": null
+    },
+    {
+      "name": "@types/sanitize-html",
+      "version": "2.16.2",
+      "releasedAt": "2026-09-28T23:36:43.291Z",
+      "registryLatestAtCapture": "2.16.2",
+      "declaredNodeEngines": null
+    }
+  ]
+}

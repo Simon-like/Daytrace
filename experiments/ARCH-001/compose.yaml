@@ -1,0 +1,23 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    environment:
+      CONTENT_ROOT: /data/content
+      HOST: 0.0.0.0
+      PORT: 4101
+    volumes:
+      - ./content:/data/content:ro
+    expose: ["4101"]
+  site:
+    build:
+      context: .
+      dockerfile: Dockerfile.site
+    environment:
+      API_INTERNAL_ORIGIN: http://api:4101
+      PORT: 3000
+    depends_on:
+      - api
+    ports:
+      - "4100:3000"

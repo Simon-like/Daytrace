@@ -1,0 +1,9 @@
+node_modules/
+.pnpm-store/
+.tools/
+artifacts/
+evidence/*.log
+apps/*/dist/
+apps/site/.next/
+*.tsbuildinfo
+.DS_Store

@@ -1,0 +1,24 @@
+{
+  "name": "@daytrace/arch-001",
+  "private": true,
+  "packageManager": "pnpm@11.23.0",
+  "engines": {
+    "node": "24.22.1"
+  },
+  "scripts": {
+    "build:contracts": "pnpm --filter @daytrace/arch-contracts build",
+    "build:api": "pnpm run build:contracts && pnpm --filter @daytrace/arch-api build",
+    "build:site": "pnpm run build:contracts && pnpm --filter @daytrace/arch-site build",
+    "build": "pnpm run build:api && pnpm run build:site && node scripts/prepare-standalone.mjs",
+    "typecheck": "pnpm run build:contracts && pnpm --filter @daytrace/arch-api typecheck && pnpm --filter @daytrace/arch-site typecheck",
+    "test:unit": "tsx --test apps/api/src/*.spec.ts packages/contracts/src/*.spec.ts",
+    "test:integration": "node scripts/verify.mjs",
+    "start": "node scripts/start.mjs",
+    "verify": "pnpm peers check && pnpm typecheck && pnpm test:unit && pnpm build && pnpm test:integration"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2"
+  }
+}

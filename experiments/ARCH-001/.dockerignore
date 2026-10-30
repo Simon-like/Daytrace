@@ -1,0 +1,8 @@
+node_modules
+.pnpm-store
+artifacts
+apps/*/dist
+apps/site/.next
+content/private
+evidence
+.git

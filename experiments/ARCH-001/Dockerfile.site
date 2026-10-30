@@ -1,0 +1,20 @@
+FROM node:24.22.1-bookworm-slim AS build
+WORKDIR /app
+RUN npm install -g pnpm@11.23.0
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml tsconfig.base.json ./
+COPY packages/contracts ./packages/contracts
+COPY apps/site ./apps/site
+COPY apps/api/package.json ./apps/api/package.json
+COPY scripts/prepare-standalone.mjs ./scripts/prepare-standalone.mjs
+RUN pnpm install --frozen-lockfile
+RUN pnpm --filter @daytrace/arch-contracts build && pnpm --filter @daytrace/arch-site build
+RUN node scripts/prepare-standalone.mjs
+
+FROM node:24.22.1-bookworm-slim AS runtime
+ENV NODE_ENV=production HOSTNAME=0.0.0.0 PORT=3000
+WORKDIR /app
+COPY --from=build /app/apps/site/.next/standalone ./
+USER node
+WORKDIR /app/apps/site
+EXPOSE 3000
+CMD ["node", "server.js"]

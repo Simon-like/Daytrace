@@ -1,0 +1,20 @@
+{
+  "capturedAt": "2026-10-30T08:28:17.690Z",
+  "host": {
+    "node": "v24.22.1",
+    "platform": "darwin",
+    "arch": "arm64",
+    "corepack": "unavailable: command not found",
+    "projectPnpm": "11.23.0"
+  },
+  "docker": {
+    "status": "not-verified",
+    "checkedCommand": "docker version --format '{{.Server.Version}}'",
+    "observedError": "failed to connect to the docker API; docker.sock does not exist",
+    "imageBuild": "not-run",
+    "composeRun": "not-run"
+  },
+  "realIphoneSafari": "not-run",
+  "realUserWebVitals": "not-run",
+  "independentReview": "not-run"
+}

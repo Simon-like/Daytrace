@@ -1,0 +1,25 @@
+✔ public content is available without identity and never contains private canary (14.967458ms)
+✔ guest cannot read private record through Nest or Next (2.686125ms)
+✔ non-owner synthetic identity is rejected without a session cookie (1.556292ms)
+✔ owner cookie uses host-only HttpOnly Secure SameSite=Lax attributes (1.37475ms)
+✔ owner positive control can read private SSR without cookie disclosure (1.908916ms)
+✔ Next forwards only the session cookie to fixed Nest upstream (1.667125ms)
+✔ idle expiration blocks owner search and private object (1.549708ms)
+✔ absolute expiration cannot be extended by activity (5.274125ms)
+✔ logout enforces Origin and CSRF, revokes server session, and clears cookie (2.56375ms)
+✔ revoke-all invalidates every synthetic owner session (1.734167ms)
+✔ tampered session token is denied without revealing record existence (0.697ms)
+✔ login rotates the session identifier and revokes the presented session (1.183459ms)
+✔ public and owner search indexes are isolated and missing visibility is quarantined (1.226042ms)
+✔ private asset requires a live owner session (2.083333ms)
+✔ asset path escape and encoded separators cannot reach outside canary (2.763042ms)
+✔ public cache can be shared while private responses always bypass it (3.416834ms)
+✔ private errors and public cache errors are generic and not cacheable (1.102625ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 569.908083

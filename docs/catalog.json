@@ -3,6 +3,30 @@
   "updated": "2026-10-30",
   "documents": [
     {
+      "id": "context",
+      "title": "上下文管理入口",
+      "path": "docs/context/README.md",
+      "purpose": "稳定共识、当前工作与任务接力",
+      "status": "active",
+      "owner_role": "协调与集成"
+    },
+    {
+      "id": "current-context",
+      "title": "当前工作上下文",
+      "path": "docs/context/当前工作上下文.md",
+      "purpose": "最新用户要求与本轮边界",
+      "status": "active",
+      "owner_role": "集成"
+    },
+    {
+      "id": "task-context",
+      "title": "任务上下文模板",
+      "path": "docs/context/任务上下文模板.md",
+      "purpose": "独立任务的最小接力包",
+      "status": "reference",
+      "owner_role": "各Agent"
+    },
+    {
       "id": "product",
       "title": "产品需求与立项",
       "path": "docs/product/PRD-v1.0.md",
@@ -62,7 +86,7 @@
       "id": "tech",
       "title": "技术选型与研发路径",
       "path": "docs/architecture/技术选型与研发路径.md",
-      "purpose": "官方依据、推荐、PoC和迭代顺序",
+      "purpose": "未共同讨论的候选笔记，当前不执行",
       "status": "proposed",
       "owner_role": "架构与安全"
     },

@@ -1,6 +1,6 @@
 # Project Collaboration Foundation Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** 建立可交接、可校验的多Agent项目结构和文档/工程知识/个人内容分层，并准备技术选型与迭代任务。
 
@@ -32,25 +32,27 @@
 
 ## Task 1：目录与文档迁移
 
-- [ ] 建立上述目录和各边界README/AGENTS，保留design下既有可运行资源。
-- [ ] 把研究全文移到docs/research、旧草案到docs/archive；按新目录重算文内相对链接；旧路径改为清楚的转向入口。
-- [ ] 建立catalog.json，并以生成块维护docs/README目录，记录唯一权威位置。
+- [x] 建立上述目录和各边界README/AGENTS，保留design下既有可运行资源。
+- [x] 把研究全文移到docs/research、旧草案到docs/archive；按新目录重算文内相对链接；旧路径改为清楚的转向入口。
+- [x] 建立catalog.json，并以生成块维护docs/README目录，记录唯一权威位置。
 
 ## Task 2：协作队列与真实约束
 
-- [ ] 使用任务ID、依赖、owner、允许写入路径、状态和完成证据建立board.json和任务卡。
-- [ ] 实现单checkout文件锁及原子替换；认领已有owner或依赖未完成时失败；任务推进到done必须先有交付/评审证据。
-- [ ] 测试两个并发认领只有一个成功，依赖未就绪拒绝、非法状态拒绝、路径边界拒绝。
+- [x] 使用任务ID、依赖、owner、允许写入路径、状态和完成证据建立board.json和任务卡。
+- [x] 实现单checkout文件锁及原子替换；认领已有owner或依赖未完成时失败；任务推进到done必须先有交付/评审证据。
+- [x] 测试两个并发认领只有一个成功，依赖未就绪拒绝、非法状态拒绝、路径边界拒绝。
 
 ## Task 3：技术选择与研发任务
 
-- [ ] 以官方资料对比Astro、Nuxt Content、Next.js；明确推荐、边界、待验证与不自动安装。
-- [ ] 建立ARCH-001/CONTENT-001/SECURITY-001等独立任务，设置PoC范围及技术冻结门槛。
-- [ ] 以公开Markdown垂直切片、私密边界、页面迁移、真机与发布串接既有M1–M5。
+- [x] 以官方资料对比Astro、Nuxt Content、Next.js；明确推荐、边界、待验证与不自动安装。
+- [x] 建立ARCH-001/CONTENT-001/SECURITY-001等独立任务，设置PoC范围及技术冻结门槛。
+- [x] 以公开Markdown垂直切片、私密边界、页面迁移、真机与发布串接既有M1–M5。
 
 ## Task 4：检查、版本与交接
 
-- [ ] 执行 `python3 scripts/project_check.py --write-index` 与只读检查。
-- [ ] 执行 `python3 -m unittest discover -s tests/foundation -v`。
-- [ ] 初始化本地Git，核实忽略私密/凭据/依赖；在有可用作者身份时建立本地基线提交，未推送远端。
-- [ ] 更新记忆、进度、资产入口与结构报告，明确正式技术栈仍待验证冻结。
+- [x] 执行 `python3 scripts/project_check.py --write-index` 与只读检查。
+- [x] 执行 `python3 -m unittest discover -s tests/foundation -v`。
+- [x] 初始化本地Git，核实忽略私密/凭据/依赖；在有可用作者身份时建立本地基线提交，未推送远端。
+- [x] 更新记忆、进度、资产入口与结构报告，明确正式技术栈仍待验证冻结。
+
+本轮用户澄清：只完成文档结构与上下文。技术资料和任务作为未讨论占位，不执行PoC或正式安装。

@@ -2,13 +2,14 @@
 
 让技术实践、生活经验与个人感想容易留下、方便回看，看到自己的变化。
 
-当前：D/D²与手写风格已确认，模块原型先收敛，M1进入技术选型准备。正式内容、身份与私密链路尚未实现。
+当前：D/D²与手写风格已确认，模块原型先收敛；本轮只定文档结构与上下文管理，技术选型后续共同讨论。正式内容、身份与私密链路尚未实现。
 
 ## 从这里开始
 
-- Agent接手：[协作规则](AGENTS.md) → [项目记忆](docs/项目记忆.md) → [中央任务队列](coordination/board.json)。
+- Agent接手：[当前工作](docs/context/当前工作上下文.md) → [协作规则](AGENTS.md) → [项目记忆](docs/项目记忆.md) → 已授权任务。
+- 上下文怎么组织：[上下文入口](docs/context/README.md)。
 - 看文档：[文档目录](docs/README.md)，按产品、设计、架构、研究、报告查找。
-- 定技术：[技术选型与研发路径](docs/architecture/技术选型与研发路径.md)，目前优先验证Astro，尚未冻结。
+- 后续共同定技术：[候选笔记](docs/architecture/技术选型与研发路径.md)，未讨论、未冻结，本轮不执行。
 - 看进度：[阶段看板](docs/project/项目进度.md)与[路线图](docs/project/项目路线图与阶段管理.md)。
 - 看页面：[模块稿运行入口](design/contributions/2026-10-30-codex-modules-v1/README.md)与[资产索引](design/资产索引.md)。
 

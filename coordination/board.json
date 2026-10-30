@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updated": "2026-10-30",
+  "updated": "2026-10-30T06:58:20.072893+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
       "title": "协作结构与文档编排",
-      "status": "active",
+      "status": "done",
       "owner": "codex-current-chat",
       "depends_on": [],
       "allowed_paths": [
@@ -26,7 +26,11 @@
         "design/资产索引.md"
       ],
       "card": "coordination/tasks/FOUND-001.md",
-      "evidence": []
+      "evidence": [
+        "coordination/handoffs/FOUND-001-codex-current-chat.md"
+      ],
+      "review": "coordination/reviews/FOUND-001-self-review.md",
+      "reviewer": "codex-self-review"
     },
     {
       "id": "ARCH-001",
@@ -181,5 +185,25 @@
       "evidence": []
     }
   ],
-  "history": []
+  "history": [
+    {
+      "at": "2026-10-30T06:58:19.935764+00:00",
+      "task": "FOUND-001",
+      "action": "submit",
+      "actor": "codex-current-chat",
+      "evidence": "coordination/handoffs/FOUND-001-codex-current-chat.md"
+    },
+    {
+      "at": "2026-10-30T06:58:20.072893+00:00",
+      "task": "FOUND-001",
+      "action": "complete",
+      "actor": "codex-self-review",
+      "evidence": "coordination/reviews/FOUND-001-self-review.md"
+    }
+  ],
+  "dispatch_policy": {
+    "mode": "manual",
+    "current_scope": "documentation-and-context",
+    "technical_tasks": "queued is registration only; wait for user discussion and actual dispatch"
+  }
 }

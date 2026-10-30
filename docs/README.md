@@ -2,9 +2,12 @@
 
 先按问题找权威来源，不必读取所有历史资料。
 
+**当前先看 [上下文入口](context/README.md) 和 [当前工作](context/当前工作上下文.md)。本轮只定文档结构，技术选型留待共同讨论。**
+
 - 接手：根AGENTS → 项目记忆 → 已认领任务 → 相关PRD/设计/ADR。
 - 建什么：product；怎么落地：design与architecture；做到哪：project。
 - 工具和资料：research；已被替代的草案：archive。
+- 稳定共识、当前工作与任务接力如何衔接：context，不重复维护需求。
 - 可复用经验：根knowledge；个人站点正文：根content；原始视觉和原型：根design。
 
 以下表格由catalog.json生成，更新目录后运行 `python3 scripts/project_check.py --write-index`。目录块不要手改。
@@ -12,6 +15,9 @@
 <!-- catalog:start -->
 | 文档 | 用途 | 状态 | 维护职责 |
 | --- | --- | --- | --- |
+| [上下文管理入口](context/README.md) | 稳定共识、当前工作与任务接力 | active | 协调与集成 |
+| [当前工作上下文](context/当前工作上下文.md) | 最新用户要求与本轮边界 | active | 集成 |
+| [任务上下文模板](context/任务上下文模板.md) | 独立任务的最小接力包 | reference | 各Agent |
 | [产品需求与立项](product/PRD-v1.0.md) | 范围、用户流程和18项P0要求 | baseline | 产品与集成 |
 | [正式验收矩阵](product/验收矩阵-v1.0.md) | AC与非功能测试门槛 | baseline | 测试与集成 |
 | [视觉风格基线](../design/视觉风格基线-v1.0.md) | D/D²、手写与视觉约束 | baseline | 设计 |
@@ -19,7 +25,7 @@
 | [项目结构与文档治理](architecture/项目结构与文档治理.md) | 目录、单一事实来源和维护规则 | active | 集成 |
 | [ADR-0001结构决策](architecture/decisions/ADR-0001-项目分层与协作边界.md) | 仓库组织与协作边界 | accepted | 集成 |
 | [ADR-0002技术候选](architecture/decisions/ADR-0002-技术路线候选.md) | 技术路线状态与冻结门槛 | proposed | 架构 |
-| [技术选型与研发路径](architecture/技术选型与研发路径.md) | 官方依据、推荐、PoC和迭代顺序 | proposed | 架构与安全 |
+| [技术选型与研发路径](architecture/技术选型与研发路径.md) | 未共同讨论的候选笔记，当前不执行 | proposed | 架构与安全 |
 | [多Agent协作入口](../coordination/README.md) | 认领、交接、评审与合并 | active | 协调与集成 |
 | [工程知识库](../knowledge/README.md) | 可复用经验与操作流程 | active | 各模块与集成 |
 | [个人内容库](../content/README.md) | 站点正文、公开私密与样本隔离 | active | 内容与安全 |

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://daytrace.local/contracts/frontmatter-v1.schema.json",
+  "title": "Daytrace Markdown frontmatter v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "type", "title", "slug", "occurredOn", "updatedAt", "revision", "status", "visibility"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "id": {"type": "string", "pattern": "^rec_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"},
+    "type": {"enum": ["engineering", "recipe", "reflection"]},
+    "title": {"type": "string", "minLength": 1, "maxLength": 120},
+    "slug": {"type": "string", "maxLength": 80, "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "oldSlugs": {"type": "array", "maxItems": 16, "items": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"}, "default": []},
+    "occurredOn": {"type": ["string", "null"], "format": "date"},
+    "updatedAt": {"type": "string", "format": "date-time"},
+    "revision": {"type": "integer", "minimum": 1},
+    "tags": {"type": "array", "maxItems": 16, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 32}, "default": []},
+    "summary": {"type": ["string", "null"], "maxLength": 280, "default": null},
+    "status": {"enum": ["draft", "published", "archived"]},
+    "visibility": {"enum": ["public", "private"]},
+    "attachments": {
+      "type": "array",
+      "maxItems": 100,
+      "default": [],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "path", "mediaType"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^ast_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"},
+          "path": {"type": "string", "minLength": 1},
+          "mediaType": {"enum": ["image/png", "image/jpeg", "image/webp", "image/gif", "application/pdf", "text/plain"]},
+          "title": {"type": "string", "minLength": 1, "maxLength": 120},
+          "width": {"type": "integer", "minimum": 1},
+          "height": {"type": "integer", "minimum": 1}
+        }
+      }
+    }
+  }
+}

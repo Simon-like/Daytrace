@@ -2,14 +2,14 @@
 
 让技术实践、生活经验与个人感想容易留下、方便回看，看到自己的变化。
 
-当前：D/D²与手写风格已确认，模块原型先收敛；本轮只定文档结构与上下文管理，技术选型后续共同讨论。正式内容、身份与私密链路尚未实现。
+当前：D/D²与手写风格已确认，模块原型先收敛；后续采用多Agent协作开发，技术选型仍由用户与项目共同讨论。正式内容、身份与私密链路尚未实现。
 
 ## 从这里开始
 
 - Agent接手：[当前工作](docs/context/当前工作上下文.md) → [协作规则](AGENTS.md) → [项目记忆](docs/项目记忆.md) → 已授权任务。
 - 上下文怎么组织：[上下文入口](docs/context/README.md)。
 - 看文档：[文档目录](docs/README.md)，按产品、设计、架构、研究、报告查找。
-- 后续共同定技术：[候选笔记](docs/architecture/技术选型与研发路径.md)，未讨论、未冻结，本轮不执行。
+- 后续共同定技术：[候选笔记](docs/architecture/技术选型与研发路径.md)，未讨论、未冻结，不因队列登记自动执行。
 - 看进度：[阶段看板](docs/project/项目进度.md)与[路线图](docs/project/项目路线图与阶段管理.md)。
 - 看页面：[模块稿运行入口](design/contributions/2026-10-30-codex-modules-v1/README.md)与[资产索引](design/资产索引.md)。
 
@@ -29,7 +29,7 @@ templates/      个人内容整理模板
 ops/            后续发布、备份和恢复文档
 ```
 
-这是一套协作目录，不表示已安装monorepo构建工具、选定框架或启动多个Agent。正式应用先保持一个，不为了分工过早拆服务/包。
+这是一套协作目录，不表示已安装monorepo构建工具、选定框架或已启动多个Agent。正式应用先保持一个，不为了分工过早拆服务/包。
 
 ## 常用入口
 
@@ -41,4 +41,4 @@ python3 scripts/task_claim.py claim ARCH-001 agent-name
 
 任务先读卡、认领再写入；规范见 [coordination](coordination/README.md)。更新文档目录使用 `python3 scripts/project_check.py --write-index`，普通校验不改文件。
 
-内容、依赖、构建、凭据分别管理，私密内容不进普通Git。当前版本操作只在本地，远端、发布和私密备份另行落实。其他Agent通过同一项目或实际传递的副本接手，不自动继承聊天。
+内容、依赖、构建、凭据分别管理，私密内容不进普通Git。共同版本基线为 `origin/main`，远端是 `git@github.com:Simon-like/Daytrace.git`；正式并行任务从最新主分支建立独立分支或worktree。发布和私密备份仍另行落实，其他Agent不自动继承聊天。

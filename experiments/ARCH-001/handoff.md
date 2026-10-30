@@ -46,6 +46,8 @@ pnpm 12.16.1 在本机 registry 组合下反复警告无法记录 packageManager
 
 环境：macOS arm64、Node 24.22.1、生产构建、真实 Nest 进程 + Next standalone 进程。
 
+复现性修复：旧 `pnpm-lock.yaml` 含 103 个内网 HTTP tarball URL，仅把 `.npmrc` 切到官方 registry 不会重写这些既有条目；已有 `node_modules` 时，即使删除锁文件也可能继续沿用旧安装状态。本次移除旧锁和各 workspace 依赖目录，用固定 pnpm 11.23.0 从 `https://registry.npmjs.org/` 全量重建为仅含 integrity 的解析记录，再删除 `.tools`、`.pnpm-store`、所有依赖目录和构建产物，原样执行 `bootstrap.sh && pnpm.sh verify`。冻结安装重新下载 161 个包，供应链策略检查通过；未放宽或关闭任何策略。旧锁在本机是否立即报错会受供应链验证缓存和内网可达性影响，但旧 URL 与官方元数据不一致是确定的锁文件缺陷。
+
 - frozen lockfile 安装：通过；`pnpm peers check`：无问题。
 - TypeScript：通过；Node test：6/6 通过。
 - Next 生产构建：`/` 静态，`_not-found` 静态，`/records/[slug]` 动态 SSR。
@@ -53,18 +55,20 @@ pnpm 12.16.1 在本机 registry 组合下反复警告无法记录 packageManager
 - 私密 API/SSR：404；与不存在记录使用相同错误码和消息；无正文/标题 canary。
 - 错误定位：非法日期返回 422、`CONTENT_INVALID`、`content/public/invalid-arch-sample.md`、`date` 和 requestId，无 stack 字段。
 - 清洗单测：TypeScript 合成输入中的 script 与 javascript URL 被移除，安全文本保留。
-- canary 扫描：12 个客户端静态文件、1291 个 standalone 文件，无合成私密正文/标题。
+- canary 扫描：12 个客户端静态文件、1241 个 standalone 文件，无合成私密正文/标题。
 - standalone：共享契约和版本标记位于 `bundled-server-chunk`，静态资源复制后真实 SSR 成功；不是仅靠检查文件存在。
 
 预算方法：从生产 SSR HTML 提取全部 script 和 stylesheet URL，以 `Accept-Encoding: gzip` 发真实 HTTP 请求；gzip 大小由实际响应体重算，传输大小按线上响应体字节累计。没有使用 Next 构建摘要代替 gzip。
 
 | 指标 | 实测 | 预算 | 结论 |
 | --- | ---: | ---: | --- |
-| 必要 JS | 178389 B / 174.21 KiB gzip，8 请求 | 81920 B / 80 KiB | **失败，超出 94.21 KiB** |
-| 首屏必要传输 | 181563 B / 177.31 KiB | 819200 B / 800 KiB | 通过，余量 622.69 KiB |
-| HTML 传输 | 2622 B gzip | 包含于首屏 | 实测 |
+| 必要 JS | 178358 B / 174.18 KiB gzip，8 请求 | 81920 B / 80 KiB | **失败，超出 94.18 KiB** |
+| 首屏必要传输 | 181537 B / 177.28 KiB | 819200 B / 800 KiB | 通过，余量 622.72 KiB |
+| HTML 传输 | 2627 B gzip | 包含于首屏 | 实测 |
 | CSS 传输 | 552 B identity | 包含于首屏 | 实测 |
 | 字体 / 图片 | 0 请求 / 0 B | 包含于首屏 | 仅因样本使用系统字体、无图 |
+
+相较修复前证据，必要 JS 减少 31 B（0.03 KiB），首屏必要传输减少 26 B（0.03 KiB）；两项预算结论均无变化。
 
 ## 未验证
 
@@ -75,7 +79,7 @@ pnpm 12.16.1 在本机 registry 组合下反复警告无法记录 packageManager
 
 ## 风险与 ENGINE 注意点
 
-1. **JS 预算是未解决门槛。** 即使页面没有自定义 Client Component，Next 16.4.3 基线仍为 174.21 KiB gzip。ENGINE/QA 必须保留同一测量方法，分析框架/runtime/navigation chunk；不能宣称 NFR-01 通过或静默提高 80 KiB。若需例外，记录页面、理由和评审结论。
+1. **JS 预算是未解决门槛。** 即使页面没有自定义 Client Component，Next 16.4.3 基线仍为 174.18 KiB gzip。ENGINE/QA 必须保留同一测量方法，分析框架/runtime/navigation chunk；不能宣称 NFR-01 通过或静默提高 80 KiB。若需例外，记录页面、理由和评审结论。
 2. TypeScript 7 不再接受 `moduleResolution: "Node"` 对应的 node10；本样本共享包/API 使用 `NodeNext`，包 `type: commonjs`，构建产物仍为 CommonJS。
 3. pnpm 11+ 使用 `pnpm-workspace.yaml` 的 `allowBuilds`。这里只允许 esbuild 执行构建脚本，明确拒绝不需要的 watcher/bufferutil/utf-8-validate；不要改成全量放行。
 4. `outputFileTracingRoot` 指向实验 monorepo 根。Turbopack 将 workspace 契约内联进服务端 chunk，未复制独立 `packages/contracts/dist`；验证应检查实际 chunk 和运行时行为，不要硬编码 hash 或假设包路径。

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-30T08:37:04.987Z",
+  "generatedAt": "2026-10-30T08:49:56.451Z",
   "environment": {
     "node": "v24.22.1",
     "platform": "darwin",
@@ -17,35 +17,35 @@
     "publicArtifactPrivateCanaryScan": "pass"
   },
   "scannedClientFiles": 12,
-  "scannedStandaloneFiles": 1293,
+  "scannedStandaloneFiles": 1241,
   "budget": {
     "methodology": "Production standalone HTTP responses; gzip sizes from actual response bodies; transfer bytes counted on the wire with Accept-Encoding: gzip. System fonts and no article images, so both contribute zero requests/bytes in this baseline.",
     "html": {
       "url": "http://127.0.0.1:4100/records/public-arch-sample",
-      "transferBytes": 2622,
-      "gzipBytes": 2198,
+      "transferBytes": 2627,
+      "gzipBytes": 2203,
       "encoding": "gzip",
       "status": 200
     },
     "scripts": [
       {
-        "url": "http://127.0.0.1:4100/_next/static/chunks/31ay6xeav4prc.js",
-        "transferBytes": 7721,
-        "gzipBytes": 7721,
+        "url": "http://127.0.0.1:4100/_next/static/chunks/2p7fkjq752zk3.js",
+        "transferBytes": 7665,
+        "gzipBytes": 7665,
         "encoding": "gzip",
         "status": 200
       },
       {
-        "url": "http://127.0.0.1:4100/_next/static/chunks/1ziv92pp28i7-.js",
-        "transferBytes": 71965,
-        "gzipBytes": 71965,
+        "url": "http://127.0.0.1:4100/_next/static/chunks/1_glfrvfa_qbx.js",
+        "transferBytes": 71975,
+        "gzipBytes": 71975,
         "encoding": "gzip",
         "status": 200
       },
       {
-        "url": "http://127.0.0.1:4100/_next/static/chunks/2dxq54h173_af.js",
-        "transferBytes": 46351,
-        "gzipBytes": 46351,
+        "url": "http://127.0.0.1:4100/_next/static/chunks/2j7gyxdod6l97.js",
+        "transferBytes": 46355,
+        "gzipBytes": 46355,
         "encoding": "gzip",
         "status": 200
       },
@@ -57,16 +57,16 @@
         "status": 200
       },
       {
-        "url": "http://127.0.0.1:4100/_next/static/chunks/0k4ik-dv5z_m0.js",
-        "transferBytes": 3504,
-        "gzipBytes": 3504,
+        "url": "http://127.0.0.1:4100/_next/static/chunks/43r7ux6sqse2m.js",
+        "transferBytes": 3513,
+        "gzipBytes": 3513,
         "encoding": "gzip",
         "status": 200
       },
       {
-        "url": "http://127.0.0.1:4100/_next/static/chunks/1e8a8hcze5awk.js",
-        "transferBytes": 3308,
-        "gzipBytes": 3308,
+        "url": "http://127.0.0.1:4100/_next/static/chunks/14zzlkg8n5qe5.js",
+        "transferBytes": 3309,
+        "gzipBytes": 3309,
         "encoding": "gzip",
         "status": 200
       },
@@ -78,9 +78,9 @@
         "status": 200
       },
       {
-        "url": "http://127.0.0.1:4100/_next/static/chunks/1doivaa62exhq.js",
-        "transferBytes": 1973,
-        "gzipBytes": 1973,
+        "url": "http://127.0.0.1:4100/_next/static/chunks/3ftls9qex4y8f.js",
+        "transferBytes": 1974,
+        "gzipBytes": 1974,
         "encoding": "gzip",
         "status": 200
       }
@@ -96,15 +96,15 @@
     ],
     "fontRequestCount": 0,
     "imageRequestCount": 0,
-    "necessaryJsGzipBytes": 178389,
-    "necessaryJsGzipKiB": 174.21,
+    "necessaryJsGzipBytes": 178358,
+    "necessaryJsGzipKiB": 174.18,
     "necessaryJsBudgetKiB": 80,
-    "necessaryJsDeltaKiB": 94.21,
+    "necessaryJsDeltaKiB": 94.18,
     "necessaryJsWithinBudget": false,
-    "firstScreenTransferBytes": 181563,
-    "firstScreenTransferKiB": 177.31,
+    "firstScreenTransferBytes": 181537,
+    "firstScreenTransferKiB": 177.28,
     "firstScreenBudgetKiB": 800,
-    "firstScreenDeltaKiB": -622.69,
+    "firstScreenDeltaKiB": -622.72,
     "firstScreenWithinBudget": true
   },
   "container": {

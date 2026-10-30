@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-30T08:58:18.635247+00:00",
+  "updated": "2026-10-30T10:05:24.762670+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -96,7 +96,7 @@
     {
       "id": "ENGINE-001",
       "title": "正式工程与内容纵向切片",
-      "status": "active",
+      "status": "done",
       "owner": "kimi-engine",
       "depends_on": [
         "ARCH-001",
@@ -119,7 +119,11 @@
         "scripts/dev/"
       ],
       "card": "coordination/tasks/ENGINE-001.md",
-      "evidence": []
+      "evidence": [
+        "coordination/handoffs/ENGINE-001-kimi-engine.md"
+      ],
+      "review": "coordination/reviews/ENGINE-001-integration-review.md",
+      "reviewer": "kimi-integration"
     },
     {
       "id": "READER-001",
@@ -441,6 +445,20 @@
       "action": "claim",
       "actor": "kimi-engine",
       "evidence": null
+    },
+    {
+      "at": "2026-10-30T10:05:24.651306+00:00",
+      "task": "ENGINE-001",
+      "action": "submit",
+      "actor": "kimi-engine",
+      "evidence": "coordination/handoffs/ENGINE-001-kimi-engine.md"
+    },
+    {
+      "at": "2026-10-30T10:05:24.762670+00:00",
+      "task": "ENGINE-001",
+      "action": "complete",
+      "actor": "kimi-integration",
+      "evidence": "coordination/reviews/ENGINE-001-integration-review.md"
     }
   ],
   "dispatch_policy": {

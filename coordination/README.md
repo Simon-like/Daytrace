@@ -11,7 +11,7 @@
 
 角色是工作职责，不表示已启动或雇用多个Agent。FOUND-001、BRAND-001与BRAND-002已交付，后续任务处于队列，等待用户/协调者实际派发。
 
-最新范围：用户确认后续采用多Agent协作开发，并已建立GitHub共同版本基线。技术选型仍需共同沟通；queued仅表示登记占位，不是执行授权，ARCH/CONTENT/SECURITY等技术任务不能因为依赖满足就自动认领开工。
+最新范围：Next.js + NestJS + monorepo方向已确认，pnpm/TypeScript为实施基线；本轮更新架构与CI/CD交接，由用户另行调度其他Agent开发。先看[研发编排](../docs/architecture/研发交接与任务编排.md)。ARCH/CONTENT/SECURITY先行，ENGINE串行集成，功能与CICD随后并行；queued仍需实际派发/认领，生产权限不随开发任务授予。
 
 ## 任务流程
 

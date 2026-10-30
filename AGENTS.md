@@ -21,9 +21,9 @@
 
 M1进行中。MODULES-001七页面原型已交付，用户表示先这样；91组Chromium布局和10组交互检查不等于正式站点、真实Markdown、私密或iPhone真机验收。
 
-本轮已建立协作目录、中央任务队列、校验工具和Git基础。正式应用只有apps/site边界。技术推荐在ADR-0002，仍为proposed；不自行安装另一套正式框架。
+技术方向已由用户确认：Next.js（React）+ NestJS + monorepo；实施基线为TypeScript与pnpm workspace。正式工程尚未建立。先读docs/architecture/研发交接与任务编排.md；site负责页面，api负责业务/权限，禁止重复建设。
 
-最新用户要求：后续采用多Agent协作开发；本轮已接入GitHub远端并同步main。技术选型仍需共同沟通，技术任务仅占位，未经实际派发不认领执行，不依据候选建议自动启动PoC。
+最新用户要求：完善方向性技术架构和完整CI/CD，交由其他Agent开发。本轮仅文档，不运行开发Agent、不安装依赖或发布。ARCH-001验证固定路线兼容性，不再选择Astro；CI从ENGINE后与功能并行。按用户另行派发领取任务，生产授权独立。
 
 ## 写入与集成
 

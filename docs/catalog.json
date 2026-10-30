@@ -76,18 +76,18 @@
     },
     {
       "id": "adr2",
-      "title": "ADR-0002技术候选",
+      "title": "ADR-0002全栈技术方向",
       "path": "docs/architecture/decisions/ADR-0002-技术路线候选.md",
-      "purpose": "技术路线状态与冻结门槛",
-      "status": "proposed",
+      "purpose": "Next/Nest/monorepo决定、代价与待验证条件",
+      "status": "accepted",
       "owner_role": "架构"
     },
     {
       "id": "tech",
-      "title": "技术选型与研发路径",
+      "title": "全栈技术架构与研发路径",
       "path": "docs/architecture/技术选型与研发路径.md",
-      "purpose": "未共同讨论的候选笔记，当前不执行",
-      "status": "proposed",
+      "purpose": "模块/数据/渲染/部署边界与分阶段实施",
+      "status": "baseline",
       "owner_role": "架构与安全"
     },
     {
@@ -185,6 +185,38 @@
       "purpose": "保留早期需求与决策过程",
       "status": "historical",
       "owner_role": "集成"
+    },
+    {
+      "id": "adr3",
+      "title": "ADR-0003 CI/CD与发布治理",
+      "path": "docs/architecture/decisions/ADR-0003-CI-CD与发布治理.md",
+      "purpose": "可信构建、同产物晋级、权限与恢复决定",
+      "status": "accepted",
+      "owner_role": "架构与运维"
+    },
+    {
+      "id": "cicd",
+      "title": "CI/CD与运维建设方案",
+      "path": "docs/architecture/CI-CD与运维建设方案.md",
+      "purpose": "PR检查、环境、发布/回滚/恢复与实际门槛",
+      "status": "baseline",
+      "owner_role": "工程与运维"
+    },
+    {
+      "id": "dev-handoff",
+      "title": "研发交接与任务编排",
+      "path": "docs/architecture/研发交接与任务编排.md",
+      "purpose": "Agent入口、分工顺序、写入职责与完成定义",
+      "status": "active",
+      "owner_role": "协调与集成"
+    },
+    {
+      "id": "m1-architecture",
+      "title": "M1全栈架构与CI/CD报告",
+      "path": "docs/project/reports/M1-全栈架构与CI-CD建设-2026-10-30.md",
+      "purpose": "技术确认、文档交付、验证与未完成边界",
+      "status": "reference",
+      "owner_role": "架构与集成"
     }
   ]
 }

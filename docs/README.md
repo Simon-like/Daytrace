@@ -2,7 +2,7 @@
 
 先按问题找权威来源，不必读取所有历史资料。
 
-**当前先看 [上下文入口](context/README.md) 和 [当前工作](context/当前工作上下文.md)。本轮只定文档结构，技术选型留待共同讨论。**
+**当前先看 [上下文入口](context/README.md) 和 [当前工作](context/当前工作上下文.md)。Next.js + NestJS + pnpm monorepo方向已确定，开发先看[研发交接](architecture/研发交接与任务编排.md)和[CI/CD方案](architecture/CI-CD与运维建设方案.md)。**
 
 - 接手：根AGENTS → 项目记忆 → 已认领任务 → 相关PRD/设计/ADR。
 - 建什么：product；怎么落地：design与architecture；做到哪：project。
@@ -24,8 +24,8 @@
 | [模块页面设计](design/模块页面设计-v1.0.md) | 当前原型模块和响应式行为 | active | 设计与前端 |
 | [项目结构与文档治理](architecture/项目结构与文档治理.md) | 目录、单一事实来源和维护规则 | active | 集成 |
 | [ADR-0001结构决策](architecture/decisions/ADR-0001-项目分层与协作边界.md) | 仓库组织与协作边界 | accepted | 集成 |
-| [ADR-0002技术候选](architecture/decisions/ADR-0002-技术路线候选.md) | 技术路线状态与冻结门槛 | proposed | 架构 |
-| [技术选型与研发路径](architecture/技术选型与研发路径.md) | 未共同讨论的候选笔记，当前不执行 | proposed | 架构与安全 |
+| [ADR-0002全栈技术方向](architecture/decisions/ADR-0002-技术路线候选.md) | Next/Nest/monorepo决定、代价与待验证条件 | accepted | 架构 |
+| [全栈技术架构与研发路径](architecture/技术选型与研发路径.md) | 模块/数据/渲染/部署边界与分阶段实施 | baseline | 架构与安全 |
 | [多Agent协作入口](../coordination/README.md) | 认领、交接、评审与合并 | active | 协调与集成 |
 | [工程知识库](../knowledge/README.md) | 可复用经验与操作流程 | active | 各模块与集成 |
 | [个人内容库](../content/README.md) | 站点正文、公开私密与样本隔离 | active | 内容与安全 |
@@ -38,8 +38,12 @@
 | [移动Markdown调研](research/移动端Markdown阅读调研.md) | 原始资料与渲染候选 | reference | 架构 |
 | [设计资源调研](research/设计资源库.md) | 工具候选与资料来源 | reference | 设计 |
 | [历史需求草案](archive/产品需求草案-2026-10-30.md) | 保留早期需求与决策过程 | historical | 集成 |
+| [ADR-0003 CI/CD与发布治理](architecture/decisions/ADR-0003-CI-CD与发布治理.md) | 可信构建、同产物晋级、权限与恢复决定 | accepted | 架构与运维 |
+| [CI/CD与运维建设方案](architecture/CI-CD与运维建设方案.md) | PR检查、环境、发布/回滚/恢复与实际门槛 | baseline | 工程与运维 |
+| [研发交接与任务编排](architecture/研发交接与任务编排.md) | Agent入口、分工顺序、写入职责与完成定义 | active | 协调与集成 |
+| [M1全栈架构与CI/CD报告](project/reports/M1-全栈架构与CI-CD建设-2026-10-30.md) | 技术确认、文档交付、验证与未完成边界 | reference | 架构与集成 |
 <!-- catalog:end -->
 
-状态含义：baseline为当前产品/设计基线，active为持续维护的工作入口，proposed为尚待验证的建议，accepted为已落实的决策，reference为参考资料，historical为历史。
+状态含义：baseline为当前产品/设计基线，active为持续维护的工作入口，proposed为尚待验证的建议，accepted为已作出的决策（不等于已实现/验收），reference为参考资料，historical为历史。
 
 报告记录当时的结果，最新进度以项目进度为准；索引中“基线”不意味着每个技术参数已经由用户逐项批准。

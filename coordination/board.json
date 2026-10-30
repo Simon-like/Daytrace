@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-30T07:13:45.518297+00:00",
+  "updated": "2026-10-30T07:37:04.620435+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -34,15 +34,16 @@
     },
     {
       "id": "ARCH-001",
-      "title": "渲染框架与运行目标验证",
+      "title": "Next/Nest兼容与运行目标验证",
       "status": "queued",
       "owner": null,
       "depends_on": [
-        "FOUND-001"
+        "FOUND-001",
+        "ARCHDOC-001"
       ],
       "allowed_paths": [
         "experiments/ARCH-001/",
-        "docs/architecture/decisions/ADR-0002-技术路线候选.md"
+        "docs/project/reports/ARCH-001.md"
       ],
       "card": "coordination/tasks/ARCH-001.md",
       "evidence": []
@@ -53,7 +54,8 @@
       "status": "queued",
       "owner": null,
       "depends_on": [
-        "FOUND-001"
+        "FOUND-001",
+        "ARCHDOC-001"
       ],
       "allowed_paths": [
         "experiments/CONTENT-001/",
@@ -69,7 +71,8 @@
       "status": "queued",
       "owner": null,
       "depends_on": [
-        "FOUND-001"
+        "FOUND-001",
+        "ARCHDOC-001"
       ],
       "allowed_paths": [
         "experiments/SECURITY-001/",
@@ -90,14 +93,18 @@
       ],
       "allowed_paths": [
         "apps/site/",
+        "apps/api/",
+        "packages/",
         "tests/integration/",
         "docs/project/reports/ENGINE-001.md",
         "package.json",
         "pnpm-workspace.yaml",
         "pnpm-lock.yaml",
-        "package-lock.json",
         ".nvmrc",
-        ".github/"
+        ".node-version",
+        ".npmrc",
+        ".env.example",
+        "scripts/dev/"
       ],
       "card": "coordination/tasks/ENGINE-001.md",
       "evidence": []
@@ -130,7 +137,8 @@
         "apps/site/src/features/records/",
         "apps/site/src/features/search/",
         "tests/unit/find/",
-        "tests/e2e/find/"
+        "tests/e2e/find/",
+        "apps/api/src/modules/search/"
       ],
       "card": "coordination/tasks/FIND-001.md",
       "evidence": []
@@ -146,7 +154,9 @@
       "allowed_paths": [
         "apps/site/src/features/owner/",
         "apps/site/src/server/",
-        "tests/integration/access/"
+        "tests/integration/access/",
+        "apps/api/src/modules/auth/",
+        "apps/api/src/modules/assets/"
       ],
       "card": "coordination/tasks/ACCESS-001.md",
       "evidence": []
@@ -159,7 +169,8 @@
       "depends_on": [
         "READER-001",
         "FIND-001",
-        "ACCESS-001"
+        "ACCESS-001",
+        "CICD-001"
       ],
       "allowed_paths": [
         "tests/e2e/acceptance/",
@@ -227,6 +238,48 @@
       ],
       "review": "coordination/reviews/BRAND-002-self-review.md",
       "reviewer": "codex-self-review"
+    },
+    {
+      "id": "ARCHDOC-001",
+      "title": "全栈架构与CI/CD建设文档",
+      "status": "done",
+      "owner": "codex-current-chat",
+      "depends_on": [
+        "FOUND-001"
+      ],
+      "allowed_paths": [
+        "AGENTS.md",
+        "README.md",
+        "apps/site/AGENTS.md",
+        "apps/site/README.md",
+        "docs/",
+        "coordination/",
+        "ops/README.md"
+      ],
+      "card": "coordination/tasks/ARCHDOC-001.md",
+      "evidence": [
+        "coordination/handoffs/ARCHDOC-001-codex-current-chat.md"
+      ],
+      "review": "coordination/reviews/ARCHDOC-001-self-review.md",
+      "reviewer": "codex-self-review"
+    },
+    {
+      "id": "CICD-001",
+      "title": "CI/CD与测试环境交付",
+      "status": "queued",
+      "owner": null,
+      "depends_on": [
+        "ENGINE-001"
+      ],
+      "allowed_paths": [
+        ".github/",
+        "ops/cicd/",
+        "scripts/ci/",
+        "tests/cicd/",
+        "docs/project/reports/CICD-001.md"
+      ],
+      "card": "coordination/tasks/CICD-001.md",
+      "evidence": []
     }
   ],
   "history": [
@@ -285,11 +338,32 @@
       "action": "complete",
       "actor": "codex-self-review",
       "evidence": "coordination/reviews/BRAND-002-self-review.md"
+    },
+    {
+      "at": "2026-10-30T07:30:29.349873+00:00",
+      "task": "ARCHDOC-001",
+      "action": "claim",
+      "actor": "codex-current-chat",
+      "evidence": null
+    },
+    {
+      "at": "2026-10-30T07:37:04.520852+00:00",
+      "task": "ARCHDOC-001",
+      "action": "submit",
+      "actor": "codex-current-chat",
+      "evidence": "coordination/handoffs/ARCHDOC-001-codex-current-chat.md"
+    },
+    {
+      "at": "2026-10-30T07:37:04.620435+00:00",
+      "task": "ARCHDOC-001",
+      "action": "complete",
+      "actor": "codex-self-review",
+      "evidence": "coordination/reviews/ARCHDOC-001-self-review.md"
     }
   ],
   "dispatch_policy": {
     "mode": "manual",
-    "current_scope": "brand-naming-and-logo; technical tasks remain deferred",
-    "technical_tasks": "queued is registration only; wait for user discussion and actual dispatch"
+    "current_scope": "architecture-and-cicd-documentation",
+    "technical_tasks": "Next.js + NestJS + pnpm workspace direction confirmed; development by separately dispatched agents; no production authorization implied"
   }
 }

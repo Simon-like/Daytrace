@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-30T06:58:20.072893+00:00",
+  "updated": "2026-10-30T07:07:10.172146+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -183,6 +183,28 @@
       ],
       "card": "coordination/tasks/RELEASE-001.md",
       "evidence": []
+    },
+    {
+      "id": "BRAND-001",
+      "title": "中英文命名与Logo设计",
+      "status": "done",
+      "owner": "codex-current-chat",
+      "depends_on": [
+        "FOUND-001"
+      ],
+      "allowed_paths": [
+        "design/contributions/2026-10-30-codex-daytrace/",
+        "design/资产索引.md",
+        "docs/context/当前工作上下文.md",
+        "docs/项目记忆.md",
+        "coordination/"
+      ],
+      "card": "coordination/tasks/BRAND-001.md",
+      "evidence": [
+        "coordination/handoffs/BRAND-001-codex-current-chat.md"
+      ],
+      "review": "coordination/reviews/BRAND-001-self-review.md",
+      "reviewer": "codex-self-review"
     }
   ],
   "history": [
@@ -199,11 +221,32 @@
       "action": "complete",
       "actor": "codex-self-review",
       "evidence": "coordination/reviews/FOUND-001-self-review.md"
+    },
+    {
+      "at": "2026-10-30T07:05:41.135025+00:00",
+      "task": "BRAND-001",
+      "action": "claim",
+      "actor": "codex-current-chat",
+      "evidence": null
+    },
+    {
+      "at": "2026-10-30T07:07:10.072139+00:00",
+      "task": "BRAND-001",
+      "action": "submit",
+      "actor": "codex-current-chat",
+      "evidence": "coordination/handoffs/BRAND-001-codex-current-chat.md"
+    },
+    {
+      "at": "2026-10-30T07:07:10.172146+00:00",
+      "task": "BRAND-001",
+      "action": "complete",
+      "actor": "codex-self-review",
+      "evidence": "coordination/reviews/BRAND-001-self-review.md"
     }
   ],
   "dispatch_policy": {
     "mode": "manual",
-    "current_scope": "documentation-and-context",
+    "current_scope": "brand-naming-and-logo; technical tasks remain deferred",
     "technical_tasks": "queued is registration only; wait for user discussion and actual dispatch"
   }
 }

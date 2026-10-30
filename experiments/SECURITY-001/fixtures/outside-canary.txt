@@ -1,0 +1,1 @@
+Synthetic path-escape target: DAYTRACE_SYNTHETIC_OUTSIDE_CANARY_61B4E0

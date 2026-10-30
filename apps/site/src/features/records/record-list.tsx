@@ -1,28 +1,42 @@
 import Link from "next/link";
 import type { RecordSummary } from "@daytrace/contracts";
+import styles from "./record-list.module.css";
 
-const TYPE_LABELS = {
+export const RECORD_TYPE_LABELS = {
   engineering: "技术实践",
   recipe: "生活经验",
   reflection: "随想认知",
 } as const;
 
-export function RecordList({ records }: { records: readonly RecordSummary[] }) {
-  if (records.length === 0) {
-    return <p className="empty-state">当前公开快照没有记录。这是空集合，不是读取失败。</p>;
-  }
+interface RecordListProps {
+  readonly records: readonly RecordSummary[];
+  readonly emptyMessage?: string;
+  readonly onRecordClick?: (record: RecordSummary) => void;
+}
+
+export function RecordList({
+  records,
+  emptyMessage = "当前公开快照没有记录。这是空集合，不是读取失败。",
+  onRecordClick,
+}: RecordListProps) {
+  if (records.length === 0) return <p className={styles.empty}>{emptyMessage}</p>;
   return (
-    <ul className="record-list">
+    <ul className={styles.list}>
       {records.map((record) => (
         <li key={record.id}>
-          <article className="record-card">
-            <div className="record-meta">
-              <span>{TYPE_LABELS[record.type]}</span>
+          <article className={styles.card}>
+            <div className={styles.meta}>
+              <span>{RECORD_TYPE_LABELS[record.type]}</span>
               <time dateTime={record.updatedAt}>{record.occurredOn ?? "未记日期"}</time>
             </div>
-            <h2><Link href={`/records/${record.id}/`}>{record.title}</Link></h2>
-            {record.summary === null ? null : <p>{record.summary}</p>}
-            <div className="tag-row" aria-label="标签">
+            <h2 className={styles.title}>
+              <Link
+                href={`/records/${record.id}/`}
+                {...(onRecordClick === undefined ? {} : { onClick: () => onRecordClick(record) })}
+              >{record.title}</Link>
+            </h2>
+            {record.summary === null ? null : <p className={styles.summary}>{record.summary}</p>}
+            <div className={styles.tags} aria-label="标签">
               {record.tags.map((tag) => <span key={tag}>{tag}</span>)}
             </div>
           </article>

@@ -1,0 +1,34 @@
+.summary {
+  margin: 16px 0 0;
+  color: var(--muted, #656b5f);
+  font-size: 13px;
+}
+
+.loading {
+  min-height: 44px;
+  margin: 18px 0;
+  color: var(--muted, #656b5f);
+}
+
+.failure {
+  margin: 24px 0;
+  padding: 20px;
+  border-left: 3px solid var(--revision, #9b6652);
+  background: var(--paper-light, #f8f8f2);
+}
+
+.failure p {
+  margin: 0 0 10px;
+}
+
+.requestId {
+  color: var(--muted, #656b5f);
+  font-family: var(--mono, monospace);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.failure button {
+  min-height: 44px;
+  margin-top: 8px;
+}

@@ -1,0 +1,76 @@
+{
+  "png": [
+    {
+      "file": "favicon-48.png",
+      "size": [
+        48,
+        48
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "file": "favicon-192.png",
+      "size": [
+        192,
+        192
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "file": "apple-touch-icon.png",
+      "size": [
+        180,
+        180
+      ],
+      "mode": "RGB"
+    },
+    {
+      "file": "favicon-64.png",
+      "size": [
+        64,
+        64
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "file": "favicon-16.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "file": "favicon-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "file": "favicon-512.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    }
+  ],
+  "ico_sizes": [
+    [
+      16,
+      16
+    ],
+    [
+      32,
+      32
+    ],
+    [
+      48,
+      48
+    ]
+  ],
+  "apple_background_opaque": true,
+  "browser_integration": "not performed"
+}

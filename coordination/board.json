@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-30T07:07:10.172146+00:00",
+  "updated": "2026-10-30T07:13:45.518297+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -205,6 +205,28 @@
       ],
       "review": "coordination/reviews/BRAND-001-self-review.md",
       "reviewer": "codex-self-review"
+    },
+    {
+      "id": "BRAND-002",
+      "title": "醒目网站图标",
+      "status": "done",
+      "owner": "codex-current-chat",
+      "depends_on": [
+        "BRAND-001"
+      ],
+      "allowed_paths": [
+        "design/contributions/2026-10-30-codex-daytrace/",
+        "design/资产索引.md",
+        "docs/context/当前工作上下文.md",
+        "docs/项目记忆.md",
+        "coordination/"
+      ],
+      "card": "coordination/tasks/BRAND-002.md",
+      "evidence": [
+        "coordination/handoffs/BRAND-002-codex-current-chat.md"
+      ],
+      "review": "coordination/reviews/BRAND-002-self-review.md",
+      "reviewer": "codex-self-review"
     }
   ],
   "history": [
@@ -242,6 +264,27 @@
       "action": "complete",
       "actor": "codex-self-review",
       "evidence": "coordination/reviews/BRAND-001-self-review.md"
+    },
+    {
+      "at": "2026-10-30T07:11:56.542902+00:00",
+      "task": "BRAND-002",
+      "action": "claim",
+      "actor": "codex-current-chat",
+      "evidence": null
+    },
+    {
+      "at": "2026-10-30T07:13:45.410070+00:00",
+      "task": "BRAND-002",
+      "action": "submit",
+      "actor": "codex-current-chat",
+      "evidence": "coordination/handoffs/BRAND-002-codex-current-chat.md"
+    },
+    {
+      "at": "2026-10-30T07:13:45.518297+00:00",
+      "task": "BRAND-002",
+      "action": "complete",
+      "actor": "codex-self-review",
+      "evidence": "coordination/reviews/BRAND-002-self-review.md"
     }
   ],
   "dispatch_policy": {

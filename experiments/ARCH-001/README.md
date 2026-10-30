@@ -15,6 +15,8 @@ cd experiments/ARCH-001
 
 打开 `http://127.0.0.1:4100/records/public-arch-sample`，用 `Ctrl+C` 同时停止两个服务。`bootstrap.sh` 在项目私有 `.tools` 安装 pnpm `11.23.0`，随后执行 frozen lockfile 安装；`.tools`、`.pnpm-store`、`node_modules` 和构建目录不提交。
 
+`.npmrc` 固定使用官方 HTTPS registry，锁文件仅保存 integrity 解析记录，不再硬编码旧内网 HTTP tarball URL。若需重建锁文件，必须同时移除旧锁和各 workspace `node_modules`，再用 `./scripts/pnpm.sh install --registry=https://registry.npmjs.org/ --store-dir .pnpm-store` 全量解析；只改 registry 或只删锁文件可能沿用旧状态。
+
 单步命令：
 
 ```bash
@@ -37,9 +39,9 @@ node scripts/capture-versions.mjs
 
 ## 最终结果
 
-- 6 个单元测试通过；8 组端到端检查通过；peer 依赖无冲突；frozen 安装通过。
-- 必要 JS：`178389 B = 174.21 KiB gzip`，**未达到** 80 KiB 目标，超出 94.21 KiB。
-- 首屏传输：`181563 B = 177.31 KiB`，达到 800 KiB 预算，余量 622.69 KiB。
+- 6 个单元测试通过；8 组端到端检查通过；peer 依赖无冲突；清空 pnpm、store、依赖和构建产物后的 frozen 安装与供应链策略检查通过。
+- 必要 JS：`178358 B = 174.18 KiB gzip`，**未达到** 80 KiB 目标，超出 94.18 KiB。
+- 首屏传输：`181537 B = 177.28 KiB`，达到 800 KiB 预算，余量 622.72 KiB。
 - 样本使用系统字体且无正文图片，因此字体/图片均为 0 请求、0 B；这不等于真实字体和图片优化已验收。
 
 原始结果见 `evidence/integration.json`、`evidence/standalone-manifest.json`、`evidence/version-matrix.json`。完整风险与后续注意点见 `handoff.md`。

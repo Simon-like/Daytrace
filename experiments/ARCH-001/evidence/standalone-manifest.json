@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-10-30T08:32:53.564Z",
+  "generatedAt": "2026-10-30T08:49:53.773Z",
   "node": "v24.22.1",
   "standaloneServer": "apps/site/.next/standalone/apps/site/server.js",
-  "tracedSharedContract": "apps/site/.next/standalone/apps/site/.next/server/chunks/ssr/_044e9dojz5xpe._.js",
+  "tracedSharedContract": "apps/site/.next/standalone/apps/site/.next/server/chunks/ssr/_1magno45q4bgs._.js",
   "sharedContractTraceForm": "bundled-server-chunk",
   "staticCopied": true
 }

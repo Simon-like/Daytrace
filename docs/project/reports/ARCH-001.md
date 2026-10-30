@@ -6,7 +6,7 @@
 
 可运行纵向切片已经建立并通过宿主生产模式验证：公开 Markdown 经 Nest API 和共享运行时契约，由 Next 动态 SSR 输出完整 HTML；合成私密 canary 的 API、页面和公开产物检查通过；standalone 能加载共享代码与静态资源运行。
 
-**必要 JS 预算未达标。** 最终 Next 16.4.3 纯 Server Component 样本实测 174.21 KiB gzip，高于 80 KiB 目标 94.21 KiB；首屏必要传输 177.31 KiB，满足 800 KiB 预算。本报告不把功能通过等同于 NFR-01 全部通过。
+**必要 JS 预算未达标。** 最终 Next 16.4.3 纯 Server Component 样本实测 174.18 KiB gzip，高于 80 KiB 目标 94.18 KiB；首屏必要传输 177.28 KiB，满足 800 KiB 预算。本报告不把功能通过等同于 NFR-01 全部通过。
 
 ## 版本矩阵
 
@@ -30,13 +30,15 @@ pnpm 12.16.1 在当前 registry 组合下不能形成可 frozen 的自身版本�
 
 运行方式：`experiments/ARCH-001/scripts/bootstrap.sh` 后执行 `scripts/pnpm.sh verify`。该流程完成 frozen 安装、peer 检查、TypeScript、6 个单测、双端生产构建和真实双进程端到端验证。
 
+2026-10-30 追加复现性修复：旧锁含 103 个内网 HTTP tarball URL；`.npmrc` 改用官方 registry 不会自动重写既有 URL，已有依赖目录还会让删锁后的安装沿用旧状态。本次同时移除旧锁和 workspace 依赖目录，以固定 pnpm 11.23.0 从官方 HTTPS registry 全量重建 integrity-only 锁文件，再清除 pnpm、store、依赖和构建产物后完整复测。冻结安装重新下载 161 个包，供应链策略通过，未修改任何安全策略。
+
 | 验证项 | 实际结果 | 证据 |
 | --- | --- | --- |
 | Markdown → Nest → Next SSR | HTML 含合成段落标记和实际 `<h2>`，不等待浏览器 Markdown 解析器 | `evidence/integration.json` |
 | 共享契约 | API 与 Next 运行时校验 `1.0.0-arch.1`，不兼容响应负例通过 | 单测 + integration |
 | standalone | 契约以 bundled server chunk 追踪，静态资源复制，真实 SSR 成功 | `evidence/standalone-manifest.json` |
 | 公开/私密隔离 | 私密 API/SSR 均 404，无私密标题/正文；与不存在记录错误不可区分 | integration |
-| 公共产物 canary | 扫描 12 个客户端文件、1291 个 standalone 文件，0 命中 | integration |
+| 公共产物 canary | 扫描 12 个客户端文件、1241 个 standalone 文件，0 命中 | integration |
 | 错误定位 | 422 `CONTENT_INVALID`；文件、`date` 字段、requestId 完整，无 stack | integration |
 | 恶意 Markdown | TypeScript 合成输入中的 script 和 javascript URL 被清洗，安全正文保留 | 单测 |
 
@@ -46,11 +48,13 @@ pnpm 12.16.1 在当前 registry 组合下不能形成可 frozen 的自身版本�
 
 | 指标 | 实测 | 预算差异 |
 | --- | ---: | --- |
-| 必要 JavaScript | 178389 B = 174.21 KiB gzip | 超 80 KiB 目标 94.21 KiB，未通过 |
-| 首屏必要传输 | 181563 B = 177.31 KiB | 低于 800 KiB 预算 622.69 KiB，通过 |
-| HTML | 2622 B gzip 传输 | 计入首屏 |
+| 必要 JavaScript | 178358 B = 174.18 KiB gzip | 超 80 KiB 目标 94.18 KiB，未通过 |
+| 首屏必要传输 | 181537 B = 177.28 KiB | 低于 800 KiB 预算 622.72 KiB，通过 |
+| HTML | 2627 B gzip 传输 | 计入首屏 |
 | CSS | 552 B identity 传输 | 计入首屏 |
 | 字体 / 图片 | 0 请求、0 B | 系统字体、无图样本；不代表真实素材已验证 |
+
+相较修复前，必要 JS 减少 31 B（0.03 KiB），首屏必要传输减少 26 B（0.03 KiB）；预算通过/失败结论不变。
 
 ## 未验证与限制
 

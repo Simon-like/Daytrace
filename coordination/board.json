@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-30T07:37:04.620435+00:00",
+  "updated": "2026-10-30T08:58:18.635247+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -35,8 +35,8 @@
     {
       "id": "ARCH-001",
       "title": "Next/Nest兼容与运行目标验证",
-      "status": "queued",
-      "owner": null,
+      "status": "done",
+      "owner": "kimi-arch",
       "depends_on": [
         "FOUND-001",
         "ARCHDOC-001"
@@ -46,13 +46,17 @@
         "docs/project/reports/ARCH-001.md"
       ],
       "card": "coordination/tasks/ARCH-001.md",
-      "evidence": []
+      "evidence": [
+        "coordination/handoffs/ARCH-001-kimi-arch.md"
+      ],
+      "review": "coordination/reviews/ARCH-001-integration-review.md",
+      "reviewer": "kimi-integration"
     },
     {
       "id": "CONTENT-001",
       "title": "可迁移Markdown内容协议",
-      "status": "queued",
-      "owner": null,
+      "status": "done",
+      "owner": "kimi-content",
       "depends_on": [
         "FOUND-001",
         "ARCHDOC-001"
@@ -63,13 +67,17 @@
         "templates/content/"
       ],
       "card": "coordination/tasks/CONTENT-001.md",
-      "evidence": []
+      "evidence": [
+        "coordination/handoffs/CONTENT-001-kimi-content.md"
+      ],
+      "review": "coordination/reviews/CONTENT-001-integration-review.md",
+      "reviewer": "kimi-integration"
     },
     {
       "id": "SECURITY-001",
       "title": "主人访问与私密边界验证",
-      "status": "queued",
-      "owner": null,
+      "status": "done",
+      "owner": "kimi-security",
       "depends_on": [
         "FOUND-001",
         "ARCHDOC-001"
@@ -79,13 +87,17 @@
         "docs/architecture/security/"
       ],
       "card": "coordination/tasks/SECURITY-001.md",
-      "evidence": []
+      "evidence": [
+        "coordination/handoffs/SECURITY-001-kimi-security.md"
+      ],
+      "review": "coordination/reviews/SECURITY-001-integration-review.md",
+      "reviewer": "kimi-integration"
     },
     {
       "id": "ENGINE-001",
       "title": "正式工程与内容纵向切片",
-      "status": "queued",
-      "owner": null,
+      "status": "active",
+      "owner": "kimi-engine",
       "depends_on": [
         "ARCH-001",
         "CONTENT-001",
@@ -359,6 +371,76 @@
       "action": "complete",
       "actor": "codex-self-review",
       "evidence": "coordination/reviews/ARCHDOC-001-self-review.md"
+    },
+    {
+      "at": "2026-10-30T07:49:36.447128+00:00",
+      "task": "ARCH-001",
+      "action": "claim",
+      "actor": "kimi-arch",
+      "evidence": null
+    },
+    {
+      "at": "2026-10-30T07:49:36.555267+00:00",
+      "task": "CONTENT-001",
+      "action": "claim",
+      "actor": "kimi-content",
+      "evidence": null
+    },
+    {
+      "at": "2026-10-30T07:49:36.659900+00:00",
+      "task": "SECURITY-001",
+      "action": "claim",
+      "actor": "kimi-security",
+      "evidence": null
+    },
+    {
+      "at": "2026-10-30T08:58:17.985064+00:00",
+      "task": "ARCH-001",
+      "action": "submit",
+      "actor": "kimi-arch",
+      "evidence": "coordination/handoffs/ARCH-001-kimi-arch.md"
+    },
+    {
+      "at": "2026-10-30T08:58:18.094227+00:00",
+      "task": "ARCH-001",
+      "action": "complete",
+      "actor": "kimi-integration",
+      "evidence": "coordination/reviews/ARCH-001-integration-review.md"
+    },
+    {
+      "at": "2026-10-30T08:58:18.199922+00:00",
+      "task": "CONTENT-001",
+      "action": "submit",
+      "actor": "kimi-content",
+      "evidence": "coordination/handoffs/CONTENT-001-kimi-content.md"
+    },
+    {
+      "at": "2026-10-30T08:58:18.307124+00:00",
+      "task": "CONTENT-001",
+      "action": "complete",
+      "actor": "kimi-integration",
+      "evidence": "coordination/reviews/CONTENT-001-integration-review.md"
+    },
+    {
+      "at": "2026-10-30T08:58:18.413856+00:00",
+      "task": "SECURITY-001",
+      "action": "submit",
+      "actor": "kimi-security",
+      "evidence": "coordination/handoffs/SECURITY-001-kimi-security.md"
+    },
+    {
+      "at": "2026-10-30T08:58:18.529739+00:00",
+      "task": "SECURITY-001",
+      "action": "complete",
+      "actor": "kimi-integration",
+      "evidence": "coordination/reviews/SECURITY-001-integration-review.md"
+    },
+    {
+      "at": "2026-10-30T08:58:18.635247+00:00",
+      "task": "ENGINE-001",
+      "action": "claim",
+      "actor": "kimi-engine",
+      "evidence": null
     }
   ],
   "dispatch_policy": {

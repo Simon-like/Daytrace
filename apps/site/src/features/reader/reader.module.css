@@ -1,0 +1,649 @@
+.reader {
+  width: 100%;
+  max-width: 68rem;
+  margin: 0 auto;
+  color: var(--ink);
+}
+
+.header {
+  max-width: 52rem;
+  padding-bottom: clamp(2rem, 4vw, 3.25rem);
+  border-bottom: 1px solid var(--line);
+}
+
+.eyebrow,
+.supplementKicker,
+.tocLabel {
+  margin: 0;
+  color: var(--revision);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  line-height: 1.7;
+}
+
+.header h1 {
+  max-width: 48rem;
+  margin: 1rem 0 0;
+  font-family: var(--serif);
+  font-size: clamp(2.1rem, 4.3vw, 3.35rem);
+  font-weight: 500;
+  letter-spacing: 0.015em;
+  line-height: 1.32;
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 1.4rem;
+  margin-top: 1.35rem;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+}
+
+.summary {
+  max-width: 42rem;
+  margin: 1.4rem 0 0;
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.85;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tags li {
+  padding: 0.1rem 0.55rem;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.7;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 43rem) minmax(9rem, 11rem);
+  gap: clamp(2.5rem, 5vw, 4.5rem);
+  padding-top: clamp(2rem, 4vw, 3rem);
+}
+
+.bodyColumn,
+.body {
+  min-width: 0;
+}
+
+.reflection .layout {
+  grid-template-columns: minmax(0, 39rem) minmax(9rem, 11rem);
+}
+
+.body {
+  font-size: 1.08rem;
+  line-height: 1.9;
+  overflow-wrap: break-word;
+}
+
+.body :where(p, ul, ol, blockquote) {
+  margin: 1.15em 0;
+}
+
+.body :where(ul, ol) {
+  padding-left: 1.45em;
+}
+
+.body :where(li) {
+  padding-left: 0.18em;
+}
+
+.body :where(li + li) {
+  margin-top: 0.38em;
+}
+
+.body :where(h2, h3, h4, h5, h6) {
+  margin: 2.25em 0 0.72em;
+  font-family: var(--serif);
+  font-weight: 600;
+  line-height: 1.42;
+  scroll-margin-top: 2rem;
+  overflow-wrap: anywhere;
+}
+
+.body :where(h2) { font-size: 1.72rem; }
+.body :where(h3) { font-size: 1.36rem; }
+.body :where(h4) { font-size: 1.15rem; }
+.body :where(h5, h6) { font-size: 1.05rem; }
+.body > :first-child { margin-top: 0; }
+
+.body :where(a) {
+  color: #76513f;
+  overflow-wrap: anywhere;
+  text-decoration-color: color-mix(in srgb, var(--revision) 50%, transparent);
+  text-underline-offset: 0.22em;
+  transition: color 160ms ease, text-decoration-color 160ms ease;
+}
+
+.body :where(a:hover) {
+  color: var(--revision);
+  text-decoration-color: currentColor;
+}
+
+.body :where(blockquote) {
+  margin-left: 0;
+  padding: 0.15rem 0 0.15rem 1.15rem;
+  border-left: 2px solid var(--revision);
+  color: var(--muted);
+}
+
+.body :where(code) {
+  padding: 0.12em 0.3em;
+  background: #e3e5dc;
+  font-family: var(--mono);
+  font-size: 0.88em;
+  overflow-wrap: anywhere;
+}
+
+.body :where(hr) {
+  margin: 2.8rem 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.body :where(input[type="checkbox"]) {
+  width: 1rem;
+  height: 1rem;
+  margin: 0 0.5rem 0 0;
+  accent-color: var(--archive);
+  vertical-align: -0.1em;
+}
+
+.tocAside {
+  align-self: start;
+  position: sticky;
+  top: 2rem;
+  min-width: 0;
+}
+
+.tocLabel {
+  margin-bottom: 0.9rem;
+  color: var(--muted);
+  font-size: 0.64rem;
+}
+
+.tocList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tocItem {
+  position: relative;
+  margin: 0.18rem 0;
+}
+
+.tocItem[data-level="3"] { padding-left: 0.65rem; }
+.tocItem[data-level="4"] { padding-left: 1.3rem; }
+.tocItem[data-level="5"] { padding-left: 1.95rem; }
+.tocItem[data-level="6"] { padding-left: 2.6rem; }
+
+.mobileToc summary:focus-visible,
+.codeBlock pre:focus-visible,
+.tableScroll:focus-visible {
+  outline: 3px solid var(--revision);
+  outline-offset: 3px;
+}
+
+.tocItem a {
+  display: block;
+  min-height: 2.5rem;
+  padding: 0.48rem 0;
+  color: var(--muted);
+  font-size: 0.79rem;
+  line-height: 1.55;
+  text-decoration: none;
+  transition: color 160ms ease, transform 160ms ease;
+}
+
+.tocItem a:hover,
+.tocItem a[aria-current="location"] {
+  color: var(--revision);
+}
+
+.tocItem a[aria-current="location"] {
+  transform: translateX(0.18rem);
+}
+
+.mobileToc {
+  display: none;
+}
+
+.marginNote {
+  margin: 2rem 0 0;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--line);
+  color: var(--revision);
+  font-family: "Kaiti SC", "STKaiti", var(--serif);
+  font-size: 1rem;
+  line-height: 1.85;
+  transform: rotate(-1deg);
+}
+
+.recipeQuickNav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.25rem;
+  padding: 1.15rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.recipeQuickNav > span {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.recipeQuickNav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recipeQuickNav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.35rem 0.85rem;
+  border: 1px solid var(--line);
+  color: var(--archive);
+  font-size: 0.86rem;
+  text-decoration: none;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.recipeQuickNav a:hover {
+  border-color: var(--revision);
+  background: var(--paper-light);
+}
+
+.codeBlock {
+  max-width: 100%;
+  margin: 1.5rem 0;
+  background: var(--archive);
+  color: var(--paper);
+}
+
+.codeToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 2.75rem;
+  padding-left: 1rem;
+  border-bottom: 1px solid #4b584d;
+}
+
+.codeLanguage {
+  color: #c6cec1;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+}
+
+.copyButton,
+.lightboxClose {
+  min-width: 5.5rem;
+  min-height: 2.75rem;
+  padding: 0.45rem 0.85rem;
+  border: 0;
+  background: transparent;
+  color: var(--paper);
+  font-size: 0.78rem;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.copyButton:hover,
+.lightboxClose:hover {
+  background: #3b493e;
+}
+
+.copyButton[data-copy-state="copied"] { color: #d9e4c9; }
+.copyButton[data-copy-state="failed"] { color: #f0c6b7; }
+
+.codeBlock pre {
+  max-width: 100%;
+  margin: 0;
+  padding: 1.15rem 1.25rem;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  line-height: 1.7;
+  tab-size: 2;
+}
+
+.codeBlock pre code {
+  display: block;
+  width: max-content;
+  min-width: 100%;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 0.86rem;
+  overflow-wrap: normal;
+}
+
+.scrollHint {
+  display: none;
+  padding: 0.35rem 1rem 0.55rem;
+  color: var(--muted);
+  font-size: 0.7rem;
+  line-height: 1.5;
+  text-align: right;
+}
+
+.codeBlock .scrollHint {
+  padding-top: 0;
+  color: #c6cec1;
+}
+
+.scrollHint[data-overflow="true"] { display: block; }
+
+.tableScroll {
+  max-width: 100%;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+
+.tableScroll table {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.tableScroll :where(th, td) {
+  min-width: 7rem;
+  max-width: 18rem;
+  padding: 0.72rem 0.85rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.tableScroll th {
+  border-bottom-color: #aeb5a6;
+  color: var(--archive);
+  font-weight: 600;
+}
+
+.imageButton {
+  display: block;
+  width: 100%;
+  min-height: 0;
+  margin: 1.6rem 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+}
+
+.imageButton img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  transition: transform 180ms ease, filter 180ms ease;
+}
+
+.imageButton:hover img {
+  filter: brightness(0.97);
+  transform: scale(1.008);
+}
+
+.imageError {
+  display: none;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.hasImageError .imageError { display: block; }
+
+.supplements {
+  margin-top: 3.5rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line);
+}
+
+.supplementKicker { margin-bottom: 1.25rem; }
+
+.supplement {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 1.4rem;
+  padding: 1.3rem 0 1.3rem 1rem;
+  border-left: 2px solid var(--revision);
+}
+
+.supplement + .supplement { margin-top: 1.25rem; }
+
+.supplementDate {
+  padding-top: 0.3rem;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+
+.supplementBody h2 {
+  margin: 0 0 0.5rem;
+  color: var(--revision);
+  font-family: "Kaiti SC", "STKaiti", var(--serif);
+  font-size: 1.24rem;
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+.supplementBody p {
+  margin: 0;
+  line-height: 1.85;
+}
+
+.lightbox {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--paper);
+  overflow: auto;
+}
+
+.lightbox[open] {
+  animation: lightbox-in 180ms ease-out both;
+}
+
+.lightbox::backdrop {
+  background: rgb(24 30 25 / 92%);
+  animation: backdrop-in 180ms ease-out both;
+}
+
+.lightboxPanel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-height: 100%;
+  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+}
+
+.lightboxBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 90rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.lightboxBar p {
+  margin: 0;
+  color: #d7ded2;
+  font-size: 0.84rem;
+  line-height: 1.6;
+}
+
+.lightboxClose {
+  flex: none;
+  border: 1px solid #6f7a70;
+}
+
+.lightboxMedia {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  padding: 1rem 0;
+}
+
+.lightboxMedia img {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100svh - 10rem);
+  object-fit: contain;
+}
+
+.lightboxHint,
+.lightboxError {
+  margin: 0;
+  color: #c6cec1;
+  font-size: 0.76rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.lightboxError {
+  max-width: 28rem;
+  padding: 2rem;
+  border: 1px solid #6f7a70;
+  font-size: 0.95rem;
+}
+
+@keyframes lightbox-in {
+  from { opacity: 0; transform: translateY(0.45rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 1199px) {
+  .layout,
+  .reflection .layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+
+  .tocAside { display: none; }
+
+  .mobileToc {
+    display: block;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .mobileToc summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 3rem;
+    cursor: pointer;
+    color: var(--archive);
+    font-size: 0.9rem;
+    list-style-position: inside;
+  }
+
+  .mobileToc[open] summary {
+    color: var(--revision);
+  }
+
+  .tocCount {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 400;
+  }
+
+  .mobileToc nav {
+    padding: 0.35rem 0 0.85rem;
+  }
+
+  .mobileToc .tocItem a {
+    display: flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.45rem 0;
+    font-size: 0.86rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .header h1 { font-size: clamp(2rem, 8.8vw, 2.65rem); }
+  .summary { font-size: 0.98rem; }
+  .layout { padding-top: 1.6rem; }
+  .body { font-size: 1.06rem; line-height: 1.86; }
+  .body :where(h2) { font-size: 1.55rem; }
+  .body :where(h3) { font-size: 1.27rem; }
+  .body :where(h2, h3, h4, h5, h6) { scroll-margin-top: 5.5rem; }
+  .recipeQuickNav { align-items: flex-start; }
+  .recipeQuickNav > span { width: 100%; }
+  .supplement { grid-template-columns: 1fr; gap: 0.35rem; }
+  .supplementDate { padding-top: 0; }
+  .lightboxBar { align-items: flex-start; }
+  .lightboxHint { visibility: hidden; }
+}
+
+@media (max-width: 359px) {
+  .header h1 { font-size: 1.95rem; }
+  .body { font-size: 1rem; }
+  .codeBlock pre { padding-inline: 1rem; }
+  .supplement { padding-left: 0.75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox[open],
+  .lightbox::backdrop {
+    animation: none;
+  }
+
+  .marginNote,
+  .tocItem a[aria-current="location"],
+  .imageButton:hover img {
+    transform: none;
+  }
+
+  .body :where(a),
+  .tocItem a,
+  .recipeQuickNav a,
+  .copyButton,
+  .lightboxClose,
+  .imageButton img {
+    transition: none;
+  }
+}

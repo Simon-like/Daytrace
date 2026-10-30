@@ -1,0 +1,5 @@
+# E 稿修正：完整提示词
+
+方式：内置图像生成编辑模式，参考本目录 drafts/E-初稿.png。只修正首页照片旁的故事对应关系，手机技术阅读页保持不变。
+
+Edit this existing website design presentation with one focused correction. Preserve ALL visual identity, layout geometry, colors, typography style, photograph, desktop masthead, lavender reflection section, bottom records, and the entire mobile technical article on the right exactly as they are. Change ONLY the desktop large feature text block immediately to the right of the mapo tofu photograph, so its story matches that photograph. Replace its small category 技术实践 with 生活实践. Replace its giant title 微前端，不只是一份配置 with crisp Chinese text arranged in 3 beautiful lines: 麻婆豆腐， / 第二次 / 终于对了。 Keep similarly bold plum Chinese lettering and same available space, no overlap. Replace the paragraph below this headline with: 先把豆腐焯水，再耐心炒出红油。 / 第二次终于摸清了火候，也记下了下次要调整的细节。 Keep the orange 阅读全文 link. Keep date circular marker 10/26. Do not change the phone title or phone technical content, and keep the bottom technical record entry. No other changes.

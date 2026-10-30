@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>日常有迹 · 模块设计稿</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#e8ebe2;color:#29352c;font:15px/1.7 "PingFang SC",sans-serif}header,main,footer{max-width:1680px;margin:auto;padding:28px 36px}header{padding-bottom:15px}header>div{display:flex;gap:24px;justify-content:space-between;align-items:center}h1{font:30px/1.5 "Songti SC",serif;margin:0}p{margin:8px 0;color:#62695b;font-size:13px}nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}button,a{color:inherit;font:inherit}button{padding:10px 18px;border:1px solid #b2bba8;background:transparent;cursor:pointer;min-height:44px}button[aria-pressed=true]{background:#29352c;color:#f0f0e8;border-color:#29352c}a{min-height:44px;display:inline-flex;align-items:center;text-underline-offset:5px;font-size:13px;white-space:nowrap}:focus-visible{outline:2px solid #96604b;outline-offset:4px}.review-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px;align-items:start}figure{margin:0;min-width:0}figcaption{font:11px monospace;color:#62695b;margin-bottom:12px;letter-spacing:.08em}figure a{display:block;height:auto}img{width:100%;display:block;border:1px solid #cdd3c2}.notes{max-width:900px;margin-top:25px;font-size:14px;color:#62695b}footer{padding-top:0;font-size:11px;color:#62695b}@media(max-width:1000px){.review-layout{grid-template-columns:minmax(0,1fr) 245px;gap:16px}header,main,footer{padding-left:22px;padding-right:22px}h1{font-size:25px}}@media(max-width:680px){header>div{display:block}.review-layout{display:flex;flex-direction:column;gap:30px}figure{width:100%}.phone{order:-1;max-width:390px;margin:auto}header,main,footer{padding-left:18px;padding-right:18px}nav{gap:7px}button{padding:9px 13px;font-size:13px}header p{font-size:12px}}
+</style>
+</head>
+<body>
+<header><div><div><p>日常有迹 / D 档案方向</p><h1>按模块，看看每一页。</h1></div><a id="live-link" href="index.html?page=home" target="_blank" rel="noopener">打开可操作页面 ↗</a></div><nav aria-label="选择页面模块"><button data-page="home" aria-pressed="true">首页</button><button data-page="archive" aria-pressed="false">记录索引</button><button data-page="tech" aria-pressed="false">技术长文</button><button data-page="recipe" aria-pressed="false">生活菜谱</button><button data-page="thought" aria-pressed="false">随想</button><button data-page="about" aria-pressed="false">关于</button><button data-page="404" aria-pressed="false">找不到页面</button></nav></header>
+<main><div class="review-layout"><figure><figcaption id="desktop-label">首页 / DESKTOP · 1440px</figcaption><a id="desktop-full" href="previews/home-desktop.png" target="_blank" rel="noopener"><img id="desktop-image" src="previews/home-desktop.png" width="1440" height="1000" alt="首页桌面端实际浏览器截图"></a></figure><figure class="phone"><figcaption id="mobile-label">首页 / MOBILE · 390px</figcaption><a id="mobile-full" href="previews/home-mobile.png" target="_blank" rel="noopener"><img id="mobile-image" src="previews/home-mobile.png" width="390" height="844" alt="首页手机视口实际浏览器截图"></a></figure></div><p id="module-note" class="notes">首页用来回看：技术与厨房并置，随想与后来补充相连。手机按阅读顺序自然叠放，手写短注保留在引言之后。</p></main>
+<footer>这些是本地可运行模块稿的浏览器截图。点击截图可看原尺寸，右上角可操作页面可继续滚动和使用搜索、目录、复制与图片查看。内容为示例，尚未进行真实 iPhone Safari 验收。</footer>
+<script>
+const notes={home:'首页用来回看：技术与厨房并置，随想与后来补充相连。手机按阅读顺序自然叠放，手写短注保留在引言之后。',archive:'索引用来查找：时间分组、关键词与类别组合。手机表单分两行，记录保留日期、标题和摘要，清除筛选可以回到全部。',tech:'技术页优先长文阅读：桌面侧边目录，手机展开式目录；代码可复制，表格只在自身横滑，手写提醒在正文外或段后。',recipe:'菜谱优先进厨房时的操作：桌面材料与工序分栏，手机先材料后步骤；照片可放大，后来调整独立保留。',thought:'随想给原话留下空间：短文无需凑满模板，手写提醒与后来的认识自然分隔；手机不增加旁栏或多余工具。',about:'关于页解释这个地方为何存在，不虚构个人履历和社交信息；手机将旁注放在主内容之后。','404':'失败页仍给出回到内容的路径，不使用夸张插画或暴露私密内容的信息。'};
+document.querySelectorAll('[data-page]').forEach(button=>button.addEventListener('click',()=>{
+ const page=button.dataset.page;
+ document.querySelectorAll('[data-page]').forEach(b=>b.setAttribute('aria-pressed',b===button?'true':'false'));
+ for(const device of ['desktop','mobile']){
+  document.getElementById(device+'-image').src=`previews/${page}-${device}.png`;
+  document.getElementById(device+'-image').alt=button.textContent+(device==='mobile'?'手机':'桌面')+'实际浏览器截图';
+  document.getElementById(device+'-full').href=`previews/${page}-${device}.png`;
+  document.getElementById(device+'-label').textContent=button.textContent+(device==='mobile'?' / MOBILE · 390px':' / DESKTOP · 1440px');
+ }
+ document.getElementById('live-link').href=`index.html?page=${page}`;
+ document.getElementById('module-note').textContent=notes[page];
+ history.replaceState(null,'','#'+page);
+}));
+const initial=document.querySelector(`[data-page="${CSS.escape(location.hash.slice(1))}"]`);if(initial)initial.click();
+</script>
+</body>
+</html>

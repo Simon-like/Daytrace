@@ -1,0 +1,30 @@
+# Local dependencies and generated builds
+node_modules/
+dist/
+.astro/
+.nuxt/
+.output/
+.next/
+coverage/
+test-results/
+playwright-report/
+__pycache__/
+*.pyc
+.DS_Store
+.local/
+.cache/
+/coordination/board.lock
+/coordination/.board-*.tmp
+
+# Credentials belong outside version history
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Owner content is a separate backup/deployment boundary
+/content/private/**
+!/content/private/.gitkeep
+
+# Keep curated design previews, reports and prompts tracked.

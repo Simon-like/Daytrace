@@ -1,0 +1,185 @@
+{
+  "version": 1,
+  "updated": "2026-10-30",
+  "tasks": [
+    {
+      "id": "FOUND-001",
+      "title": "协作结构与文档编排",
+      "status": "active",
+      "owner": "codex-current-chat",
+      "depends_on": [],
+      "allowed_paths": [
+        "AGENTS.md",
+        "README.md",
+        ".gitignore",
+        ".editorconfig",
+        "apps/",
+        "content/",
+        "knowledge/",
+        "docs/",
+        "coordination/",
+        "scripts/",
+        "tests/",
+        "templates/",
+        "ops/",
+        "experiments/",
+        "design/资产索引.md"
+      ],
+      "card": "coordination/tasks/FOUND-001.md",
+      "evidence": []
+    },
+    {
+      "id": "ARCH-001",
+      "title": "渲染框架与运行目标验证",
+      "status": "queued",
+      "owner": null,
+      "depends_on": [
+        "FOUND-001"
+      ],
+      "allowed_paths": [
+        "experiments/ARCH-001/",
+        "docs/architecture/decisions/ADR-0002-技术路线候选.md"
+      ],
+      "card": "coordination/tasks/ARCH-001.md",
+      "evidence": []
+    },
+    {
+      "id": "CONTENT-001",
+      "title": "可迁移Markdown内容协议",
+      "status": "queued",
+      "owner": null,
+      "depends_on": [
+        "FOUND-001"
+      ],
+      "allowed_paths": [
+        "experiments/CONTENT-001/",
+        "docs/architecture/contracts/",
+        "templates/content/"
+      ],
+      "card": "coordination/tasks/CONTENT-001.md",
+      "evidence": []
+    },
+    {
+      "id": "SECURITY-001",
+      "title": "主人访问与私密边界验证",
+      "status": "queued",
+      "owner": null,
+      "depends_on": [
+        "FOUND-001"
+      ],
+      "allowed_paths": [
+        "experiments/SECURITY-001/",
+        "docs/architecture/security/"
+      ],
+      "card": "coordination/tasks/SECURITY-001.md",
+      "evidence": []
+    },
+    {
+      "id": "ENGINE-001",
+      "title": "正式工程与内容纵向切片",
+      "status": "queued",
+      "owner": null,
+      "depends_on": [
+        "ARCH-001",
+        "CONTENT-001",
+        "SECURITY-001"
+      ],
+      "allowed_paths": [
+        "apps/site/",
+        "tests/integration/",
+        "docs/project/reports/ENGINE-001.md",
+        "package.json",
+        "pnpm-workspace.yaml",
+        "pnpm-lock.yaml",
+        "package-lock.json",
+        ".nvmrc",
+        ".github/"
+      ],
+      "card": "coordination/tasks/ENGINE-001.md",
+      "evidence": []
+    },
+    {
+      "id": "READER-001",
+      "title": "三类阅读模块正式落地",
+      "status": "queued",
+      "owner": null,
+      "depends_on": [
+        "ENGINE-001"
+      ],
+      "allowed_paths": [
+        "apps/site/src/features/reader/",
+        "tests/unit/reader/",
+        "tests/e2e/reader/"
+      ],
+      "card": "coordination/tasks/READER-001.md",
+      "evidence": []
+    },
+    {
+      "id": "FIND-001",
+      "title": "首页索引与公开检索",
+      "status": "queued",
+      "owner": null,
+      "depends_on": [
+        "ENGINE-001"
+      ],
+      "allowed_paths": [
+        "apps/site/src/features/records/",
+        "apps/site/src/features/search/",
+        "tests/unit/find/",
+        "tests/e2e/find/"
+      ],
+      "card": "coordination/tasks/FIND-001.md",
+      "evidence": []
+    },
+    {
+      "id": "ACCESS-001",
+      "title": "主人视图与私密链路",
+      "status": "queued",
+      "owner": null,
+      "depends_on": [
+        "ENGINE-001"
+      ],
+      "allowed_paths": [
+        "apps/site/src/features/owner/",
+        "apps/site/src/server/",
+        "tests/integration/access/"
+      ],
+      "card": "coordination/tasks/ACCESS-001.md",
+      "evidence": []
+    },
+    {
+      "id": "QA-001",
+      "title": "正式质量与iPhone验收",
+      "status": "queued",
+      "owner": null,
+      "depends_on": [
+        "READER-001",
+        "FIND-001",
+        "ACCESS-001"
+      ],
+      "allowed_paths": [
+        "tests/e2e/acceptance/",
+        "docs/project/reports/QA-001.md",
+        "docs/project/evidence/QA-001/"
+      ],
+      "card": "coordination/tasks/QA-001.md",
+      "evidence": []
+    },
+    {
+      "id": "RELEASE-001",
+      "title": "发布备份与维护移交",
+      "status": "queued",
+      "owner": null,
+      "depends_on": [
+        "QA-001"
+      ],
+      "allowed_paths": [
+        "ops/",
+        "docs/project/reports/RELEASE-001.md"
+      ],
+      "card": "coordination/tasks/RELEASE-001.md",
+      "evidence": []
+    }
+  ],
+  "history": []
+}

@@ -1,0 +1,166 @@
+{
+  "version": 1,
+  "updated": "2026-10-30",
+  "documents": [
+    {
+      "id": "product",
+      "title": "产品需求与立项",
+      "path": "docs/product/PRD-v1.0.md",
+      "purpose": "范围、用户流程和18项P0要求",
+      "status": "baseline",
+      "owner_role": "产品与集成"
+    },
+    {
+      "id": "acceptance",
+      "title": "正式验收矩阵",
+      "path": "docs/product/验收矩阵-v1.0.md",
+      "purpose": "AC与非功能测试门槛",
+      "status": "baseline",
+      "owner_role": "测试与集成"
+    },
+    {
+      "id": "art",
+      "title": "视觉风格基线",
+      "path": "design/视觉风格基线-v1.0.md",
+      "purpose": "D/D²、手写与视觉约束",
+      "status": "baseline",
+      "owner_role": "设计"
+    },
+    {
+      "id": "modules",
+      "title": "模块页面设计",
+      "path": "docs/design/模块页面设计-v1.0.md",
+      "purpose": "当前原型模块和响应式行为",
+      "status": "active",
+      "owner_role": "设计与前端"
+    },
+    {
+      "id": "structure",
+      "title": "项目结构与文档治理",
+      "path": "docs/architecture/项目结构与文档治理.md",
+      "purpose": "目录、单一事实来源和维护规则",
+      "status": "active",
+      "owner_role": "集成"
+    },
+    {
+      "id": "adr1",
+      "title": "ADR-0001结构决策",
+      "path": "docs/architecture/decisions/ADR-0001-项目分层与协作边界.md",
+      "purpose": "仓库组织与协作边界",
+      "status": "accepted",
+      "owner_role": "集成"
+    },
+    {
+      "id": "adr2",
+      "title": "ADR-0002技术候选",
+      "path": "docs/architecture/decisions/ADR-0002-技术路线候选.md",
+      "purpose": "技术路线状态与冻结门槛",
+      "status": "proposed",
+      "owner_role": "架构"
+    },
+    {
+      "id": "tech",
+      "title": "技术选型与研发路径",
+      "path": "docs/architecture/技术选型与研发路径.md",
+      "purpose": "官方依据、推荐、PoC和迭代顺序",
+      "status": "proposed",
+      "owner_role": "架构与安全"
+    },
+    {
+      "id": "coordination",
+      "title": "多Agent协作入口",
+      "path": "coordination/README.md",
+      "purpose": "认领、交接、评审与合并",
+      "status": "active",
+      "owner_role": "协调与集成"
+    },
+    {
+      "id": "knowledge",
+      "title": "工程知识库",
+      "path": "knowledge/README.md",
+      "purpose": "可复用经验与操作流程",
+      "status": "active",
+      "owner_role": "各模块与集成"
+    },
+    {
+      "id": "content",
+      "title": "个人内容库",
+      "path": "content/README.md",
+      "purpose": "站点正文、公开私密与样本隔离",
+      "status": "active",
+      "owner_role": "内容与安全"
+    },
+    {
+      "id": "progress",
+      "title": "项目进度",
+      "path": "docs/project/项目进度.md",
+      "purpose": "实际阶段、证据与下一步",
+      "status": "active",
+      "owner_role": "集成"
+    },
+    {
+      "id": "roadmap",
+      "title": "阶段路线图",
+      "path": "docs/project/项目路线图与阶段管理.md",
+      "purpose": "M0至M5基线和退出门槛",
+      "status": "active",
+      "owner_role": "产品与集成"
+    },
+    {
+      "id": "decisions",
+      "title": "产品与项目决定",
+      "path": "docs/project/决策记录.md",
+      "purpose": "用户确认与建议的区别",
+      "status": "active",
+      "owner_role": "产品与集成"
+    },
+    {
+      "id": "m0",
+      "title": "M0立项报告",
+      "path": "docs/project/reports/M0-立项报告-2026-10-30.md",
+      "purpose": "立项交付与检查记录",
+      "status": "reference",
+      "owner_role": "产品"
+    },
+    {
+      "id": "m1-ui",
+      "title": "M1模块稿进展",
+      "path": "docs/project/reports/M1-模块排版与响应式进展-2026-10-30.md",
+      "purpose": "91组布局与10组原型交互证据",
+      "status": "reference",
+      "owner_role": "前端与测试"
+    },
+    {
+      "id": "m1-foundation",
+      "title": "M1协作结构报告",
+      "path": "docs/project/reports/M1-协作结构与技术选型准备-2026-10-30.md",
+      "purpose": "本轮结构、校验与版本基础",
+      "status": "active",
+      "owner_role": "集成"
+    },
+    {
+      "id": "research-md",
+      "title": "移动Markdown调研",
+      "path": "docs/research/移动端Markdown阅读调研.md",
+      "purpose": "原始资料与渲染候选",
+      "status": "reference",
+      "owner_role": "架构"
+    },
+    {
+      "id": "research-design",
+      "title": "设计资源调研",
+      "path": "docs/research/设计资源库.md",
+      "purpose": "工具候选与资料来源",
+      "status": "reference",
+      "owner_role": "设计"
+    },
+    {
+      "id": "archive-prd",
+      "title": "历史需求草案",
+      "path": "docs/archive/产品需求草案-2026-10-30.md",
+      "purpose": "保留早期需求与决策过程",
+      "status": "historical",
+      "owner_role": "集成"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "daytrace",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.23.0",
+  "engines": {
+    "node": "24.22.1",
+    "pnpm": "11.23.0"
+  },
+  "scripts": {
+    "dev": "node scripts/dev/run-dev.mjs",
+    "build:packages": "pnpm --filter @daytrace/config build && pnpm --filter @daytrace/contracts build",
+    "dev:site": "pnpm run build:packages && pnpm --filter @daytrace/site dev",
+    "dev:api": "pnpm run build:packages && pnpm --filter @daytrace/api dev",
+    "lint": "oxlint apps packages tests/integration scripts/dev",
+    "typecheck": "pnpm run build:packages && pnpm --filter @daytrace/api typecheck && pnpm --filter @daytrace/site typecheck",
+    "test:unit": "pnpm run build:packages && tsx --test packages/config/src/*.test.ts packages/contracts/src/*.test.ts apps/api/src/common/*.test.ts apps/api/src/modules/content/*.test.ts",
+    "test:integration": "pnpm run build:packages && tsx --tsconfig apps/api/tsconfig.json --test tests/integration/api.integration.test.ts",
+    "build": "pnpm run build:packages && pnpm --filter @daytrace/api build && pnpm --filter @daytrace/site build",
+    "test:e2e": "pnpm run build && tsx --test tests/integration/ssr.e2e.test.ts",
+    "content:validate": "pnpm run build:packages && tsx apps/api/src/cli/validate-content.ts",
+    "docs:validate": "python3 scripts/project_check.py"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "oxlint": "1.90.0",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2"
+  }
+}

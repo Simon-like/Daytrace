@@ -45,7 +45,7 @@
     {
       "id": "art",
       "title": "视觉风格基线",
-      "path": "design/视觉风格基线-v1.0.md",
+      "path": "docs/design/视觉风格基线-v1.0.md",
       "purpose": "D/D²、手写与视觉约束",
       "status": "baseline",
       "owner_role": "设计"
@@ -54,15 +54,15 @@
       "id": "modules",
       "title": "模块页面设计",
       "path": "docs/design/模块页面设计-v1.0.md",
-      "purpose": "当前原型模块和响应式行为",
-      "status": "active",
+      "purpose": "M1模块原型规范，正式运行行为见Demo报告与代码",
+      "status": "reference",
       "owner_role": "设计与前端"
     },
     {
       "id": "structure",
       "title": "项目结构与文档治理",
       "path": "docs/architecture/项目结构与文档治理.md",
-      "purpose": "目录、单一事实来源和维护规则",
+      "purpose": "docs集中管理、唯一事实源与防散落约束",
       "status": "active",
       "owner_role": "集成"
     },
@@ -92,16 +92,16 @@
     },
     {
       "id": "coordination",
-      "title": "多Agent协作入口",
-      "path": "coordination/README.md",
-      "purpose": "认领、交接、评审与合并",
+      "title": "Kimi / Codex共同协作协议",
+      "path": "docs/collaboration/README.md",
+      "purpose": "唯一中央队列、认领、worktree、交接与评审",
       "status": "active",
       "owner_role": "协调与集成"
     },
     {
       "id": "knowledge",
       "title": "工程知识库",
-      "path": "knowledge/README.md",
+      "path": "docs/knowledge/README.md",
       "purpose": "可复用经验与操作流程",
       "status": "active",
       "owner_role": "各模块与集成"
@@ -109,7 +109,7 @@
     {
       "id": "content",
       "title": "个人内容库",
-      "path": "content/README.md",
+      "path": "docs/development/content.md",
       "purpose": "站点正文、公开私密与样本隔离",
       "status": "active",
       "owner_role": "内容与安全"
@@ -159,7 +159,7 @@
       "title": "M1协作结构报告",
       "path": "docs/project/reports/M1-协作结构与技术选型准备-2026-10-30.md",
       "purpose": "本轮结构、校验与版本基础",
-      "status": "active",
+      "status": "reference",
       "owner_role": "集成"
     },
     {
@@ -223,8 +223,56 @@
       "title": "全栈Demo验收报告",
       "path": "docs/project/reports/DEMO-001.md",
       "purpose": "Kimi接力事实、成品运行、真实测试与发布差距",
-      "status": "active",
+      "status": "reference",
       "owner_role": "集成与验收"
+    },
+    {
+      "id": "demo-guide",
+      "title": "Demo运行手册",
+      "path": "docs/development/demo.md",
+      "purpose": "启动全栈演示、版本和合成身份边界",
+      "status": "active",
+      "owner_role": "开发与集成"
+    },
+    {
+      "id": "local-dev",
+      "title": "本地开发手册",
+      "path": "docs/development/local-dev.md",
+      "purpose": "工程开发命令、端口与进程清理",
+      "status": "reference",
+      "owner_role": "开发"
+    },
+    {
+      "id": "ops-guide",
+      "title": "CI/CD运行说明",
+      "path": "docs/operations/cicd.md",
+      "purpose": "配置变量、受控脚本与实际运维前提",
+      "status": "active",
+      "owner_role": "运维"
+    },
+    {
+      "id": "assets",
+      "title": "设计资产索引",
+      "path": "docs/design/资产索引.md",
+      "purpose": "素材源文件、来源和采用状态",
+      "status": "active",
+      "owner_role": "设计"
+    },
+    {
+      "id": "adr4",
+      "title": "ADR-0004文档集中决策",
+      "path": "docs/architecture/decisions/ADR-0004-项目文档统一到docs.md",
+      "purpose": "文档归位及Kimi/Codex共用协议",
+      "status": "accepted",
+      "owner_role": "集成"
+    },
+    {
+      "id": "docs-consolidation",
+      "title": "文档收敛验收报告",
+      "path": "docs/project/reports/DOCS-001.md",
+      "purpose": "迁移清单、引用修复、脚本回归与保留现场",
+      "status": "reference",
+      "owner_role": "集成"
     }
   ]
 }

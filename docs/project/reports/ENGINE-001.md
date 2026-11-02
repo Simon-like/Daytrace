@@ -130,6 +130,6 @@ npm run dev
 npm run dev -- --host 127.0.0.1 --port 3000
 ```
 
-默认 Next 为 `http://127.0.0.1:3000`，Nest 为 `http://127.0.0.1:3001/api/v1`。环境示例见 [.env.example](../../../.env.example)，开发细节见 [scripts/dev/README.md](../../../scripts/dev/README.md)，站点边界见 [apps/site/README.md](../../../apps/site/README.md)。
+默认 Next 为 `http://127.0.0.1:3000`，Nest 为 `http://127.0.0.1:3001/api/v1`。环境示例见 [.env.example](../../../.env.example)，开发细节见 [docs/development/local-dev.md](../../development/local-dev.md)，站点边界见 [docs/development/web.md](../../development/web.md)。
 
 本报告只证明本地合成样本、构建和 HTTP 链路自检结果。未验证真实内容迁移、生产部署包或反向代理、CI 工作流、身份登录、iPhone 真机、浏览器全量视觉回归、性能与安全专项验收；这些不能由本次机器自检或模拟结果替代。改动已提交到上述分支，未执行 push、合并或发布。

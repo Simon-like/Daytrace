@@ -14,12 +14,12 @@ class CoordinationTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.root = Path(self.tmp.name)
-        (self.root / "coordination/tasks").mkdir(parents=True)
-        for p in ["coordination/tasks/A.md", "coordination/tasks/B.md", "handoff.md", "review.md"]:
+        (self.root / "docs/collaboration/tasks").mkdir(parents=True)
+        for p in ["docs/collaboration/tasks/A.md", "docs/collaboration/tasks/B.md", "handoff.md", "review.md"]:
             (self.root / p).write_text("Test evidence\n")
         self.data = {"version": 1, "tasks": [
-            {"id": "EX-001", "title": "A", "status": "queued", "owner": None, "depends_on": [], "allowed_paths": ["experiments/A/"], "card": "coordination/tasks/A.md", "evidence": []},
-            {"id": "EX-002", "title": "B", "status": "queued", "owner": None, "depends_on": ["EX-001"], "allowed_paths": ["experiments/B/"], "card": "coordination/tasks/B.md", "evidence": []},
+            {"id": "EX-001", "title": "A", "status": "queued", "owner": None, "depends_on": [], "allowed_paths": ["experiments/A/"], "card": "docs/collaboration/tasks/A.md", "evidence": []},
+            {"id": "EX-002", "title": "B", "status": "queued", "owner": None, "depends_on": ["EX-001"], "allowed_paths": ["experiments/B/"], "card": "docs/collaboration/tasks/B.md", "evidence": []},
         ]}
         self.save()
 
@@ -27,7 +27,7 @@ class CoordinationTests(unittest.TestCase):
         self.tmp.cleanup()
 
     def save(self):
-        (self.root / "coordination/board.json").write_text(json.dumps(self.data))
+        (self.root / "docs/collaboration/board.json").write_text(json.dumps(self.data))
 
     def test_concurrent_claim_has_exactly_one_winner(self):
         def claim(name):
@@ -39,9 +39,9 @@ class CoordinationTests(unittest.TestCase):
         with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
             results = list(pool.map(claim, ["agent-a", "agent-b"]))
         self.assertEqual(sum(results), 1)
-        board = json.loads((self.root / "coordination/board.json").read_text())
+        board = json.loads((self.root / "docs/collaboration/board.json").read_text())
         self.assertIn(board["tasks"][0]["owner"], ["agent-a", "agent-b"])
-        self.assertFalse((self.root / "coordination/board.lock").exists())
+        self.assertFalse((self.root / "docs/collaboration/board.lock").exists())
 
     def test_dependency_blocks_claim_then_releases_after_review(self):
         with self.assertRaisesRegex(ValueError, "Dependencies not done"):
@@ -55,10 +55,10 @@ class CoordinationTests(unittest.TestCase):
 
     def test_non_owner_cannot_submit_or_change_owner(self):
         transition(self.root, "claim", "EX-001", "agent-a")
-        before = (self.root / "coordination/board.json").read_text()
+        before = (self.root / "docs/collaboration/board.json").read_text()
         with self.assertRaisesRegex(ValueError, "Only the active owner"):
             transition(self.root, "submit", "EX-001", "agent-b", "handoff.md")
-        self.assertEqual(before, (self.root / "coordination/board.json").read_text())
+        self.assertEqual(before, (self.root / "docs/collaboration/board.json").read_text())
 
     def test_missing_or_private_evidence_is_rejected(self):
         transition(self.root, "claim", "EX-001", "agent-a")

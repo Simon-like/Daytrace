@@ -58,7 +58,7 @@ CI 无 paths 跳过和 `continue-on-error`。聚合 job 使用 `if: always()` �
 - release manifest CLI 用合成 digest 实际生成并通过结构断言；这不是实际镜像 digest 或发布记录。
 - 下载 actionlint 1.7.7 到已忽略目录，核验官方 release checksum 后检查全部工作流，0 error。
 - 本机 `gh run view --help` 核实 JSON 字段后，将部署证据查询从不支持的 `path` 修正为 `workflowName`，复测通过。
-- `git diff --check` 通过；根 `package.json`、`pnpm-lock.yaml` 和 `coordination/board.json` 无变更。
+- `git diff --check` 通过；根 `package.json`、`pnpm-lock.yaml` 和 `docs/collaboration/board.json` 无变更。
 
 开发过程中隐私检查先因 standalone 的尾斜杠 308 和 RSC 404 语义失败，随后修正为跟随规范化跳转、按 RSC 协议验证 `NEXT_HTTP_ERROR_FALLBACK;404`，未删除 canary 或放宽最终 HTML/API 状态断言。完整复跑通过。
 
@@ -78,4 +78,4 @@ CI 无 paths 跳过和 `continue-on-error`。聚合 job 使用 `if: always()` �
 3. 演练 staging 健康失败、同一 release 证据不匹配和并发发布，确认旧组合不受影响，再评估生产授权。
 4. RELEASE-001 完成备份恢复、会话撤销、真实私密快照、回滚与恢复演练；在此之前保持生产关闭。
 
-运行与变量说明见 `ops/cicd/README.md`。本报告是机器自检记录，不冒充独立评审或部署证据。
+运行与变量说明见 `docs/operations/cicd.md`。本报告是机器自检记录，不冒充独立评审或部署证据。

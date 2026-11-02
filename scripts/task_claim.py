@@ -11,7 +11,7 @@ from pathlib import Path
 import tempfile
 import time
 
-from project_check import ROOT, exists_inside, validate_board
+from project_check import BOARD_RELATIVE, ROOT, exists_inside, validate_board
 
 
 @contextmanager
@@ -38,7 +38,7 @@ def board_lock(board: Path):
 def transition(root: Path, action: str, task_id: str, agent: str, evidence: str | None = None) -> dict:
     if not agent.strip():
         raise ValueError("Agent/reviewer name is required")
-    board = root / "coordination/board.json"
+    board = root / BOARD_RELATIVE
     with board_lock(board):
         data = json.loads(board.read_text())
         tasks = {t["id"]: t for t in data["tasks"]}
@@ -90,15 +90,30 @@ def transition(root: Path, action: str, task_id: str, agent: str, evidence: str 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("action", choices=["claim", "submit", "complete"])
-    parser.add_argument("task")
-    parser.add_argument("agent")
+    parser.add_argument("--root", type=Path, default=ROOT, help="Primary checkout containing the central docs/collaboration/board.json")
+    parser.add_argument("action", choices=["claim", "submit", "complete", "status"])
+    parser.add_argument("task", nargs="?")
+    parser.add_argument("agent", nargs="?")
     parser.add_argument("--evidence")
     args = parser.parse_args()
-    if (ROOT / ".git").is_file():
-        parser.error("Run coordination in the primary checkout, not a worktree board copy")
+    root = args.root.resolve()
+    if (root / ".git").is_file():
+        parser.error("A worktree copy is not the central checkout; pass --root /path/to/primary-checkout")
+    if not (root / ".git").is_dir():
+        parser.error("--root must point to the primary Git checkout, not an unversioned central-board copy")
+    if not (root / BOARD_RELATIVE).is_file():
+        parser.error("Central board is missing; sync main and use docs/collaboration/board.json")
+    if args.action == "status":
+        if args.task or args.agent or args.evidence:
+            parser.error("status is read-only and takes no task, agent, or evidence")
+        data = json.loads((root / BOARD_RELATIVE).read_text())
+        fields = ("id", "title", "status", "owner", "depends_on")
+        print(json.dumps({"board": str(root / BOARD_RELATIVE), "tasks": [{key: task.get(key) for key in fields} for task in data["tasks"]]}, ensure_ascii=False, indent=2))
+        return 0
+    if not args.task or not args.agent:
+        parser.error("claim/submit/complete require task and agent")
     try:
-        print(json.dumps(transition(ROOT, args.action, args.task, args.agent, args.evidence), ensure_ascii=False))
+        print(json.dumps(transition(root, args.action, args.task, args.agent, args.evidence), ensure_ascii=False))
         return 0
     except (ValueError, KeyError) as exc:
         print(json.dumps({"error": str(exc)}, ensure_ascii=False))

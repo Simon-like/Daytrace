@@ -1,0 +1,59 @@
+{
+  "date": "2026-11-02",
+  "task": "DOCS-001",
+  "moved_files": 96,
+  "moved_markdown": 93,
+  "removed_duplicate_redirects": 3,
+  "protected_application_files": 132,
+  "application_bytes_unchanged": true,
+  "markdown_data_files_checked": 27,
+  "markdown_data_unchanged": true,
+  "tests": {
+    "foundation": {
+      "passed": 11,
+      "failed": 0
+    },
+    "ci_python": {
+      "passed": 7,
+      "failed": 0
+    },
+    "ci_node": {
+      "passed": 3,
+      "failed": 0
+    },
+    "typecheck": "passed"
+  },
+  "http_smoke": [
+    {
+      "path": "/",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "path": "/archive",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "path": "/search",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "path": "/owner",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "path": "/api/v1/health/ready",
+      "status": 200,
+      "passed": true
+    }
+  ],
+  "scope": "documentation and collaboration tooling only; no business/visual changes, no production deployment",
+  "preserved_initial_worktree_changes": [
+    "experiments/ARCH-001/evidence/integration.json",
+    "experiments/ARCH-001/evidence/standalone-manifest.json",
+    "design/contributions/2026-10-30-codex-daytrace/daytrace-website-icon/"
+  ]
+}

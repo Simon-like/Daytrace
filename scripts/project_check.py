@@ -4,13 +4,66 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import subprocess
 import posixpath
 import re
 from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
+BOARD_RELATIVE = Path("docs/collaboration/board.json")
 STATES = {"queued", "active", "review", "done", "blocked"}
 SKIP = {".git", "node_modules", "dist", ".astro", ".next", ".nuxt", ".local", "__pycache__"}
+
+
+def is_content_markdown(path: Path) -> bool:
+    parts = path.parts
+    if parts[:1] == ("content",):
+        return path.name != "AGENTS.md" and path != Path("content/README.md")
+    if parts[:3] == ("apps", "api", "fixtures"):
+        return True
+    return parts[:1] == ("experiments",) and any(value in {"content", "fixtures"} for value in parts[2:])
+
+
+def document_policy_errors(root: Path, files: list[Path]) -> list[str]:
+    errors = []
+    for path in files:
+        if path.suffix != ".md" or any(part in SKIP for part in path.parts):
+            continue
+        if path.parts[:1] == ("docs",) or is_content_markdown(path):
+            continue
+        if path == Path("README.md"):
+            continue
+        if path.name == "AGENTS.md":
+            maximum = 50 if path == Path("AGENTS.md") else 30
+            actual = root / path
+            if actual.exists() and len(actual.read_text().splitlines()) > maximum:
+                errors.append(f"{path}: keep the agent entry under {maximum} lines; full rules belong in docs/collaboration")
+            continue
+        errors.append(f"{path}: project documentation must live under docs/")
+    return errors
+
+
+def markdown_files(root: Path) -> list[Path]:
+    result = []
+    for directory, names, files in os.walk(root):
+        names[:] = [name for name in names if name not in SKIP]
+        parent = Path(directory)
+        if parent.relative_to(root).parts[:2] == ("content", "private"):
+            names[:] = []
+            continue
+        result.extend(parent / name for name in files if name.endswith(".md"))
+    return result
+
+
+def managed_markdown(root: Path, discovered: list[Path]) -> list[Path]:
+    try:
+        output = subprocess.check_output(["git", "-C", str(root), "ls-files", "-z", "--", "*.md"], stderr=subprocess.DEVNULL)
+        tracked = [Path(name.decode()) for name in output.split(b"\0") if name]
+        return sorted({path for path in tracked if (root / path).exists()} |
+                      {path.relative_to(root) for path in discovered if path.relative_to(root).parts[:1] == ("docs",)})
+    except (OSError, subprocess.CalledProcessError):
+        return [path.relative_to(root) for path in discovered]
 
 
 def safe_relative(value: str) -> bool:
@@ -110,6 +163,8 @@ def main() -> int:
     errors = []
     catalog = json.loads((ROOT / "docs/catalog.json").read_text())
     for d in catalog["documents"]:
+        if not d["path"].startswith("docs/"):
+            errors.append(f"catalog: canonical project document outside docs: {d['path']}")
         if not exists_inside(ROOT, d["path"]):
             errors.append(f"catalog: missing/unsafe {d['path']}")
     paths = [d["path"] for d in catalog["documents"]]
@@ -125,12 +180,16 @@ def main() -> int:
         index.write_text(re.sub(pattern, lambda _: expected, text, flags=re.S))
     elif re.search(pattern, text, re.S).group() != expected:
         errors.append("docs index stale: run python3 scripts/project_check.py --write-index")
-    board = json.loads((ROOT / "coordination/board.json").read_text())
+    board = json.loads((ROOT / BOARD_RELATIVE).read_text())
+    if (ROOT / "coordination/board.json").exists():
+        errors.append("legacy coordination/board.json exists; docs/collaboration/board.json is the only authority")
     errors.extend(validate_board(board, ROOT))
     md_count = 0
-    for p in ROOT.rglob("*.md"):
+    discovered = markdown_files(ROOT)
+    errors.extend(document_policy_errors(ROOT, managed_markdown(ROOT, discovered)))
+    for p in discovered:
         rel = p.relative_to(ROOT)
-        if any(x in SKIP for x in rel.parts) or rel.parts[:2] == ("content", "private"):
+        if is_content_markdown(rel):
             continue
         md_count += 1
         for target in re.findall(r"\]\(([^)]+)\)", p.read_text()):
@@ -139,7 +198,7 @@ def main() -> int:
             target = target.split("#")[0]
             if target and not (p.parent / target).exists():
                 errors.append(f"{rel}: broken link {target}")
-    for p in (ROOT / "knowledge/learnings").glob("*.md"):
+    for p in (ROOT / "docs/knowledge/learnings").glob("*.md"):
         source = p.read_text()
         for key in ("id", "title", "status", "updated", "sources"):
             if not re.search(rf"^{key}:", source, re.M):

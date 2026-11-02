@@ -67,4 +67,4 @@ Docker daemon 不可用，未构建镜像或运行 Compose；保留的 Dockerfil
 - standalone 构建必须复制 `.next/static`/`public`，并验证 workspace 代码实际进入服务端 chunk；不要硬编码本次 chunk hash。
 - JS 差距需要 ENGINE/QA 继续分解测量或形成明确预算例外，不能删除断言、隐瞒失败或默认 Next 必然满足 80 KiB。
 
-完整文件清单、复现命令、风险和容器注意点见 `experiments/ARCH-001/handoff.md`。
+完整文件清单、复现命令、风险和容器注意点见 `docs/archive/experiments/ARCH-001/handoff.md`。

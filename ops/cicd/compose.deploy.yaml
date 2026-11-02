@@ -1,0 +1,41 @@
+services:
+  api:
+    image: ${API_IMAGE:?API_IMAGE must be a digest-pinned image}
+    restart: unless-stopped
+    environment:
+      API_HOST: 0.0.0.0
+      API_PORT: 3001
+      CONTENT_ROOT: /data/content
+    volumes:
+      - ${CONTENT_ROOT:?CONTENT_ROOT is required}:/data/content:ro
+    read_only: true
+    tmpfs:
+      - /tmp
+    expose:
+      - "3001"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3001/api/v1/health/ready').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+  site:
+    image: ${SITE_IMAGE:?SITE_IMAGE must be a digest-pinned image}
+    restart: unless-stopped
+    environment:
+      API_INTERNAL_ORIGIN: http://api:3001
+      HOSTNAME: 0.0.0.0
+      PORT: 3000
+      NEXT_TELEMETRY_DISABLED: 1
+    read_only: true
+    tmpfs:
+      - /tmp
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "${SITE_BIND:-127.0.0.1}:${SITE_PORT:-3000}:3000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 12

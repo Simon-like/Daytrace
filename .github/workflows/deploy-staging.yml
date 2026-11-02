@@ -1,0 +1,78 @@
+name: deploy-staging
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_run_id:
+        description: Successful release-build run ID
+        required: true
+        type: string
+      confirm:
+        description: Type staging to confirm
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: daytrace-staging
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: ${{ inputs.confirm == 'staging' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: staging
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: main
+      - name: Read trusted release run
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_ID: ${{ inputs.release_run_id }}
+        run: |
+          mkdir -p ops/cicd/.artifacts
+          [[ "$RUN_ID" =~ ^[0-9]+$ ]]
+          gh run view "$RUN_ID" --json databaseId,status,conclusion,event,headBranch,headSha,url,workflowName > ops/cicd/.artifacts/release-run.json
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: release-candidate
+          path: ops/cicd/.artifacts/release
+          run-id: ${{ inputs.release_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify release provenance
+        run: node scripts/ci/verify-release.mjs release --run ops/cicd/.artifacts/release-run.json --manifest ops/cicd/.artifacts/release/manifest.json
+      - name: Deploy and verify staging
+        id: deploy
+        env:
+          DEPLOY_MODE: staging
+          DEPLOY_HOST: ${{ vars.STAGING_DEPLOY_HOST }}
+          DEPLOY_USER: ${{ vars.STAGING_DEPLOY_USER }}
+          DEPLOY_PORT: ${{ vars.STAGING_DEPLOY_PORT }}
+          DEPLOY_HOST_KEY: ${{ secrets.STAGING_DEPLOY_HOST_KEY }}
+          DEPLOY_SSH_KEY: ${{ secrets.STAGING_DEPLOY_SSH_KEY }}
+          DEPLOY_DIRECTORY: ${{ vars.STAGING_DEPLOY_DIRECTORY }}
+          DEPLOY_CONTENT_ROOT: ${{ vars.STAGING_CONTENT_ROOT }}
+          PUBLIC_ORIGIN: ${{ vars.STAGING_PUBLIC_ORIGIN }}
+          SITE_BIND: ${{ vars.STAGING_SITE_BIND }}
+          SITE_PORT: ${{ vars.STAGING_SITE_PORT }}
+          RELEASE_MANIFEST: ops/cicd/.artifacts/release/manifest.json
+          EVIDENCE_OUTPUT: ops/cicd/.artifacts/staging/evidence.json
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          bash ops/cicd/remote-deploy.sh
+          jq --arg stagingRunUrl "$RUN_URL" '. + {stagingRunUrl:$stagingRunUrl}' "$EVIDENCE_OUTPUT" > "$EVIDENCE_OUTPUT.tmp"
+          mv "$EVIDENCE_OUTPUT.tmp" "$EVIDENCE_OUTPUT"
+      - name: Upload sanitized staging evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: staging-evidence
+          path: ops/cicd/.artifacts/staging/evidence.json
+          if-no-files-found: error
+          retention-days: 30

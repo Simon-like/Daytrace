@@ -1,0 +1,97 @@
+name: promote-production
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_run_id:
+        description: Successful release-build run ID
+        required: true
+        type: string
+      staging_run_id:
+        description: Successful deploy-staging run ID for the same release
+        required: true
+        type: string
+      confirm:
+        description: Type production to request promotion
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: daytrace-production
+  cancel-in-progress: false
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require explicit production enablement
+        env:
+          ENABLED: ${{ vars.DAYTRACE_PRODUCTION_ENABLED }}
+          CONFIRM: ${{ inputs.confirm }}
+        run: |
+          [[ "$ENABLED" == "true" ]] || { echo "Production is disabled by default."; exit 1; }
+          [[ "$CONFIRM" == "production" ]]
+  deploy:
+    needs: guard
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: main
+      - name: Read trusted release and staging runs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_RUN_ID: ${{ inputs.release_run_id }}
+          STAGING_RUN_ID: ${{ inputs.staging_run_id }}
+        run: |
+          mkdir -p ops/cicd/.artifacts
+          [[ "$RELEASE_RUN_ID" =~ ^[0-9]+$ && "$STAGING_RUN_ID" =~ ^[0-9]+$ ]]
+          gh run view "$RELEASE_RUN_ID" --json databaseId,status,conclusion,event,headBranch,headSha,url,workflowName > ops/cicd/.artifacts/release-run.json
+          gh run view "$STAGING_RUN_ID" --json databaseId,status,conclusion,event,headBranch,headSha,url,workflowName > ops/cicd/.artifacts/staging-run.json
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: release-candidate
+          path: ops/cicd/.artifacts/release
+          run-id: ${{ inputs.release_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: staging-evidence
+          path: ops/cicd/.artifacts/staging
+          run-id: ${{ inputs.staging_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify the same immutable pair passed staging
+        run: |
+          node scripts/ci/verify-release.mjs release --run ops/cicd/.artifacts/release-run.json --manifest ops/cicd/.artifacts/release/manifest.json
+          node scripts/ci/verify-release.mjs staging --run ops/cicd/.artifacts/staging-run.json --manifest ops/cicd/.artifacts/release/manifest.json --evidence ops/cicd/.artifacts/staging/evidence.json
+      - name: Promote the verified digests
+        env:
+          DEPLOY_MODE: production
+          DEPLOY_HOST: ${{ secrets.PRODUCTION_DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.PRODUCTION_DEPLOY_USER }}
+          DEPLOY_PORT: ${{ vars.PRODUCTION_DEPLOY_PORT }}
+          DEPLOY_HOST_KEY: ${{ secrets.PRODUCTION_DEPLOY_HOST_KEY }}
+          DEPLOY_SSH_KEY: ${{ secrets.PRODUCTION_DEPLOY_SSH_KEY }}
+          DEPLOY_DIRECTORY: ${{ secrets.PRODUCTION_DEPLOY_DIRECTORY }}
+          DEPLOY_CONTENT_ROOT: ${{ secrets.PRODUCTION_CONTENT_ROOT }}
+          PUBLIC_ORIGIN: ${{ vars.PRODUCTION_PUBLIC_ORIGIN }}
+          SITE_BIND: ${{ vars.PRODUCTION_SITE_BIND }}
+          SITE_PORT: ${{ vars.PRODUCTION_SITE_PORT }}
+          RELEASE_MANIFEST: ops/cicd/.artifacts/release/manifest.json
+          EVIDENCE_OUTPUT: ops/cicd/.artifacts/production/evidence.json
+        run: bash ops/cicd/remote-deploy.sh
+      - name: Upload sanitized production evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: production-evidence-${{ inputs.release_run_id }}
+          path: ops/cicd/.artifacts/production/evidence.json
+          if-no-files-found: error
+          retention-days: 30

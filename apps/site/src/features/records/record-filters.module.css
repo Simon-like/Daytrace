@@ -1,0 +1,101 @@
+.form {
+  display: grid;
+  gap: 18px;
+  margin: 26px 0 8px;
+  padding: 22px 0;
+  border-top: 1px solid var(--line, #d4d7cc);
+  border-bottom: 1px solid var(--line, #d4d7cc);
+}
+
+.typeField {
+  display: grid;
+  gap: 7px;
+  max-width: 340px;
+  color: var(--muted, #656b5f);
+  font-size: 13px;
+}
+
+.typeField select {
+  min-height: 44px;
+  padding: 8px 36px 8px 12px;
+  border: 1px solid var(--line, #d4d7cc);
+  border-radius: 0;
+  background: var(--paper-light, #f8f8f2);
+  color: var(--ink, #252a25);
+  font: inherit;
+  font-size: 15px;
+}
+
+.tags {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.tags legend {
+  margin-bottom: 9px;
+  color: var(--muted, #656b5f);
+  font-size: 13px;
+}
+
+.tagOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag,
+.selectedTag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  gap: 7px;
+  padding: 7px 11px;
+  border: 1px solid var(--line, #d4d7cc);
+  color: var(--muted, #656b5f);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.selectedTag {
+  border-color: var(--archive, #29352c);
+  color: var(--ink, #252a25);
+  background: #e3e5dc;
+}
+
+.tag input,
+.selectedTag input {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.actions button {
+  min-height: 44px;
+  padding: 8px 18px;
+  border: 1px solid var(--archive, #29352c);
+  background: var(--archive, #29352c);
+  color: var(--paper, #f0f0e8);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.actions .secondary {
+  background: transparent;
+  color: var(--archive, #29352c);
+}
+
+.actions button:disabled,
+.typeField select:disabled,
+.tags:disabled label {
+  cursor: wait;
+  opacity: 0.58;
+}

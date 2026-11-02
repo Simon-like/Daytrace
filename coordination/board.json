@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-30T10:05:24.762670+00:00",
+  "updated": "2026-11-02T04:01:46.551746+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -128,8 +128,8 @@
     {
       "id": "READER-001",
       "title": "三类阅读模块正式落地",
-      "status": "queued",
-      "owner": null,
+      "status": "done",
+      "owner": "kimi-reader",
       "depends_on": [
         "ENGINE-001"
       ],
@@ -139,13 +139,17 @@
         "tests/e2e/reader/"
       ],
       "card": "coordination/tasks/READER-001.md",
-      "evidence": []
+      "evidence": [
+        "coordination/handoffs/READER-001-codex-integration.md"
+      ],
+      "review": "coordination/reviews/READER-001-codex-integration.md",
+      "reviewer": "codex-integration"
     },
     {
       "id": "FIND-001",
       "title": "首页索引与公开检索",
-      "status": "queued",
-      "owner": null,
+      "status": "done",
+      "owner": "kimi-find",
       "depends_on": [
         "ENGINE-001"
       ],
@@ -157,13 +161,17 @@
         "apps/api/src/modules/search/"
       ],
       "card": "coordination/tasks/FIND-001.md",
-      "evidence": []
+      "evidence": [
+        "coordination/handoffs/FIND-001-codex-integration.md"
+      ],
+      "review": "coordination/reviews/FIND-001-codex-integration.md",
+      "reviewer": "codex-integration"
     },
     {
       "id": "ACCESS-001",
       "title": "主人视图与私密链路",
-      "status": "queued",
-      "owner": null,
+      "status": "done",
+      "owner": "kimi-access",
       "depends_on": [
         "ENGINE-001"
       ],
@@ -175,7 +183,11 @@
         "apps/api/src/modules/assets/"
       ],
       "card": "coordination/tasks/ACCESS-001.md",
-      "evidence": []
+      "evidence": [
+        "coordination/handoffs/ACCESS-001-codex-integration.md"
+      ],
+      "review": "coordination/reviews/ACCESS-001-codex-integration.md",
+      "reviewer": "codex-integration"
     },
     {
       "id": "QA-001",
@@ -282,8 +294,8 @@
     {
       "id": "CICD-001",
       "title": "CI/CD与测试环境交付",
-      "status": "queued",
-      "owner": null,
+      "status": "done",
+      "owner": "kimi-cicd",
       "depends_on": [
         "ENGINE-001"
       ],
@@ -295,7 +307,70 @@
         "docs/project/reports/CICD-001.md"
       ],
       "card": "coordination/tasks/CICD-001.md",
-      "evidence": []
+      "evidence": [
+        "coordination/handoffs/CICD-001-codex-integration.md"
+      ],
+      "review": "coordination/reviews/CICD-001-codex-integration.md",
+      "reviewer": "codex-integration"
+    },
+    {
+      "id": "DEMO-001",
+      "title": "接力验收与成品Demo集成",
+      "status": "done",
+      "owner": "codex-integration",
+      "depends_on": [
+        "ENGINE-001",
+        "READER-001",
+        "FIND-001",
+        "ACCESS-001",
+        "CICD-001"
+      ],
+      "allowed_paths": [
+        "AGENTS.md",
+        "README.md",
+        ".gitignore",
+        "coordination/",
+        "package.json",
+        "pnpm-lock.yaml",
+        ".env.example",
+        "scripts/demo/",
+        "apps/site/src/app/",
+        "apps/site/src/layouts/",
+        "apps/site/src/components/",
+        "apps/site/src/styles/",
+        "apps/site/public/",
+        "apps/api/src/app.module.ts",
+        "apps/api/src/bootstrap.ts",
+        "apps/api/src/main.ts",
+        "apps/api/src/modules/content/",
+        "apps/api/fixtures/demo/",
+        "tests/e2e/acceptance/",
+        "tests/integration/demo/",
+        "docs/superpowers/",
+        "docs/context/",
+        "docs/项目记忆.md",
+        "docs/README.md",
+        "docs/catalog.json",
+        "docs/project/项目进度.md",
+        "docs/project/reports/DEMO-001.md",
+        "docs/project/evidence/DEMO-001/",
+        "apps/",
+        "packages/",
+        "scripts/",
+        "tests/",
+        ".github/",
+        "ops/cicd/",
+        ".npmrc",
+        ".nvmrc",
+        ".node-version",
+        "knowledge/learnings/NOTE-0002-模块接线与浏览器验收.md"
+      ],
+      "card": "coordination/tasks/DEMO-001.md",
+      "evidence": [
+        "coordination/handoffs/DEMO-001-codex-integration.md"
+      ],
+      "review": "coordination/reviews/DEMO-001-self-review.md",
+      "reviewer": "codex-self-review"
     }
   ],
   "history": [
@@ -459,11 +534,116 @@
       "action": "complete",
       "actor": "kimi-integration",
       "evidence": "coordination/reviews/ENGINE-001-integration-review.md"
+    },
+    {
+      "at": "2026-10-30T10:07:28.435314+00:00",
+      "task": "READER-001",
+      "action": "claim",
+      "actor": "kimi-reader",
+      "evidence": null
+    },
+    {
+      "at": "2026-10-30T10:07:28.544718+00:00",
+      "task": "FIND-001",
+      "action": "claim",
+      "actor": "kimi-find",
+      "evidence": null
+    },
+    {
+      "at": "2026-10-30T10:07:28.650741+00:00",
+      "task": "ACCESS-001",
+      "action": "claim",
+      "actor": "kimi-access",
+      "evidence": null
+    },
+    {
+      "at": "2026-10-30T10:07:28.757013+00:00",
+      "task": "CICD-001",
+      "action": "claim",
+      "actor": "kimi-cicd",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-02T03:18:49.412244+00:00",
+      "task": "DEMO-001",
+      "action": "claim",
+      "actor": "codex-integration",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-02T03:20:59.449307+00:00",
+      "task": "READER-001",
+      "action": "submit",
+      "actor": "kimi-reader",
+      "evidence": "coordination/handoffs/READER-001-codex-integration.md"
+    },
+    {
+      "at": "2026-11-02T03:20:59.452364+00:00",
+      "task": "READER-001",
+      "action": "complete",
+      "actor": "codex-integration",
+      "evidence": "coordination/reviews/READER-001-codex-integration.md"
+    },
+    {
+      "at": "2026-11-02T03:20:59.455093+00:00",
+      "task": "FIND-001",
+      "action": "submit",
+      "actor": "kimi-find",
+      "evidence": "coordination/handoffs/FIND-001-codex-integration.md"
+    },
+    {
+      "at": "2026-11-02T03:20:59.457588+00:00",
+      "task": "FIND-001",
+      "action": "complete",
+      "actor": "codex-integration",
+      "evidence": "coordination/reviews/FIND-001-codex-integration.md"
+    },
+    {
+      "at": "2026-11-02T03:20:59.460781+00:00",
+      "task": "ACCESS-001",
+      "action": "submit",
+      "actor": "kimi-access",
+      "evidence": "coordination/handoffs/ACCESS-001-codex-integration.md"
+    },
+    {
+      "at": "2026-11-02T03:20:59.463254+00:00",
+      "task": "ACCESS-001",
+      "action": "complete",
+      "actor": "codex-integration",
+      "evidence": "coordination/reviews/ACCESS-001-codex-integration.md"
+    },
+    {
+      "at": "2026-11-02T03:20:59.466132+00:00",
+      "task": "CICD-001",
+      "action": "submit",
+      "actor": "kimi-cicd",
+      "evidence": "coordination/handoffs/CICD-001-codex-integration.md"
+    },
+    {
+      "at": "2026-11-02T03:20:59.469168+00:00",
+      "task": "CICD-001",
+      "action": "complete",
+      "actor": "codex-integration",
+      "evidence": "coordination/reviews/CICD-001-codex-integration.md"
+    },
+    {
+      "at": "2026-11-02T04:01:46.455586+00:00",
+      "task": "DEMO-001",
+      "action": "submit",
+      "actor": "codex-integration",
+      "evidence": "coordination/handoffs/DEMO-001-codex-integration.md"
+    },
+    {
+      "at": "2026-11-02T04:01:46.551746+00:00",
+      "task": "DEMO-001",
+      "action": "complete",
+      "actor": "codex-self-review",
+      "evidence": "coordination/reviews/DEMO-001-self-review.md"
     }
   ],
   "dispatch_policy": {
     "mode": "manual",
-    "current_scope": "architecture-and-cicd-documentation",
+    "current_scope": "2026-11-02 Kimi branch acceptance and complete local demo integration",
     "technical_tasks": "Next.js + NestJS + pnpm workspace direction confirmed; development by separately dispatched agents; no production authorization implied"
   }
 }

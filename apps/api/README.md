@@ -1,3 +1,5 @@
+> 2026-11-02更新：已集成搜索、主人与附件边界，完整Demo见[运行手册](../../scripts/demo/README.md)与[验收报告](../../docs/project/reports/DEMO-001.md)。以下ENGINE记录保留工程基础背景；当前以源码与Demo报告为准，不能将旧“尚未接线”当作当前状态。
+
 # @daytrace/api
 
 NestJS 12 内容 API。唯一内容读取与公开投影边界位于 `src/modules/content`；共享响应契约来自 `@daytrace/contracts`，不包含第二套前端解析或权限逻辑。

@@ -1,4 +1,4 @@
-FROM node:24.22.1-bookworm-slim AS build
+FROM node:24.18.0-bookworm-slim AS build
 WORKDIR /app
 RUN npm install --global pnpm@11.23.0
 COPY .npmrc package.json pnpm-lock.yaml pnpm-workspace.yaml ./
@@ -12,7 +12,7 @@ RUN pnpm install --frozen-lockfile --filter @daytrace/api... \
     && node scripts/ci/export-public-content.mjs \
     && pnpm prune --prod
 
-FROM node:24.22.1-bookworm-slim AS runtime
+FROM node:24.18.0-bookworm-slim AS runtime
 ENV NODE_ENV=production API_HOST=0.0.0.0 API_PORT=3001 CONTENT_ROOT=/data/content
 WORKDIR /app
 COPY package.json pnpm-workspace.yaml ./

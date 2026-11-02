@@ -1,4 +1,4 @@
-FROM node:24.22.1-bookworm-slim AS build
+FROM node:24.18.0-bookworm-slim AS build
 WORKDIR /app
 RUN npm install --global pnpm@11.23.0
 COPY .npmrc package.json pnpm-lock.yaml pnpm-workspace.yaml ./
@@ -11,7 +11,7 @@ RUN pnpm install --frozen-lockfile --filter @daytrace/site... \
     && pnpm --filter @daytrace/site build \
     && node scripts/ci/prepare-standalone.mjs
 
-FROM node:24.22.1-bookworm-slim AS runtime
+FROM node:24.18.0-bookworm-slim AS runtime
 ENV NODE_ENV=production HOSTNAME=0.0.0.0 PORT=3000 NEXT_TELEMETRY_DISABLED=1
 WORKDIR /app
 COPY --from=build /app/apps/site/.next/standalone ./

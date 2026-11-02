@@ -1,4 +1,4 @@
-import { Controller, Get, Header, Inject, Param, Query, Req, Res } from "@nestjs/common";
+import { Controller, Get, Header, Inject, Optional, Param, Query, Req, Res } from "@nestjs/common";
 import {
   API_SCHEMA_VERSION,
   type ApiSuccess,
@@ -8,11 +8,26 @@ import {
 import type { Response } from "express";
 import { authRequired, invalidQuery } from "../../common/api-error";
 import type { RequestWithId } from "../../common/request-id.middleware";
+import { AssetsService } from "../assets/assets.service";
+import { noStore, onlySessionCookie, SessionService } from "../auth";
 import { ContentService } from "./content.service";
 
 @Controller()
 export class ContentController {
-  constructor(@Inject(ContentService) private readonly content: ContentService) {}
+  constructor(
+    @Inject(ContentService) private readonly content: ContentService,
+    @Inject(AssetsService) private readonly assets: AssetsService,
+    @Optional() @Inject(SessionService) private readonly sessions?: SessionService,
+  ) {}
+
+  private isOwner(request: RequestWithId): boolean {
+    return this.sessions?.resolve(onlySessionCookie(request.headers.cookie)) != null;
+  }
+
+  private requireOwner(request: RequestWithId, response: Response): void {
+    noStore(response);
+    if (!this.isOwner(request)) throw authRequired();
+  }
 
   @Get("health/live")
   @Header("Cache-Control", "no-store")
@@ -30,6 +45,7 @@ export class ContentController {
   @Header("Cache-Control", "public, max-age=0, must-revalidate")
   list(
     @Req() request: RequestWithId,
+    @Res({ passthrough: true }) response: Response,
     @Query("scope") scope?: unknown,
     @Query("type") type?: unknown,
     @Query("tag") tag?: unknown,
@@ -38,7 +54,13 @@ export class ContentController {
     @Query("status") status?: unknown,
     @Query("visibility") visibility?: unknown,
   ): ApiSuccess<RecordListData> {
-    if (scope === "owner") throw authRequired();
+    if (scope === "owner") {
+      this.requireOwner(request, response);
+      return { schemaVersion: API_SCHEMA_VERSION, data: {
+        items: this.content.listOwner().items,
+        pageInfo: { hasMore: false, nextCursor: null },
+      }, meta: { requestId: request.requestId, contentRevision: this.content.ownerContentRevision } };
+    }
     if (scope !== undefined && scope !== "public") throw invalidQuery("scope 仅支持 public", "scope");
     if (status !== undefined || visibility !== undefined) throw invalidQuery("公开范围不接受主人过滤参数", "status");
     if (type !== undefined && (typeof type !== "string" || !["engineering", "recipe", "reflection"].includes(type))) {
@@ -77,27 +99,27 @@ export class ContentController {
     @Param("recordId") recordId: string,
     @Query("scope") scope?: unknown,
   ): ApiSuccess<RecordDetail> {
-    if (scope === "owner") throw authRequired();
-    if (scope !== undefined && scope !== "public") throw invalidQuery("scope 仅支持 public", "scope");
-    const record = this.content.getPublicRecord(recordId);
-    response.setHeader("ETag", `"${record.metadata.id}:${record.metadata.revision}"`);
+    if (scope === "owner") this.requireOwner(request, response);
+    if (scope !== undefined && scope !== "public" && scope !== "owner") throw invalidQuery("scope 仅支持 public 或 owner", "scope");
+    const record = scope === "owner" ? this.content.getOwnerRecord(recordId) : this.content.getPublicRecord(recordId);
+    response.setHeader("ETag", `"${scope === "owner" ? this.content.ownerContentRevision : this.content.contentRevision}:${record.metadata.id}:${record.metadata.revision}"`);
     return {
       schemaVersion: API_SCHEMA_VERSION,
       data: record.detail,
-      meta: { requestId: request.requestId, contentRevision: this.content.contentRevision },
+      meta: { requestId: request.requestId, contentRevision: scope === "owner" ? this.content.ownerContentRevision : this.content.contentRevision },
     };
   }
 
   @Get("assets/:assetId")
-  async asset(@Param("assetId") assetId: string, @Res() response: Response): Promise<void> {
-    const asset = await this.content.getPublicAsset(assetId);
-    const disposition = asset.mediaType.startsWith("image/") ? "inline" : "attachment";
+  async asset(@Param("assetId") assetId: string, @Req() request: RequestWithId, @Res() response: Response): Promise<void> {
+    // One asset route for both projections, using ACCESS's confined file reader.
+    noStore(response);
+    const asset = await this.assets.open(assetId, this.isOwner(request));
     response.setHeader("Content-Type", asset.mediaType);
-    response.setHeader("Content-Length", asset.bytes.byteLength);
-    response.setHeader("Content-Disposition", disposition);
+    response.setHeader("Content-Length", asset.size);
+    response.setHeader("Content-Disposition", asset.mediaType.startsWith("image/") ? "inline" : "attachment");
     response.setHeader("X-Content-Type-Options", "nosniff");
-    response.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
-    response.setHeader("ETag", asset.etag);
-    response.send(asset.bytes);
+    asset.stream.once("error", () => response.destroy());
+    asset.stream.pipe(response);
   }
 }

@@ -7,8 +7,15 @@ import { AppModule } from "./app.module";
 import { ApiErrorFilter } from "./common/api-error.filter";
 import { RequestIdMiddleware } from "./common/request-id.middleware";
 
-export async function createApiApplication(contentRoot: string, logger = false): Promise<INestApplication> {
-  const app = await NestFactory.create(AppModule.register(contentRoot), new ExpressAdapter(), {
+export async function createApiApplication(contentRoot: string, logger = false, demoOrigin?: string): Promise<INestApplication> {
+  if (demoOrigin !== undefined) {
+    const origin = new URL(demoOrigin);
+    if (process.env.NODE_ENV === "production" || !["127.0.0.1", "localhost"].includes(origin.hostname) ||
+        origin.protocol !== "http:" || origin.username || origin.password || origin.pathname !== "/") {
+      throw new Error("Demo authentication requires a non-production loopback origin");
+    }
+  }
+  const app = await NestFactory.create(AppModule.register(contentRoot, demoOrigin), new ExpressAdapter(), {
     logger: logger ? ["log", "error", "warn"] as ("log" | "error" | "warn")[] : false,
   });
   const requestId = new RequestIdMiddleware();

@@ -115,7 +115,14 @@ export function renderMarkdown(
     transformTags: {
       a: sanitizeHtml.simpleTransform("a", { rel: "noopener noreferrer" }),
       input: sanitizeHtml.simpleTransform("input", { disabled: "disabled" }),
-      img: sanitizeHtml.simpleTransform("img", { loading: "lazy" }),
+      img: (_tagName, attributes) => {
+        const asset = attachments.find(item => attributes.src === `/api/v1/assets/${item.id}`);
+        return { tagName: "img", attribs: {
+          ...attributes, loading: "lazy",
+          ...(asset?.width === undefined ? {} : { width: String(asset.width) }),
+          ...(asset?.height === undefined ? {} : { height: String(asset.height) }),
+        } };
+      },
     },
   });
   return { html, toc, parseRevision: MARKDOWN_PARSE_REVISION, issues: [] };

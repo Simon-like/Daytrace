@@ -146,7 +146,7 @@ export function SearchPanel({ initialQuery = "", onClose }: SearchPanelProps) {
         <button className={styles.submit} type="submit" disabled={state.status === "loading"}>搜索</button>
       </form>
       {onClose === undefined ? null : <button type="button" className={styles.close} onClick={onClose}>关闭搜索</button>}
-      <p className={styles.hint}>只检索明确公开的集合；即使浏览器带有 Cookie，也不会拼入主人记录。</p>
+      <p className={styles.hint}>只查找公开记录；只想留给自己的内容，仍留在主人空间。</p>
       <p className={styles.status} aria-live="polite">
         {state.status === "idle" ? "输入关键词开始查找。" :
           state.status === "loading" ? `正在搜索“${state.query}”…` :

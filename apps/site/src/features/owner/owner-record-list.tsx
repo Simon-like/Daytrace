@@ -10,7 +10,7 @@ export function OwnerRecordList({ records }: { records: readonly RecordSummary[]
           <article className="record-card">
             <div className="record-meta">
               <span>{record.visibility === "private" ? "私密" : "公开"}</span>
-              <span>{record.status}</span>
+              <span>{{ draft: "未整理", published: "已归档", archived: "已封存" }[record.status]}</span>
               <time dateTime={record.updatedAt}>{record.occurredOn ?? "未记日期"}</time>
             </div>
             <h2><Link href={`/owner/records/${record.id}/`}>{record.title}</Link></h2>

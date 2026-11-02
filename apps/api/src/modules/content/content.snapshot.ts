@@ -22,7 +22,7 @@ function comparePublicRecords(left: SourceRecord, right: SourceRecord): number {
   return b.updatedAt.localeCompare(a.updatedAt) || a.id.localeCompare(b.id);
 }
 
-async function validateAttachmentFiles(record: SourceRecord, hash: ReturnType<typeof createHash>): Promise<ContentIssue[]> {
+async function validateAttachmentFiles(record: SourceRecord, hashes: readonly ReturnType<typeof createHash>[]): Promise<ContentIssue[]> {
   const issues: ContentIssue[] = [];
   let root: string;
   try {
@@ -46,10 +46,12 @@ async function validateAttachmentFiles(record: SourceRecord, hash: ReturnType<ty
         continue;
       }
       const bytes = await readFile(actual);
-      hash.update(attachment.path);
-      hash.update("\0");
-      hash.update(bytes);
-      hash.update("\0");
+      for (const hash of hashes) {
+        hash.update(attachment.path);
+        hash.update("\0");
+        hash.update(bytes);
+        hash.update("\0");
+      }
     } catch {
       issues.push(issue(record.sourceFile, "CONTENT_ATTACHMENT_MISSING", "附件不存在或不可读取", field));
     }
@@ -116,6 +118,7 @@ export async function loadContentSnapshot(contentRoot: string): Promise<ContentS
   const issues: ContentIssue[] = [];
   const hash = createHash("sha256");
   hash.update("daytrace-content-v1\0");
+  const publicHash = createHash("sha256").update("daytrace-public-content-v1\0");
   try {
     for (const group of ["private", "public"] as const) {
       const entries = await readdir(join(root, group), { withFileTypes: true });
@@ -125,11 +128,15 @@ export async function loadContentSnapshot(contentRoot: string): Promise<ContentS
         issues.push(...loaded.issues);
         if (loaded.record !== null && loaded.sourceBytes !== null) {
           records.push(loaded.record);
-          hash.update(loaded.record.sourceFile);
-          hash.update("\0");
-          hash.update(loaded.sourceBytes);
-          hash.update("\0");
-          issues.push(...await validateAttachmentFiles(loaded.record, hash));
+          const digests = loaded.record.metadata.visibility === "public" && loaded.record.metadata.status === "published"
+            ? [hash, publicHash] : [hash];
+          for (const digest of digests) {
+            digest.update(loaded.record.sourceFile);
+            digest.update("\0");
+            digest.update(loaded.sourceBytes);
+            digest.update("\0");
+          }
+          issues.push(...await validateAttachmentFiles(loaded.record, digests));
         }
       }
     }
@@ -158,7 +165,7 @@ export async function loadContentSnapshot(contentRoot: string): Promise<ContentS
   const publicRecords = records.filter((record) =>
     record.metadata.status === "published" && record.metadata.visibility === "public",
   ).sort(comparePublicRecords);
-  return { contentRevision: `sha256:${hash.digest("hex")}`, records, publicRecords };
+  return { contentRevision: `sha256:${hash.digest("hex")}`, publicContentRevision: `sha256:${publicHash.digest("hex")}`, records, publicRecords };
 }
 
 export async function readAssetBytes(record: SourceRecord, assetId: string): Promise<{

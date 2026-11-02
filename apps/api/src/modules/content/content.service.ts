@@ -40,7 +40,9 @@ export class ContentService implements OnModuleInit {
     } catch (error: unknown) {
       if (this.snapshot !== undefined) return;
       if (error instanceof ContentSnapshotInvalidError || error instanceof ContentSnapshotUnavailableError) {
-        this.failure = error;
+        this.failure = error instanceof ContentSnapshotInvalidError
+          ? new ContentSnapshotInvalidError(error.details.filter(detail => !detail.file?.startsWith("private/")))
+          : error;
       } else {
         this.failure = new ContentSnapshotUnavailableError();
       }
@@ -53,6 +55,10 @@ export class ContentService implements OnModuleInit {
   }
 
   get contentRevision(): string {
+    return this.current().publicContentRevision;
+  }
+
+  get ownerContentRevision(): string {
     return this.current().contentRevision;
   }
 
@@ -64,7 +70,7 @@ export class ContentService implements OnModuleInit {
       limit: query.limit,
     })).digest("hex");
     let offset = 0;
-    if (query.cursor !== undefined) offset = this.decodeCursor(query.cursor, snapshot.contentRevision, fingerprint);
+    if (query.cursor !== undefined) offset = this.decodeCursor(query.cursor, snapshot.publicContentRevision, fingerprint);
     const filtered = snapshot.publicRecords.filter((record) =>
       (query.type === undefined || record.metadata.type === query.type) &&
       query.tags.every((tag) => record.metadata.tags.includes(tag)),
@@ -74,7 +80,7 @@ export class ContentService implements OnModuleInit {
     return {
       items: page.map(toPublicSummary),
       hasMore,
-      nextCursor: hasMore ? this.encodeCursor(snapshot.contentRevision, fingerprint, offset + query.limit) : null,
+      nextCursor: hasMore ? this.encodeCursor(snapshot.publicContentRevision, fingerprint, offset + query.limit) : null,
     };
   }
 
@@ -92,6 +98,29 @@ export class ContentService implements OnModuleInit {
       if (asset !== null) return asset;
     }
     throw new AssetNotFoundError();
+  }
+
+  listOwner(): { items: readonly RecordSummary[]; hasMore: false; nextCursor: null } {
+    return { items: this.current().records.map(toPublicSummary), hasMore: false, nextCursor: null };
+  }
+
+  getOwnerRecord(recordId: string): SourceRecord {
+    if (!isRecordId(recordId)) throw invalidRecordId();
+    const record = this.current().records.find((item) => item.metadata.id === recordId);
+    if (record === undefined) throw new RecordNotFoundError();
+    return record;
+  }
+
+  findPublishedAsset(assetId: string) {
+    for (const record of this.current().records) {
+      if (record.metadata.status !== "published") continue;
+      const asset = record.metadata.attachments.find((item) => item.id === assetId);
+      if (asset !== undefined) return {
+        id: asset.id, visibility: record.metadata.visibility, rootPath: record.recordDirectory,
+        relativePath: asset.path, mediaType: asset.mediaType,
+      };
+    }
+    return null;
   }
 
   private encodeCursor(contentRevision: string, fingerprint: string, offset: number): string {

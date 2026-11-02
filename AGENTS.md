@@ -19,11 +19,13 @@
 
 ## 当前阶段
 
-M1进行中。MODULES-001七页面原型已交付，用户表示先这样；91组Chromium布局和10组交互检查不等于正式站点、真实Markdown、私密或iPhone真机验收。
+2026-11-02：Kimi已交付正式Next/Nest工程与四个独立模块；本聊天已完成主分支集成和成品本地Demo。实际阶段/证据见docs/project/项目进度.md和DEMO-001报告，不再按旧“M1/尚未建立工程”描述执行。
 
-技术方向已由用户确认：Next.js（React）+ NestJS + monorepo；实施基线为TypeScript与pnpm workspace。正式工程尚未建立。先读docs/architecture/研发交接与任务编排.md；site负责页面，api负责业务/权限，禁止重复建设。
+最新用户授权：验收Kimi成果并持续开发到成品Demo。方向固定Next.js（React）+ NestJS + TypeScript + pnpm workspace。site负责页面，api负责内容/业务/权限，不重复建设。根命令pnpm demo启动隔离的示例内容/身份，正式生产不得启用演示登录。
 
-最新用户要求：完善方向性技术架构和完整CI/CD，交由其他Agent开发。本轮仅文档，不运行开发Agent、不安装依赖或发布。ARCH-001验证固定路线兼容性，不再选择Astro；CI从ENGINE后与功能并行。按用户另行派发领取任务，生产授权独立。
+11组真实Chromium交互与56组布局通过不等于iPhone/Safari、真实OIDC、性能预算、托管CI或生产验收。原80 KiB JS预算未达；真实身份、私密检索、分享/站点地图和部署恢复等仍需后续任务。不要把“Demo可用”升级为正式发布完成。
+
+原四模块已审阅合并，owner与证据保留。开发任务依中央board实际分配，禁止覆盖现存未提交实验记录或作者worktree。用户没有授权本轮生产部署或导入真实私密数据。
 
 ## 写入与集成
 

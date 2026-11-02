@@ -37,3 +37,14 @@ test("HTML-looking code remains readable text", () => {
   assert.ok(result.html?.includes("&lt;script&gt;"));
   assert.ok(!result.html?.includes("<script>"));
 });
+
+test("declared image dimensions reserve the reading layout before the image arrives", () => {
+  const result = renderMarkdown("![示例图](images/meal.webp)", [{
+    id: "ast_11111111-1111-4111-8111-000000001002", path: "images/meal.webp",
+    mediaType: "image/webp", width: 960, height: 640,
+  }], "public/meal/index.md");
+  assert.equal(result.issues.length, 0);
+  assert.match(result.html ?? "", /width="960"/);
+  assert.match(result.html ?? "", /height="640"/);
+  assert.match(result.html ?? "", /loading="lazy"/);
+});

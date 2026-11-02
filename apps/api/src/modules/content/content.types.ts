@@ -42,6 +42,7 @@ export interface SourceRecord {
 
 export interface ContentSnapshot {
   readonly contentRevision: string;
+  readonly publicContentRevision: string;
   readonly records: readonly SourceRecord[];
   readonly publicRecords: readonly SourceRecord[];
 }

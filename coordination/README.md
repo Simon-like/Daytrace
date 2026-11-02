@@ -9,9 +9,9 @@
 - `handoffs/` 每个任务/Agent独立交付；`reviews/` 记录证据、发现与是否可集成。
 - 项目记忆、进度、目录索引和资产台账由集成者串行汇总，贡献者不并发覆盖这些文件。
 
-角色是工作职责，不表示已启动或雇用多个Agent。FOUND-001、BRAND-001与BRAND-002已交付，后续任务处于队列，等待用户/协调者实际派发。
+角色是工作职责，不表示同时启动了多个Agent。Kimi的独立模块已由本聊天审阅并合并，当前本地成品Demo和真实浏览器证据见[DEMO-001报告](../docs/project/reports/DEMO-001.md)。任务精确状态以board为准，不能从旧“队列占位”说明推断当前实现进度。
 
-最新范围：Next.js + NestJS + monorepo方向已确认，pnpm/TypeScript为实施基线；本轮更新架构与CI/CD交接，由用户另行调度其他Agent开发。先看[研发编排](../docs/architecture/研发交接与任务编排.md)。ARCH/CONTENT/SECURITY先行，ENGINE串行集成，功能与CICD随后并行；queued仍需实际派发/认领，生产权限不随开发任务授予。
+最新授权：验收并持续开发到本地Demo。Next/Nest/pnpm方向固定，源码已建立，不重做选型/脚手架。后续QA/RELEASE依真实派发继续；本地演示不构成真实身份/真机/生产发布授权或验收。
 
 ## 任务流程
 

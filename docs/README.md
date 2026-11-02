@@ -2,7 +2,7 @@
 
 先按问题找权威来源，不必读取所有历史资料。
 
-**当前先看 [上下文入口](context/README.md) 和 [当前工作](context/当前工作上下文.md)。Next.js + NestJS + pnpm monorepo方向已确定，开发先看[研发交接](architecture/研发交接与任务编排.md)和[CI/CD方案](architecture/CI-CD与运维建设方案.md)。**
+**当前先看 [上下文入口](context/README.md) 和 [当前工作](context/当前工作上下文.md)。Next/Nest全栈Demo已形成，先看[Demo验收](project/reports/DEMO-001.md)；继续研发再看[研发交接](architecture/研发交接与任务编排.md)和[CI/CD方案](architecture/CI-CD与运维建设方案.md)。**
 
 - 接手：根AGENTS → 项目记忆 → 已认领任务 → 相关PRD/设计/ADR。
 - 建什么：product；怎么落地：design与architecture；做到哪：project。
@@ -42,6 +42,7 @@
 | [CI/CD与运维建设方案](architecture/CI-CD与运维建设方案.md) | PR检查、环境、发布/回滚/恢复与实际门槛 | baseline | 工程与运维 |
 | [研发交接与任务编排](architecture/研发交接与任务编排.md) | Agent入口、分工顺序、写入职责与完成定义 | active | 协调与集成 |
 | [M1全栈架构与CI/CD报告](project/reports/M1-全栈架构与CI-CD建设-2026-10-30.md) | 技术确认、文档交付、验证与未完成边界 | reference | 架构与集成 |
+| [全栈Demo验收报告](project/reports/DEMO-001.md) | Kimi接力事实、成品运行、真实测试与发布差距 | active | 集成与验收 |
 <!-- catalog:end -->
 
 状态含义：baseline为当前产品/设计基线，active为持续维护的工作入口，proposed为尚待验证的建议，accepted为已作出的决策（不等于已实现/验收），reference为参考资料，historical为历史。

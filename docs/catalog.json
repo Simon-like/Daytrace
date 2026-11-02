@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-30",
+  "updated": "2026-11-02",
   "documents": [
     {
       "id": "context",
@@ -217,6 +217,14 @@
       "purpose": "技术确认、文档交付、验证与未完成边界",
       "status": "reference",
       "owner_role": "架构与集成"
+    },
+    {
+      "id": "demo-001",
+      "title": "全栈Demo验收报告",
+      "path": "docs/project/reports/DEMO-001.md",
+      "purpose": "Kimi接力事实、成品运行、真实测试与发布差距",
+      "status": "active",
+      "owner_role": "集成与验收"
     }
   ]
 }

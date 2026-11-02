@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { ReaderArticle } from "../../../features/reader";
 import type { Metadata } from "next";
 import { isRecordId } from "@daytrace/contracts";
 import { notFound, permanentRedirect } from "next/navigation";
@@ -26,30 +28,5 @@ export default async function RecordPage({ params }: RecordPageProps) {
   }
   const record = await getPublicRecord(recordRef);
   if (record === null) notFound();
-  return (
-    <main className="reader-main">
-      <article>
-        <header className="reader-header">
-          <p className="eyebrow">公开记录 / 合成样本</p>
-          <h1>{record.title}</h1>
-          <div className="record-meta">
-            <time dateTime={record.updatedAt}>发生：{record.occurredOn ?? "未记日期"}</time>
-            <span>修订 {record.revision}</span>
-          </div>
-          {record.summary === null ? null : <p className="reader-summary">{record.summary}</p>}
-        </header>
-        <div className="reader-layout">
-          {record.body.toc.length === 0 ? null : (
-            <nav className="toc" aria-label="本文目录">
-              <p>本文目录</p>
-              <ol>{record.body.toc.map((item) => (
-                <li key={item.id} className={`toc-level-${item.level}`}><a href={`#${item.id}`}>{item.text}</a></li>
-              ))}</ol>
-            </nav>
-          )}
-          <div className="record-body" dangerouslySetInnerHTML={{ __html: record.body.html }} />
-        </div>
-      </article>
-    </main>
-  );
+  return <main className="reader-main"><div className="reader-topline"><Link href="/archive">← 返回归档</Link><span>一页演示记录</span></div><ReaderArticle record={record} marginNote="留下过程，也给后来一点线索。" /><div className="reader-bottom"><span>这一页，先记到这里。</span><Link href="/archive">继续翻阅归档 ↗</Link></div></main>;
 }

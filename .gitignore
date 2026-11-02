@@ -28,3 +28,6 @@ __pycache__/
 !/content/private/.gitkeep
 
 # Keep curated design previews, reports and prompts tracked.
+
+# TypeScript incremental cache
+*.tsbuildinfo

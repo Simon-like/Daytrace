@@ -104,6 +104,18 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: ./.github/actions/setup-workspace
       - run: pnpm test:e2e
+      - name: Install Chromium for real browser checks
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Exercise integrated demo in a real browser
+        run: DEMO_MANAGED_SERVER=1 pnpm test:browser
+      - name: Upload synthetic browser evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: demo-browser-evidence
+          path: docs/project/evidence/DEMO-001/
+          if-no-files-found: error
+          retention-days: 14
 
   aggregate:
     name: CI

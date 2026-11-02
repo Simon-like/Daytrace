@@ -52,3 +52,16 @@ test("source byte changes produce a different content revision", async () => {
     await rm(temporary, { recursive: true, force: true });
   }
 });
+
+test("private-only edits never change the public revision or pagination fingerprint", async () => {
+  const temporary = await mkdtemp(join(tmpdir(), "daytrace-private-revision-"));
+  try {
+    await cp(fixtureRoot, temporary, { recursive: true });
+    const before = await loadContentSnapshot(temporary);
+    const file = join(temporary, "private/owner-canary/index.md");
+    await writeFile(file, `${await readFile(file, "utf8")}\n仅给自己的新认识。\n`);
+    const after = await loadContentSnapshot(temporary);
+    assert.notEqual(after.contentRevision, before.contentRevision);
+    assert.equal(after.publicContentRevision, before.publicContentRevision);
+  } finally { await rm(temporary, { recursive: true, force: true }); }
+});

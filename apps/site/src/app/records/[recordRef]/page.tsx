@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: RecordPageProps): Promise<Met
   if (!isRecordId(recordRef)) return { title: "记录链接" };
   const record = await getPublicRecord(recordRef);
   if (record === null) return { title: "记录不可用" };
-  return { title: record.title, description: record.summary ?? undefined };
+  return { title: record.title, description: record.summary ?? undefined, alternates: { canonical: `/records/${record.id}/` } };
 }
 
 export default async function RecordPage({ params }: RecordPageProps) {
@@ -28,5 +28,5 @@ export default async function RecordPage({ params }: RecordPageProps) {
   }
   const record = await getPublicRecord(recordRef);
   if (record === null) notFound();
-  return <main className="reader-main"><div className="reader-topline"><Link href="/archive">← 返回归档</Link><span>一页演示记录</span></div><ReaderArticle record={record} marginNote="留下过程，也给后来一点线索。" /><div className="reader-bottom"><span>这一页，先记到这里。</span><Link href="/archive">继续翻阅归档 ↗</Link></div></main>;
+  return <main className="reader-main"><div className="reader-topline"><Link href="/archive">← 返回归档</Link><span>{process.env.DAYTRACE_DEMO === "1" ? "一页演示记录" : "一页记录"}</span></div><ReaderArticle record={record} marginNote="留下过程，也给后来一点线索。" /><div className="reader-bottom"><span>这一页，先记到这里。</span><Link href="/archive">继续翻阅归档 ↗</Link></div></main>;
 }

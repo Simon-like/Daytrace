@@ -17,7 +17,7 @@ function option(name) {
 }
 
 if (process.argv.includes("--help")) {
-  console.log("Usage: npm run dev -- [--host 127.0.0.1] [--port 3000] [--h5-port 3002]\nStarts desktop Next.js, mobile H5 Next.js and NestJS. API_HOST/API_PORT configure Nest separately.");
+  console.log("Usage: npm run dev -- [--host 127.0.0.1] [--port 3000] [--h5-port 3002] [--demo]\nStarts desktop Next.js, mobile H5 Next.js and NestJS. API_HOST/API_PORT configure Nest separately. --demo enables loopback synthetic owner/content testing.");
   process.exit(0);
 }
 
@@ -38,11 +38,13 @@ for (const project of ["packages/config/tsconfig.json", "packages/contracts/tsco
   if (built.status !== 0) process.exit(built.status ?? 1);
 }
 
+const demo = process.argv.includes("--demo");
 const environment = {
   ...process.env,
   API_INTERNAL_ORIGIN: process.env.API_INTERNAL_ORIGIN ?? `http://127.0.0.1:${apiPort}`,
   H5_INTERNAL_ORIGIN: process.env.H5_INTERNAL_ORIGIN ?? `http://${internalOriginHost}:${h5Port}`,
-  CONTENT_ROOT: process.env.CONTENT_ROOT ?? "./apps/api/fixtures/content",
+  CONTENT_ROOT: demo ? "./apps/api/fixtures/demo" : process.env.CONTENT_ROOT ?? "./apps/api/fixtures/content",
+  ...(demo ? { DAYTRACE_DEMO: "1", PUBLIC_ORIGIN: `http://${internalOriginHost}:${sitePort}`, API_HOST: "127.0.0.1" } : {}),
 };
 const children = [];
 function launch(name, args, env = environment, directory = root) {

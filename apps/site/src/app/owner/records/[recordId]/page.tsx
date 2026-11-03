@@ -13,5 +13,5 @@ export default async function OwnerRecordPage({params}:{params:Promise<{recordId
     throw error;
   });
   if(!record) notFound();
-  return <main className="reader-main"><div className="reader-topline"><Link href="/owner">← 返回主人空间</Link><OwnerSessionControls /></div><div className="private-banner">仅在主人空间中可见 · 当前为示例资料</div><ReaderArticle record={record} marginNote="有些话，留在这里就很好。" /></main>;
+  return <main className="reader-main"><div className="reader-topline"><Link href="/owner">← 返回主人空间</Link><OwnerSessionControls /></div><div className="private-banner">仅在主人空间中可见{process.env.DAYTRACE_DEMO === "1" ? " · 当前为示例资料" : ""}</div><ReaderArticle record={record} marginNote="有些话，留在这里就很好。" /></main>;
 }

@@ -1,12 +1,13 @@
 import { parseSiteRuntimeConfig } from "@daytrace/config";
 
 export const dynamic = "force-dynamic";
-const allowed = /^(?:records(?:\/rec_[0-9a-f-]{36})?|search|assets\/ast_[0-9a-f-]{36}|auth\/(?:login|callback|session|csrf|logout|revoke-all)|health\/(?:live|ready))$/;
+const ownerEndpoint = /^owner\/(?:content(?:\/rec_[0-9a-f-]{36}(?:\/(?:history|export))?)?|imports(?:\/[0-9a-f-]{36}(?:\/(?:commit|discard|assets\/ast_[0-9a-f-]{36}))?)?)$/;
+const allowed = /^(?:records(?:\/rec_[0-9a-f-]{36}|\/resolve\/[a-z0-9-]{1,80})?|search|assets\/ast_[0-9a-f-]{36}|auth\/(?:login|callback|session|csrf|logout|revoke-all)|health\/(?:live|ready))$/;
 
 async function proxy(request: Request, context: { params: Promise<{ path: string[] }> }) {
   const { path } = await context.params;
   const endpoint = path.join("/");
-  if (!allowed.test(endpoint) || request.method === "POST" && !/^auth\/(logout|revoke-all)$/.test(endpoint)) {
+  if ((!allowed.test(endpoint) && !ownerEndpoint.test(endpoint)) || request.method === "POST" && !/^auth\/(logout|revoke-all)$/.test(endpoint) && !/^owner\/(?:imports(?:\/[0-9a-f-]{36}\/(?:commit|discard))?|content\/rec_[0-9a-f-]{36})$/.test(endpoint)) {
     return new Response("Not found", { status: 404 });
   }
   const headers = new Headers({ accept: request.headers.get("accept") ?? "application/json" });
@@ -15,7 +16,7 @@ async function proxy(request: Request, context: { params: Promise<{ path: string
     if (value !== null) headers.set(key, value);
   }
   const url = new URL(request.url);
-  if (endpoint.startsWith("auth/") || endpoint.startsWith("assets/") || url.searchParams.get("scope") === "owner") {
+  if (endpoint.startsWith("owner/") || endpoint.startsWith("auth/") || endpoint.startsWith("assets/") || url.searchParams.get("scope") === "owner") {
     const cookies = (request.headers.get("cookie") ?? "").split(";").map((value) => value.trim())
       .filter((value) => /^__Host-daytrace_(session|login)=[A-Za-z0-9_-]{43}$/.test(value));
     if (cookies.length) headers.set("cookie", cookies.join("; "));
@@ -24,10 +25,27 @@ async function proxy(request: Request, context: { params: Promise<{ path: string
     const { apiInternalOrigin } = parseSiteRuntimeConfig(process.env);
     const target = new URL(`/api/v1/${endpoint}`, apiInternalOrigin);
     target.search = url.search;
+    let body: ArrayBuffer | undefined;
+    if (request.method === "POST") {
+      const length = Number(request.headers.get("content-length"));
+      const limit = endpoint === "owner/imports" ? 33 * 1024 * 1024 : 1024 * 1024;
+      if (!Number.isFinite(length) || length > limit) return Response.json({ error: { message: "上传总量超过限制" } }, { status: 413 });
+      const reader = request.body?.getReader();
+      const chunks: Uint8Array[] = []; let size = 0;
+      if (reader) while (true) {
+        const chunk = await reader.read(); if (chunk.done) break;
+        size += chunk.value.byteLength;
+        if (size > limit) { await reader.cancel(); return Response.json({ error: { message: "上传总量超过限制" } }, { status: 413 }); }
+        chunks.push(chunk.value);
+      }
+      const bytes = new Uint8Array(size); let offset = 0;
+      for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+      body = bytes.buffer;
+    }
     const response = await fetch(target, {
       method: request.method, headers, cache: "no-store", redirect: "manual",
-      ...(request.method === "POST" ? { body: await request.text() } : {}),
-      signal: AbortSignal.timeout(8_000),
+      ...(request.method === "POST" ? { body: body ?? null } : {}),
+      signal: AbortSignal.timeout(endpoint.startsWith("owner/") ? 60_000 : 8_000),
     });
     const result = new Headers({ "cache-control": "private, no-store", "x-content-type-options": "nosniff" });
     for (const key of ["content-type", "content-length", "content-disposition", "location", "x-request-id"]) {

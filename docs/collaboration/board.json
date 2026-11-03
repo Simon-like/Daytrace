@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-03T07:47:35.047492+00:00",
+  "updated": "2026-11-03T07:53:05.145747+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -597,6 +597,27 @@
       "reviewer": "kimi-UI-003-focus"
     },
     {
+      "id": "DOCS-003",
+      "title": "逐轮提交规约与功能扩充里程碑",
+      "status": "done",
+      "owner": "kimi-DOCS-003-milestones",
+      "depends_on": [
+        "DOCS-002"
+      ],
+      "allowed_paths": [
+        "AGENTS.md",
+        "docs/collaboration/",
+        "docs/context/",
+        "docs/project/"
+      ],
+      "card": "docs/collaboration/tasks/DOCS-003.md",
+      "evidence": [
+        "docs/collaboration/handoffs/DOCS-003-kimi-milestones.md"
+      ],
+      "review": "docs/collaboration/reviews/DOCS-003-self-review.md",
+      "reviewer": "kimi-DOCS-003-milestones"
+    },
+    {
       "id": "SYSTEM-001",
       "title": "共享设计资产、桌面统一与入场编排",
       "status": "done",
@@ -1138,6 +1159,27 @@
       "action": "complete",
       "actor": "kimi-UI-003-focus",
       "evidence": "docs/collaboration/reviews/UI-003-self-review.md"
+    },
+    {
+      "at": "2026-11-03T07:48:41.683854+00:00",
+      "task": "DOCS-003",
+      "action": "claim",
+      "actor": "kimi-DOCS-003-milestones",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-03T07:53:05.036884+00:00",
+      "task": "DOCS-003",
+      "action": "submit",
+      "actor": "kimi-DOCS-003-milestones",
+      "evidence": "docs/collaboration/handoffs/DOCS-003-kimi-milestones.md"
+    },
+    {
+      "at": "2026-11-03T07:53:05.145747+00:00",
+      "task": "DOCS-003",
+      "action": "complete",
+      "actor": "kimi-DOCS-003-milestones",
+      "evidence": "docs/collaboration/reviews/DOCS-003-self-review.md"
     }
   ],
   "dispatch_policy": {

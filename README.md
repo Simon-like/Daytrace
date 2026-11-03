@@ -18,6 +18,8 @@ pnpm dev
 
 只需要桌面生产构建 Demo 时运行 `pnpm demo`。当前使用合成内容和演示身份，运行边界见[Demo手册](docs/development/demo.md)。
 
+日常开发成果统一在`dev`分支，稳定集成成果在`main`分支；后续不再新建任务分支。开始开发先运行`git switch dev && git pull origin dev`。
+
 - **找文档**：[docs目录](docs/README.md)。
 - **Kimi / Codex接手**：[AGENTS.md](AGENTS.md) → [当前工作](docs/context/当前工作上下文.md) → [协作协议](docs/collaboration/README.md)。
 - **看进度与证据**：[项目进度](docs/project/项目进度.md)、[Demo验收](docs/project/reports/DEMO-001.md)。

@@ -1,6 +1,6 @@
 # 可迁移 Markdown 内容协议 v1
 
-状态：CONTENT-001 契约交付，待 ENGINE-001 实现与集成评审。规则中的“必须”用于阻止不安全或不可迁移的内容进入可用快照。
+状态：CONTENT-001 契约已由 ENGINE-001 实现，CONTENT-003 扩展服务端渲染与管理闭环。规则中的“必须”用于阻止不安全或不可迁移的内容进入可用快照。
 
 ## 1. 内容包与类型
 
@@ -82,15 +82,17 @@ slug 和 `oldSlugs` 构成一个全库共享命名空间，任何两项都不能
 
 ## 5. Markdown、HTML 与目录
 
-v1 支持 CommonMark 与明确的 GFM 表格、任务列表、删除线、围栏代码。不执行 MDX、脚本、嵌入组件；脚注、公式、Mermaid、双链不默认启用。正文 H1 不使用，文章标题只来自 frontmatter；标题从 H2 开始。
+v1 支持 CommonMark 与明确的 GFM 表格、任务列表、删除线、围栏代码。不执行 MDX、脚本、嵌入组件；CONTENT-003 已启用脚注与公式；Mermaid、双链方言仍不默认启用。正文 H1 不使用，文章标题只来自 frontmatter；标题从 H2 开始。
 
 原始 HTML 在 v1 中不是“信任主人所以保留”，而是 `CONTENT_RAW_HTML_UNSUPPORTED` 校验错误。代码围栏和行内代码中的 HTML 字符串仍是可读文本。生产解析器必须关闭或拒绝原始 HTML，并在输出端使用固定元素／属性允许列表作为第二道防线。
 
 普通外链只允许 `http`、`https`、`mailto` 和页内锚点；站内记录链接只允许 `/records/<id>/`。禁止 `javascript:`、`data:`、协议相对 URL 和其他站点绝对路径。正文图片不得直接引用第三方 URL。
 
-HTML 与目录必须来自**同一次 Markdown token 解析**：遍历该 token 流时同时写入标题 ID、生成目录并渲染 HTML，不能分别调用两次解析器后拼接可能不同的结果。v1 回退标题 ID 为 `section-1`、`section-2` 等文档顺序编号，目录项为 `{id,text,level}`；同一 `contentRevision` 内稳定。调整标题顺序可能改变回退 ID，因此需要长期外部引用的标题应在后续协议增加显式 ID 扩展，而不是由前端自行猜测 slug。
+HTML 与目录必须来自**同一次 Markdown token 解析**：遍历该 token 流时同时写入标题 ID、生成目录并渲染 HTML，不能分别调用两次解析器后拼接可能不同的结果。旧解析器的回退标题 ID 为 `section-1`、`section-2` 等文档顺序编号，目录项为 `{id,text,level}`；同一 `contentRevision` 内稳定。调整标题顺序可能改变回退 ID，因此需要长期外部引用的标题应在后续协议增加显式 ID 扩展，而不是由前端自行猜测 slug。
 
-响应中的 `parseRevision` 当前固定为 `daytrace-markdown-2`。解析规则、清洗允许列表或高亮行为变化时递增，并按内容快照重建，不能在同一 `contentRevision` 下静默混用两套 HTML。
+当前正式解析器为 unified/remark/rehype，语义标题 ID 使用 `dt-` 前缀、中文规范化和冲突去重，同时输出旧 `section-N` 锚点作为兼容入口。标题重命名或前置同名标题仍可能改变小节地址；顺序锚点也未引入持久段落映射，不能当永久 block ID。
+
+响应中的 `parseRevision` 当前固定为 `daytrace-markdown-3`。服务端支持脚注、KaTeX 与有限语言 Shiki 高亮，浏览器只消费产物。渲染配置版本参与完整/公开 contentRevision 哈希。解析规则、清洗允许列表或高亮行为变化时递增，并按内容快照重建，不能在同一 `contentRevision` 下静默混用两套 HTML。
 
 v2 在服务端同一 token 渲染阶段直接输出受控的阅读语义：代码块包含语言、复制按钮、可聚焦滚动区和溢出提示；表格包含局部滚动容器；图片包含灯箱按钮、尺寸、异步解码、错误状态容器，Markdown 图片 title 同时作为可见 `figcaption`，alt 保持为替代文本。第一张内容图使用 eager，其余使用 lazy。浏览器只绑定复制、溢出观察、图片错误和灯箱，不得在 hydration 后搬动或重新包装正文 DOM。新增元素、类名及 data／ARIA 属性仍由固定 sanitizer 白名单约束。
 

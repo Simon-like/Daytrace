@@ -48,7 +48,7 @@ test("real Nest HTTP list and detail satisfy the shared runtime contract", async
   const detail = parseRecordDetailResponse(await detailResponse.json());
   assert.ok(detail.data.body.html.includes("PUBLIC_SSR_PARAGRAPH_7F3A"));
   assert.ok(detail.data.body.html.includes(`/api/v1/assets/${assetId}`));
-  assert.equal(detail.data.body.toc[0]?.id, "section-1");
+  assert.equal(detail.data.body.toc[0]?.id, "dt-从问题开始");
   assert.equal(detail.meta.contentRevision, list.meta.contentRevision);
 });
 

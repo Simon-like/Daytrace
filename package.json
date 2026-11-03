@@ -26,7 +26,8 @@
     "test:demo": "tsx --tsconfig apps/api/tsconfig.json --test tests/integration/demo/*.test.ts",
     "test:browser": "node tests/e2e/acceptance/demo.browser.mjs",
     "test:h5": "node tests/e2e/h5/mobile.browser.mjs",
-    "content:validate:demo": "CONTENT_ROOT=apps/api/fixtures/demo pnpm content:validate"
+    "content:validate:demo": "CONTENT_ROOT=apps/api/fixtures/demo pnpm content:validate",
+    "test:content": "pnpm run build:packages && tsx --tsconfig apps/api/tsconfig.json --test apps/api/src/modules/content-management/*.test.ts"
   },
   "devDependencies": {
     "@types/node": "24.19.2",

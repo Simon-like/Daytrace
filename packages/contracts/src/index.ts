@@ -1,5 +1,5 @@
 export const API_SCHEMA_VERSION = "1.0" as const;
-export const MARKDOWN_PARSE_REVISION = "daytrace-markdown-2" as const;
+export const MARKDOWN_PARSE_REVISION = "daytrace-markdown-3" as const;
 export const RECORD_ID_PATTERN = /^rec_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 export const ASSET_ID_PATTERN = /^ast_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 export const CONTENT_REVISION_PATTERN = /^sha256:[0-9a-f]{64}$/;
@@ -78,6 +78,7 @@ export type ApiErrorCode =
   | "OWNER_REQUIRED"
   | "RECORD_NOT_FOUND"
   | "ASSET_NOT_FOUND"
+  | "CONTENT_IMPORT_INVALID"
   | "CONTENT_REVISION_CONFLICT"
   | "CONTENT_SNAPSHOT_INVALID"
   | "CONTENT_SNAPSHOT_UNAVAILABLE"
@@ -107,7 +108,7 @@ export interface ApiErrorResponse {
 const ERROR_CODES: readonly ApiErrorCode[] = [
   "INVALID_QUERY", "INVALID_CURSOR", "INVALID_RECORD_ID", "INVALID_ASSET_ID",
   "AUTH_REQUIRED", "OWNER_REQUIRED", "RECORD_NOT_FOUND", "ASSET_NOT_FOUND",
-  "CONTENT_REVISION_CONFLICT", "CONTENT_SNAPSHOT_INVALID", "CONTENT_SNAPSHOT_UNAVAILABLE",
+  "CONTENT_IMPORT_INVALID", "CONTENT_REVISION_CONFLICT", "CONTENT_SNAPSHOT_INVALID", "CONTENT_SNAPSHOT_UNAVAILABLE",
   "SEARCH_UNAVAILABLE", "CSRF_REJECTED", "LOGIN_FAILED", "INTERNAL_ERROR",
 ];
 const RECORD_TYPES: readonly RecordType[] = ["engineering", "recipe", "reflection"];

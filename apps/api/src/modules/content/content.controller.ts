@@ -91,6 +91,12 @@ export class ContentController {
     };
   }
 
+  @Get("records/resolve/:alias")
+  resolve(@Param("alias") alias: string, @Req() request: RequestWithId) {
+    return { schemaVersion: API_SCHEMA_VERSION, data: this.content.resolvePublicAlias(alias),
+      meta: { requestId: request.requestId, contentRevision: this.content.contentRevision } };
+  }
+
   @Get("records/:recordId")
   @Header("Cache-Control", "public, max-age=0, must-revalidate")
   detail(

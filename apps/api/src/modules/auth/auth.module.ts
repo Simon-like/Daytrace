@@ -41,7 +41,7 @@ export class AuthModule {
         OwnerObjectGuard,
         OriginCsrfGuard,
       ],
-      exports: [OwnerPolicy, SessionService, OwnerGuard, OwnerObjectGuard, OriginCsrfGuard],
+      exports: [OwnerPolicy, SessionService, OwnerGuard, OwnerObjectGuard, OriginCsrfGuard, PUBLIC_ORIGIN],
     };
   }
 

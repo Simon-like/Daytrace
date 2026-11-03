@@ -4,6 +4,7 @@ import {
   parseApiErrorResponse,
   parseRecordDetailResponse,
   parseRecordListResponse,
+  parsePublicRecordSummary,
   type ApiErrorCode,
   type RecordDetail,
   type RecordListData,
@@ -80,13 +81,9 @@ export async function getPublicRecord(recordId: string): Promise<RecordDetail | 
 
 export async function findPublicRecordBySlug(slug: string): Promise<RecordSummary | null> {
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) || slug.length > 80) return null;
-  let cursor: string | undefined;
-  for (let page = 0; page < 100; page += 1) {
-    const data = await getPublicRecords(cursor);
-    const match = data.items.find((record) => record.slug === slug || record.oldSlugs.includes(slug));
-    if (match !== undefined) return match;
-    if (data.pageInfo.nextCursor === null) return null;
-    cursor = data.pageInfo.nextCursor;
-  }
-  throw new PublicApiError(502, "CONTRACT_INVALID");
+  const response = await request(`/api/v1/records/resolve/${encodeURIComponent(slug)}`);
+  if (response.status === 404) return null;
+  if (!response.ok) throw await readError(response);
+  try { return parsePublicRecordSummary((await response.json()).data); }
+  catch { throw new PublicApiError(502, "CONTRACT_INVALID"); }
 }

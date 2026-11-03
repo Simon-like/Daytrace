@@ -10,6 +10,7 @@ import {
   invalidAssetId,
   invalidRecordId,
 } from "../../common/api-error";
+import { activeContentRoot } from "./content.repository";
 import { loadContentSnapshot, readAssetBytes } from "./content.snapshot";
 import { toPublicSummary, type ContentSnapshot, type SourceRecord } from "./content.types";
 
@@ -24,6 +25,7 @@ export interface PublicListQuery {
 export class ContentService implements OnModuleInit {
   private snapshot: ContentSnapshot | undefined;
   private failure: ApiError | undefined;
+  private publicAliases = new Map<string, SourceRecord>();
   private readonly cursorKey = randomBytes(32);
 
   constructor(readonly contentRoot: string) {}
@@ -34,8 +36,8 @@ export class ContentService implements OnModuleInit {
 
   async initialize(): Promise<void> {
     try {
-      const candidate = await loadContentSnapshot(this.contentRoot);
-      this.snapshot = candidate;
+      const candidate = await loadContentSnapshot(await activeContentRoot(this.contentRoot));
+      this.installSnapshot(candidate);
       this.failure = undefined;
     } catch (error: unknown) {
       if (this.snapshot !== undefined) return;
@@ -48,6 +50,15 @@ export class ContentService implements OnModuleInit {
       }
     }
   }
+
+  installSnapshot(candidate: ContentSnapshot): void {
+    this.snapshot = candidate;
+    this.failure = undefined;
+    this.publicAliases = new Map(candidate.publicRecords.flatMap(record =>
+      [record.metadata.slug, ...record.metadata.oldSlugs].map(alias => [alias, record] as const)));
+  }
+
+  currentSnapshot(): ContentSnapshot { return this.current(); }
 
   private current(): ContentSnapshot {
     if (this.snapshot === undefined) throw this.failure ?? new ContentSnapshotUnavailableError();
@@ -84,6 +95,13 @@ export class ContentService implements OnModuleInit {
     };
   }
 
+  resolvePublicAlias(alias: string): RecordSummary {
+    this.current();
+    const record = this.publicAliases.get(alias);
+    if (!record) throw new RecordNotFoundError();
+    return toPublicSummary(record);
+  }
+
   getPublicRecord(recordId: string): SourceRecord {
     if (!isRecordId(recordId)) throw invalidRecordId();
     const record = this.current().publicRecords.find((item) => item.metadata.id === recordId);
@@ -113,10 +131,9 @@ export class ContentService implements OnModuleInit {
 
   findPublishedAsset(assetId: string) {
     for (const record of this.current().records) {
-      if (record.metadata.status !== "published") continue;
       const asset = record.metadata.attachments.find((item) => item.id === assetId);
       if (asset !== undefined) return {
-        id: asset.id, visibility: record.metadata.visibility, rootPath: record.recordDirectory,
+        id: asset.id, visibility: record.metadata.status === "published" ? record.metadata.visibility : "private" as const, rootPath: record.recordDirectory,
         relativePath: asset.path, mediaType: asset.mediaType,
       };
     }

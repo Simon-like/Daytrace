@@ -3,11 +3,13 @@ import { NestFactory } from "@nestjs/core";
 import type { INestApplication } from "@nestjs/common";
 import { ExpressAdapter } from "@nestjs/platform-express";
 import type { NextFunction, Request, Response } from "express";
+import type { AuthRuntimeOptions } from "./modules/auth/auth.types";
 import { AppModule } from "./app.module";
 import { ApiErrorFilter } from "./common/api-error.filter";
 import { RequestIdMiddleware } from "./common/request-id.middleware";
 
-export async function createApiApplication(contentRoot: string, logger = false, demoOrigin?: string): Promise<INestApplication> {
+export async function createApiApplication(contentRoot: string, logger = false, demoOrigin?: string, auth?: AuthRuntimeOptions): Promise<INestApplication> {
+  if (demoOrigin !== undefined && auth !== undefined) throw new Error("Choose either configured authentication or synthetic demo authentication");
   if (demoOrigin !== undefined) {
     const origin = new URL(demoOrigin);
     if (process.env.NODE_ENV === "production" || !["127.0.0.1", "localhost"].includes(origin.hostname) ||
@@ -15,7 +17,8 @@ export async function createApiApplication(contentRoot: string, logger = false, 
       throw new Error("Demo authentication requires a non-production loopback origin");
     }
   }
-  const app = await NestFactory.create(AppModule.register(contentRoot, demoOrigin), new ExpressAdapter(), {
+  const app = await NestFactory.create(AppModule.register(contentRoot, demoOrigin, auth), new ExpressAdapter(), {
+    abortOnError: false,
     logger: logger ? ["log", "error", "warn"] as ("log" | "error" | "warn")[] : false,
   });
   const requestId = new RequestIdMiddleware();

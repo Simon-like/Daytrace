@@ -64,7 +64,7 @@
   "body": {
     "html": "<h2 id=\"section-1\">…</h2>",
     "toc": [{"id": "section-1", "text": "…", "level": 2}],
-    "parseRevision": "daytrace-markdown-2"
+    "parseRevision": "daytrace-markdown-3"
   },
   "attachments": [
     {
@@ -119,7 +119,7 @@
 - owner 范围必须验证主人会话，可以读取主人的 draft、private、archived；整个响应 `no-store`。
 - 详情中的附件 URL 仍须逐个执行相同可见性授权，不能因知道资产 ID 就绕过。
 
-slug 与旧链接属于网页路由层：公开 `/records/<slug>/` 可解析到公开记录并以 308 跳转到 `/records/<id>/`。若 slug 与 ID 形式冲突，始终以完整 ID 的 canonical 规则为准；路由冲突在快照校验阶段已经禁止。访客对私密旧 slug 的响应不得包含目标 ID 或标题。API v1 不另建按任意 slug 查询的旁路。
+slug 与旧链接属于网页路由层：公开 `/records/<slug>/` 可解析到公开记录并以 308 跳转到 `/records/<id>/`。若 slug 与 ID 形式冲突，始终以完整 ID 的 canonical 规则为准；路由冲突在快照校验阶段已经禁止。访客对私密旧 slug 的响应不得包含目标 ID 或标题。CONTENT-003 新增受相同公开投影约束的 `/records/resolve/:alias` 直达查询，不再逐页扫描列表；私密旧别名仍不可解析。详见[管理 API 扩展](content-management-v1.md)。
 
 ## 5. 搜索
 

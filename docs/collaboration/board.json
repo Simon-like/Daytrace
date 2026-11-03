@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-03T08:20:38.932581+00:00",
+  "updated": "2026-11-03T08:24:20.577998+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -700,6 +700,34 @@
       ],
       "review": "docs/collaboration/reviews/CONTENT-002-self-review.md",
       "reviewer": "codex-CONTENT-002-self-review"
+    },
+    {
+      "id": "CONTENT-003",
+      "title": "Markdown 渲染与主人内容导入发布管理实现",
+      "status": "active",
+      "owner": "codex-CONTENT-003-main",
+      "depends_on": [
+        "CONTENT-002"
+      ],
+      "allowed_paths": [
+        "apps/api/",
+        "apps/site/src/",
+        "apps/h5/src/",
+        "packages/contracts/",
+        "packages/content/",
+        "scripts/dev/",
+        "scripts/demo/",
+        "tests/",
+        "package.json",
+        "pnpm-lock.yaml",
+        ".gitignore",
+        "docs/",
+        "apps/site/package.json",
+        "apps/h5/package.json",
+        "scripts/ci/"
+      ],
+      "card": "docs/collaboration/tasks/CONTENT-003.md",
+      "evidence": []
     }
   ],
   "history": [
@@ -1234,6 +1262,20 @@
       "action": "complete",
       "actor": "codex-CONTENT-002-self-review",
       "evidence": "docs/collaboration/reviews/CONTENT-002-self-review.md"
+    },
+    {
+      "at": "2026-11-03T08:24:20.459746+00:00",
+      "task": "CONTENT-003",
+      "action": "create",
+      "actor": "codex-CONTENT-003-main",
+      "evidence": "docs/collaboration/tasks/CONTENT-003.md"
+    },
+    {
+      "at": "2026-11-03T08:24:20.577998+00:00",
+      "task": "CONTENT-003",
+      "action": "claim",
+      "actor": "codex-CONTENT-003-main",
+      "evidence": null
     }
   ],
   "dispatch_policy": {

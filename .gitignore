@@ -31,3 +31,6 @@ __pycache__/
 
 # TypeScript incremental cache
 *.tsbuildinfo
+
+# Runtime content snapshots and owner uploads (including development fixtures)
+.daytrace/

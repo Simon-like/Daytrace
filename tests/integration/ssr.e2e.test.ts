@@ -136,7 +136,7 @@ test("built Nest and Next services render only the public snapshot at request ti
     assert.equal(detailResponse.status, 200, detailHtml);
     assert.ok(detailHtml.includes("PUBLIC_SSR_PARAGRAPH_7F3A"));
     assert.ok(detailHtml.includes("本文目录"));
-    assert.ok(detailHtml.includes('href="#section-1"'));
+    assert.ok(detailHtml.includes('href="#dt-从问题开始"'));
     assert.ok(detailHtml.includes("/api/v1/assets/ast_7d0c0f2d-8f5b-4f0e-a3a6-444444444444"));
     assert.ok(detailHtml.includes("/api/v1/assets/ast_7d0c0f2d-8f5b-4f0e-a3a6-666666666666"));
     assert.ok(!detailHtml.includes("PRIVATE_"));

@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { lstat, readFile, readdir, realpath } from "node:fs/promises";
 import { basename, join, relative, resolve, sep } from "node:path";
+import { MARKDOWN_PARSE_REVISION } from "@daytrace/contracts";
 import type { RecordDetail } from "@daytrace/contracts";
 import { ContentSnapshotInvalidError, ContentSnapshotUnavailableError } from "../../common/api-error";
 import type { ContentIssue, ContentSnapshot, SourceRecord } from "./content.types";
@@ -117,8 +118,8 @@ export async function loadContentSnapshot(contentRoot: string): Promise<ContentS
   const records: SourceRecord[] = [];
   const issues: ContentIssue[] = [];
   const hash = createHash("sha256");
-  hash.update("daytrace-content-v1\0");
-  const publicHash = createHash("sha256").update("daytrace-public-content-v1\0");
+  hash.update(`daytrace-content-v1\0${MARKDOWN_PARSE_REVISION}\0`);
+  const publicHash = createHash("sha256").update(`daytrace-public-content-v1\0${MARKDOWN_PARSE_REVISION}\0`);
   try {
     for (const group of ["private", "public"] as const) {
       const entries = await readdir(join(root, group), { withFileTypes: true });

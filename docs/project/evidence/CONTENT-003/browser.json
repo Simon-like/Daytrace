@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-03",
+  "environment": "Chromium, isolated synthetic files and local session; not real iPhone or production identity",
+  "checks": [
+    "owner can open management and upload MD plus attachment using the binary proxy",
+    "desktop and mobile previews preserve layout and explicit public publication",
+    "independent H5 reads the same uploaded article and uses the public ID canonical",
+    "metadata update hides article and assets and history can restore without making it public",
+    "download exports portable source and filters retain access to private drafts"
+  ],
+  "errors": [],
+  "passed": true,
+  "resources": {
+    "page": "public desktop reader",
+    "necessaryAndRequestedJsGzipBytes": 143742,
+    "initialBudgetBytes": 81920,
+    "budgetMet": false,
+    "note": "Fresh Chromium script requests including automatic prefetch; not field Core Web Vitals"
+  }
+}

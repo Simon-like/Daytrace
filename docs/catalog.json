@@ -297,6 +297,14 @@
       "purpose": "官方资料与源码核对、快捷上传、内容目录和文章路由实施建议",
       "status": "reference",
       "owner_role": "内容与架构"
+    },
+    {
+      "id": "content-management-contract",
+      "title": "主人内容管理 API v1",
+      "path": "docs/architecture/contracts/content-management-v1.md",
+      "purpose": "上传预览、版本发布、回滚导出和受控别名解析接口",
+      "status": "active",
+      "owner_role": "内容与安全"
     }
   ]
 }

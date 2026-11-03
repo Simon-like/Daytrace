@@ -1,0 +1,22 @@
+{
+  "node": "v24.18.0",
+  "scope": "single local synthetic run on compiled API; not a browser performance pass or benchmark ranking",
+  "runs": [
+    {
+      "bytes": 30709,
+      "milliseconds": 23,
+      "valid": true
+    },
+    {
+      "bytes": 204795,
+      "milliseconds": 84,
+      "valid": true
+    },
+    {
+      "bytes": 2097150,
+      "milliseconds": 780,
+      "valid": true
+    }
+  ],
+  "oversizeRejected": true
+}

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-03T08:24:20.577998+00:00",
+  "updated": "2026-11-03T08:54:14.595170+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -704,7 +704,7 @@
     {
       "id": "CONTENT-003",
       "title": "Markdown 渲染与主人内容导入发布管理实现",
-      "status": "active",
+      "status": "done",
       "owner": "codex-CONTENT-003-main",
       "depends_on": [
         "CONTENT-002"
@@ -727,7 +727,11 @@
         "scripts/ci/"
       ],
       "card": "docs/collaboration/tasks/CONTENT-003.md",
-      "evidence": []
+      "evidence": [
+        "docs/collaboration/handoffs/CONTENT-003-codex-main.md"
+      ],
+      "review": "docs/collaboration/reviews/CONTENT-003-self-review.md",
+      "reviewer": "codex-CONTENT-003-self-review"
     }
   ],
   "history": [
@@ -1276,11 +1280,25 @@
       "action": "claim",
       "actor": "codex-CONTENT-003-main",
       "evidence": null
+    },
+    {
+      "at": "2026-11-03T08:54:14.469697+00:00",
+      "task": "CONTENT-003",
+      "action": "submit",
+      "actor": "codex-CONTENT-003-main",
+      "evidence": "docs/collaboration/handoffs/CONTENT-003-codex-main.md"
+    },
+    {
+      "at": "2026-11-03T08:54:14.595170+00:00",
+      "task": "CONTENT-003",
+      "action": "complete",
+      "actor": "codex-CONTENT-003-self-review",
+      "evidence": "docs/collaboration/reviews/CONTENT-003-self-review.md"
     }
   ],
   "dispatch_policy": {
     "mode": "manual",
-    "current_scope": "unify desktop through shared local design/content packages and short grouped entrances; build an independent apps/h5 mobile experience with shared assets; preserve reading and API boundaries",
+    "current_scope": "CONTENT-003 implements server Markdown rendering, private draft import/preview, owner content management, versioned publishing/export and stable article routes; real identity and production gates remain separate",
     "technical_tasks": "Next.js + NestJS + pnpm workspace direction confirmed; development by separately dispatched agents; no production authorization implied"
   }
 }

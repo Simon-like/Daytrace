@@ -54,3 +54,7 @@ pnpm docs:validate
 ```
 
 `test:integration` 启动真实 Nest HTTP 服务并使用临时合成内容。`test:e2e` 先构建，再启动真实 Nest 与 Next 生产服务，检查 API、SSR 正文、私密隔离和错误反馈。两者都不是部署、真机或性能验收。
+
+## 主人内容库本地体验
+
+`pnpm dev -- --demo` 启动隔离合成身份与示例内容，打开 `/owner` 后进入“内容库”，可上传 Markdown、附件/ZIP，预览并保存或发布。此显式模式不改变默认 `pnpm dev` 的身份边界。资料存储与操作详见[内容库手册](content.md)，仅用合成资料验证；真实身份接入仍有独立门槛。

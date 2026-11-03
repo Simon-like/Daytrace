@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useReducer, useRef, useState } from "react";
+import { Button, Input } from "../../components/ui";
 import { fetchPublicSearch, SearchRequestError } from "./search-api";
 import { SearchResults } from "./search-results";
 import {
@@ -116,18 +117,19 @@ export function SearchPanel({ initialQuery = "", onClose }: SearchPanelProps) {
   }, []);
 
   return (
-    <section className={styles.panel} aria-label="公开搜索" data-content-revision={state.contentRevision ?? undefined}>
-      <label className={styles.hint} htmlFor={inputId}>搜索公开记录的标题、标签和正文</label>
+    <section className={`${styles.panel} dt-scene-actions`} aria-label="公开搜索" data-content-revision={state.contentRevision ?? undefined}>
+      <label className="mb-3 block text-sm text-muted" htmlFor={inputId}>搜索公开记录的标题、标签和正文</label>
       <form
         className={styles.form}
         role="search"
         onSubmit={(event) => { event.preventDefault(); savePosition(); void run(input, "push"); }}
       >
         <div className={styles.inputWrap}>
-          <input
+          <svg className={styles.searchIcon} width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true"><circle cx="14.5" cy="14.5" r="5.75" stroke="currentColor" strokeWidth="1.4" /><path d="m19 19 4 4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></svg>
+          <Input
             ref={inputRef}
             id={inputId}
-            className={styles.input}
+            className="h-12 rounded-[12px] border-0 bg-transparent pl-12 pr-11 text-[17px] shadow-none hover:border-0 focus:border-0 focus:bg-transparent focus-visible:outline-offset-[-2px]"
             type="search"
             value={input}
             maxLength={100}
@@ -143,10 +145,10 @@ export function SearchPanel({ initialQuery = "", onClose }: SearchPanelProps) {
           />
           {input.length === 0 ? null : <button type="button" className={styles.clear} aria-label="清除搜索" onClick={() => clear()}>×</button>}
         </div>
-        <button className={styles.submit} type="submit" disabled={state.status === "loading"}>搜索</button>
+        <Button className="h-12 min-w-[108px] rounded-[13px] px-4" type="submit" disabled={state.status === "loading"}>搜索</Button>
       </form>
-      {onClose === undefined ? null : <button type="button" className={styles.close} onClick={onClose}>关闭搜索</button>}
-      <p className={styles.hint}>只查找公开记录；只想留给自己的内容，仍留在主人空间。</p>
+      {onClose === undefined ? null : <Button variant="secondary" className="mt-3" onClick={onClose}>关闭搜索</Button>}
+      <p className={styles.hint}><kbd>Enter</kbd> 检索公开记录，私密内容仍只留在主人空间。</p>
       <p className={styles.status} aria-live="polite">
         {state.status === "idle" ? "输入关键词开始查找。" :
           state.status === "loading" ? `正在搜索“${state.query}”…` :
@@ -158,7 +160,7 @@ export function SearchPanel({ initialQuery = "", onClose }: SearchPanelProps) {
         <div className={styles.failure} role="alert">
           <p>无法完成这次检索，请重试。</p>
           <p className={styles.requestId}>错误码：{state.error?.code ?? "API_UNAVAILABLE"}{state.error?.requestId ? ` · requestId：${state.error.requestId}` : ""}</p>
-          <button type="button" className={styles.retry} onClick={() => void run(state.query)}>重试搜索</button>
+          <Button type="button" variant="secondary" onClick={() => void run(state.query)}>重试搜索</Button>
         </div>
       ) : null}
       {state.status === "results" && state.result !== null ? <SearchResults items={state.result.items} onRecordClick={savePosition} /> : null}

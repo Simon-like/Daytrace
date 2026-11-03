@@ -1,39 +1,16 @@
 import { copyCodeText } from "./reader-interactions";
 
 export interface BodyClassNames {
-  readonly codeBlock: string;
-  readonly codeToolbar: string;
-  readonly codeLanguage: string;
-  readonly copyButton: string;
-  readonly scrollHint: string;
-  readonly tableScroll: string;
-  readonly imageButton: string;
-  readonly imageError: string;
   readonly hasImageError: string;
 }
 
 type Cleanup = () => void;
 
-function restoreAttribute(element: Element, name: string, value: string | null): void {
-  if (value === null) element.removeAttribute(name);
-  else element.setAttribute(name, value);
-}
-
-function unwrap(element: Element, wrapper: Element): void {
-  wrapper.before(element);
-  wrapper.remove();
-}
-
-function observeOverflow(
-  scroller: HTMLElement,
-  hint: HTMLElement,
-  onChange: () => void,
-): Cleanup {
+function observeOverflow(scroller: HTMLElement, hint: HTMLElement | null): Cleanup {
   const update = (): void => {
     const overflows = scroller.scrollWidth > scroller.clientWidth + 1;
     scroller.dataset.overflow = String(overflows);
-    hint.dataset.overflow = String(overflows);
-    onChange();
+    if (hint !== null) hint.dataset.overflow = String(overflows);
   };
   const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(update);
   observer?.observe(scroller);
@@ -43,6 +20,7 @@ function observeOverflow(
     observer?.disconnect();
     window.removeEventListener("resize", update);
     delete scroller.dataset.overflow;
+    if (hint !== null) delete hint.dataset.overflow;
   };
 }
 
@@ -87,38 +65,13 @@ function selectCode(code: HTMLElement): void {
   selection.addRange(range);
 }
 
-function enhanceCode(pre: HTMLPreElement, classes: BodyClassNames): Cleanup {
-  const document = pre.ownerDocument;
-  const code = pre.querySelector<HTMLElement>("code") ?? pre;
-  const wrapper = document.createElement("div");
-  const toolbar = document.createElement("div");
-  const language = document.createElement("span");
-  const button = document.createElement("button");
-  const hint = document.createElement("span");
-  const languageClass = Array.from(code.classList).find((name) => name.startsWith("language-"));
-  const languageName = languageClass?.slice("language-".length);
-
-  wrapper.className = classes.codeBlock;
-  toolbar.className = classes.codeToolbar;
-  language.className = classes.codeLanguage;
-  language.textContent = languageName === undefined || languageName === "" ? "CODE" : languageName.toUpperCase();
-  button.className = classes.copyButton;
-  button.type = "button";
-  button.textContent = "复制代码";
-  button.setAttribute("aria-live", "polite");
-  hint.className = classes.scrollHint;
-  hint.textContent = "代码可左右滑动";
-  hint.setAttribute("aria-hidden", "true");
-  toolbar.append(language, button);
-  pre.before(wrapper);
-  wrapper.append(toolbar, pre, hint);
-
-  const originalAttributes = (["tabindex", "role", "aria-label"] as const).map(
-    (name) => [name, pre.getAttribute(name)] as const,
-  );
-  pre.tabIndex = 0;
-  pre.setAttribute("role", "region");
-  pre.setAttribute("aria-label", `${language.textContent} 代码，可横向滚动`);
+function enhanceCode(wrapper: HTMLElement): Cleanup {
+  const document = wrapper.ownerDocument;
+  const pre = wrapper.querySelector<HTMLPreElement>("pre[data-reader-code-scroll]");
+  const code = pre?.querySelector<HTMLElement>("code");
+  const button = wrapper.querySelector<HTMLButtonElement>("button[data-code-copy]");
+  const hint = wrapper.querySelector<HTMLElement>("[data-scroll-hint]");
+  if (pre == null || code == null || button == null) return () => undefined;
 
   let resetTimer: ReturnType<typeof setTimeout> | undefined;
   let copying = false;
@@ -142,53 +95,19 @@ function enhanceCode(pre: HTMLPreElement, classes: BodyClassNames): Cleanup {
     }, 2_600);
   };
   button.addEventListener("click", onCopy);
-  const stopObserving = observeOverflow(pre, hint, () => undefined);
-
+  const stopObserving = observeOverflow(pre, hint);
   return () => {
     active = false;
     if (resetTimer !== undefined) clearTimeout(resetTimer);
     button.removeEventListener("click", onCopy);
     stopObserving();
-    for (const [name, value] of originalAttributes) restoreAttribute(pre, name, value);
-    unwrap(pre, wrapper);
   };
 }
 
-function enhanceTable(table: HTMLTableElement, classes: BodyClassNames): Cleanup {
-  const document = table.ownerDocument;
-  const wrapper = document.createElement("div");
-  const hint = document.createElement("span");
-  wrapper.className = classes.tableScroll;
-  wrapper.tabIndex = 0;
-  wrapper.setAttribute("role", "region");
-  wrapper.setAttribute("aria-label", "数据表格，可横向滚动");
-  hint.className = classes.scrollHint;
-  hint.textContent = "表格可左右滑动";
-  hint.setAttribute("aria-hidden", "true");
-  table.before(wrapper);
-  wrapper.append(table, hint);
-  const stopObserving = observeOverflow(wrapper, hint, () => undefined);
-  return () => {
-    stopObserving();
-    unwrap(table, wrapper);
-  };
-}
-
-function enhanceImage(image: HTMLImageElement, classes: BodyClassNames): Cleanup {
-  const document = image.ownerDocument;
-  const button = document.createElement("button");
-  const error = document.createElement("span");
-  button.className = classes.imageButton;
-  button.type = "button";
-  button.dataset.readerImage = "";
-  button.setAttribute("aria-label", `查看图片${image.alt === "" ? "" : `：${image.alt}`}`);
-  error.className = classes.imageError;
-  error.setAttribute("role", "status");
-  image.before(button);
-  button.append(image, error);
-  if (!image.hasAttribute("loading")) image.loading = "lazy";
-  image.decoding = "async";
-
+function enhanceImage(button: HTMLButtonElement, classes: BodyClassNames): Cleanup {
+  const image = button.querySelector<HTMLImageElement>("img");
+  const error = button.querySelector<HTMLElement>("[data-image-error]");
+  if (image == null || error == null) return () => undefined;
   const onError = (): void => {
     button.classList.add(classes.hasImageError);
     error.textContent = `图片暂时无法显示${image.alt === "" ? "。" : `：${image.alt}`}`;
@@ -198,21 +117,20 @@ function enhanceImage(image: HTMLImageElement, classes: BodyClassNames): Cleanup
   return () => {
     image.removeEventListener("error", onError);
     button.classList.remove(classes.hasImageError);
-    unwrap(image, button);
   };
 }
 
-/** Progressively enhance trusted, server-sanitized record HTML; the original text stays server-rendered. */
+/** Bind behavior to stable server-rendered semantics; hydration never wraps or moves record content. */
 export function enhanceRecordBody(root: HTMLElement, classes: BodyClassNames): Cleanup {
   const cleanups: Cleanup[] = [];
-  for (const pre of Array.from(root.querySelectorAll<HTMLPreElement>("pre"))) {
-    cleanups.push(enhanceCode(pre, classes));
+  for (const wrapper of Array.from(root.querySelectorAll<HTMLElement>("[data-reader-code]"))) {
+    cleanups.push(enhanceCode(wrapper));
   }
-  for (const table of Array.from(root.querySelectorAll<HTMLTableElement>("table"))) {
-    cleanups.push(enhanceTable(table, classes));
+  for (const scroller of Array.from(root.querySelectorAll<HTMLElement>("[data-reader-table]"))) {
+    cleanups.push(observeOverflow(scroller, scroller.querySelector<HTMLElement>("[data-scroll-hint]")));
   }
-  for (const image of Array.from(root.querySelectorAll<HTMLImageElement>("img"))) {
-    cleanups.push(enhanceImage(image, classes));
+  for (const button of Array.from(root.querySelectorAll<HTMLButtonElement>("button[data-reader-image]"))) {
+    cleanups.push(enhanceImage(button, classes));
   }
   return () => {
     for (const cleanup of cleanups.reverse()) cleanup();

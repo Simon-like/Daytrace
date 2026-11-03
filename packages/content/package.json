@@ -1,0 +1,16 @@
+{
+  "name": "@daytrace/content",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./public-api": "./src/public-api.ts",
+    "./search": "./src/search.ts",
+    "./records": "./src/records.ts"
+  },
+  "dependencies": {
+    "@daytrace/config": "workspace:*",
+    "@daytrace/contracts": "workspace:*"
+  }
+}

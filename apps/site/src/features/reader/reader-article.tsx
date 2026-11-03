@@ -39,7 +39,7 @@ export function ReaderArticle({ record, supplements = [], marginNote }: ReaderAr
 
   return (
     <article className={`${styles.reader} ${styles[record.type]}`}>
-      <header className={styles.header}>
+      <header className={`${styles.header} dt-scene-title`}>
         <p className={styles.eyebrow}>FIELD NOTE / {RECORD_TYPE_LABELS[record.type]}</p>
         <h1>{record.title}</h1>
         <div className={styles.meta}>

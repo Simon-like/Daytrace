@@ -11,7 +11,7 @@ interface SearchResultsProps {
 
 export function SearchResults({ items, onRecordClick }: SearchResultsProps) {
   return (
-    <ul className={styles.list} aria-label="公开搜索结果">
+    <ul className={`${styles.list} motion-region`} aria-label="公开搜索结果">
       {items.map((item) => (
         <li key={item.record.id}>
           <article className={styles.result}>

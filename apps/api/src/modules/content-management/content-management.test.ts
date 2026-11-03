@@ -128,3 +128,13 @@ test("unexpected multipart fields produce a stable input error", async () => {
   assert.equal(response.status, 422);
   assert.equal((await response.json()).error.code, "CONTENT_IMPORT_INVALID");
 });
+
+test("Unicode filenames from decomposed file systems normalize without losing references", async () => {
+  const service = new ContentManagementService(app.get(ContentService));
+  const preview = await service.import([
+    { path: "unicode.md", bytes: Buffer.from("# Unicode 文件名\n\n[资料](files/cafe\u0301.txt)") },
+    { path: "files/café.txt", bytes: Buffer.from("SYNTHETIC_UTF8") },
+  ], {});
+  assert.equal(preview.records[0]?.attachments.length, 1);
+  await service.discard(preview.id);
+});

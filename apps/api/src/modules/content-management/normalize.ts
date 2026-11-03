@@ -57,7 +57,7 @@ export function normalize(files: InputFile[], current: ContentSnapshot, options:
     const sourceFiles = new Map(files.map(f => [f.path, f]));
     const addResource = (original: string): string => {
       let decoded: string;
-      try { decoded = decodeURIComponent(original); } catch { throw invalid("附件地址编码无效", file.path); }
+      try { decoded = decodeURIComponent(original).normalize("NFC"); } catch { throw invalid("附件地址编码无效", file.path); }
       if (/[?#\\]/.test(decoded) || /^[a-z][a-z0-9+.-]*:/i.test(decoded) || decoded.startsWith("/")) throw invalid("图片/附件须为本地相对路径；请连同附件上传", file.path);
       const sourcePath = posix.normalize(posix.join(posix.dirname(file.path), decoded));
       const matching = files.filter(f => posix.basename(f.path) === posix.basename(sourcePath));
@@ -67,7 +67,7 @@ export function normalize(files: InputFile[], current: ContentSnapshot, options:
       const path = safePath(simplePath) ? simplePath : `assets/${sourcePath}`;
       const existing = attachments.find(a => a.path === path);
       if (existing) return path;
-      const declaration = Array.isArray(data.attachments) ? data.attachments.find((a: Record<string, unknown>) => a.path === simplePath) : undefined;
+      const declaration = Array.isArray(data.attachments) ? data.attachments.find((a: Record<string, unknown>) => typeof a.path === "string" && a.path.normalize("NFC") === simplePath) : undefined;
       const old = previous?.metadata.attachments.find(a => a.path === path);
       const type = mediaType(resource);
       const id = old?.id ?? declaration?.id ?? `ast_${randomUUID()}`;
@@ -90,7 +90,7 @@ export function normalize(files: InputFile[], current: ContentSnapshot, options:
       let value: string;
       const [withoutHash = "", fragment] = url.split("#");
       if (/\.md$/i.test(withoutHash) && !isImage) {
-        let decoded: string; try { decoded = decodeURIComponent(withoutHash); } catch { throw invalid("文章链接编码无效", file.path); }
+        let decoded: string; try { decoded = decodeURIComponent(withoutHash).normalize("NFC"); } catch { throw invalid("文章链接编码无效", file.path); }
         const targetPath = posix.normalize(posix.join(posix.dirname(file.path), decoded));
         const target = docsByPath.get(targetPath);
         if (!target) throw invalid(`文章链接没有目标，请将目标文章一起上传：${url}`, file.path);

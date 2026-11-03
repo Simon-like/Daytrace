@@ -11,7 +11,9 @@
     "./select": "./src/select.tsx",
     "./checkbox": "./src/checkbox.tsx",
     "./icon": "./src/icon.tsx",
-    "./brand-mark": "./src/brand-mark.tsx"
+    "./brand-mark": "./src/brand-mark.tsx",
+    "./reading-preferences": "./src/reading-preferences.ts",
+    "./reading-font-size-control": "./src/reading-font-size-control.tsx"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "1.4.1",

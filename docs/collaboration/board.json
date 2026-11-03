@@ -846,6 +846,7 @@
       "allowed_paths": [
         "packages/content/src/",
         "packages/ui/src/",
+        "packages/ui/package.json",
         "apps/site/src/",
         "apps/site/assets/",
         "apps/h5/src/",

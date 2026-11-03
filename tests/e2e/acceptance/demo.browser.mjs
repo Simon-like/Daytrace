@@ -147,6 +147,14 @@ try{
   const clipboard=await page.evaluate(()=>navigator.clipboard.readText());assert.ok(clipboard.includes("registerMicroApps"));
   await page.getByRole("navigation",{name:"本文目录"}).getByRole("link",{name:"这次真正需要记住的"}).click();assert.ok(new URL(page.url()).hash.length>1);
  });
+ await check("reader font preferences restore, reject invalid values and stay keyboard accessible",async()=>{
+  await page.setViewportSize({width:1440,height:1000});await go(tech);const body=page.getByText("这是一份演示复盘。",{exact:false}).first();const fontSize=()=>body.evaluate(node=>getComputedStyle(node.parentElement).fontSize);assert.equal(await fontSize(),"17.2px");
+  const large=page.getByRole("button",{name:"较大",exact:true});await large.click();assert.equal(await large.getAttribute("aria-pressed"),"true");assert.equal(await fontSize(),"19.2px");assert.equal(await page.evaluate(()=>localStorage.getItem("daytrace.readingFontSize.v1")),"large");
+  await page.reload();await page.waitForLoadState("networkidle");assert.equal(await fontSize(),"19.2px");assert.equal(await page.getByRole("button",{name:"较大",exact:true}).getAttribute("aria-pressed"),"true");
+  const xlarge=page.getByRole("button",{name:"特大",exact:true});await xlarge.focus();await page.keyboard.press("Space");assert.equal(await fontSize(),"21.2px");assert.equal(await xlarge.getAttribute("aria-pressed"),"true");
+  for(const width of [390,430]){await page.setViewportSize({width,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);}
+  await page.setViewportSize({width:1440,height:1000});await page.evaluate(()=>localStorage.setItem("daytrace.readingFontSize.v1","not-a-size"));await page.reload();await page.waitForLoadState("networkidle");assert.equal(await fontSize(),"17.2px");assert.equal(await page.getByRole("button",{name:"标准",exact:true}).getAttribute("aria-pressed"),"true");
+ });
  await check("complete Markdown semantics stay readable, scroll locally and preserve mobile type",async()=>{
   await go(tech);assert.equal(await page.locator("[data-reader-code]").count(),2);await page.getByText("UNKNOWN-LANGUAGE",{exact:true}).waitFor();
   assert.ok(await page.locator("del").first().isVisible());const longPre=page.locator("[data-reader-code-scroll]").nth(1);

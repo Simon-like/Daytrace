@@ -59,8 +59,8 @@
 - Create: `docs/collaboration/handoffs/SHARE-001-kimi-sharing.md`
 - Create: `docs/collaboration/reviews/SHARE-001-self-review.md`
 
-- [ ] 写偏好解析、预恢复、按钮键盘／`aria-pressed`、刷新恢复和非法存储失败测试。
-- [ ] 实现同源 localStorage 三档偏好；桌面约 17.2／19.2／21.2px，H5 为 17／19／21px。
-- [ ] 验证公开与主人阅读、390／430px 无整页溢出、减少动态效果和双端既有路径不回归。
+- [x] 写偏好解析、预恢复、按钮键盘／`aria-pressed`、刷新恢复和非法存储失败测试。
+- [x] 实现同源 localStorage 三档偏好；桌面约 17.2／19.2／21.2px，H5 为 17／19／21px。
+- [x] 验证公开与主人阅读、390／430px 无整页溢出、减少动态效果和双端既有路径不回归。
 - [ ] 执行 lint、typecheck、unit、integration、content、build、桌面与 H5 浏览器、文档检查；核验最新功能提交托管 CI。
 - [ ] 保存报告、证据、handoff、self-review，submit／complete SHARE-001，更新当前上下文与项目进度；文档独立提交并推送。QA／RELEASE 外部门槛不得因此关闭。

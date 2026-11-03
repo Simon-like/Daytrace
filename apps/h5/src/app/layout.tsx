@@ -1,6 +1,7 @@
 import "katex/dist/katex.min.css";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import { readingFontSizeBootScript } from "@daytrace/ui/reading-preferences";
 import { MobileShell } from "../components/mobile-shell";
 import "./globals.css";
 
@@ -18,5 +19,5 @@ export const viewport: Viewport = {
 };
 
 export default function H5Layout({ children }: { children: ReactNode }) {
-  return <html lang="zh-CN"><body><MobileShell>{children}</MobileShell></body></html>;
+  return <html lang="zh-CN" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: readingFontSizeBootScript }} /></head><body><MobileShell>{children}</MobileShell></body></html>;
 }

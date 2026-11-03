@@ -164,8 +164,31 @@ try {
     await go(tech);
     assert.equal(await page.locator("[data-reader-code]").count(), 2);
     assert.equal(await page.locator("[data-reader-table]").count(), 1);
-    const bodyFont = await page.locator(".h5-reader-body").evaluate(node => getComputedStyle(node).fontSize);
-    assert.ok(parseFloat(bodyFont) >= 17);
+    const bodyFont = () => page.locator(".h5-reader-body").evaluate(node => getComputedStyle(node).fontSize);
+    assert.equal(await bodyFont(), "17px");
+    await page.getByRole("button", { name: "较大", exact: true }).click();
+    assert.equal(await bodyFont(), "19px");
+    assert.equal(await page.getByRole("button", { name: "较大", exact: true }).getAttribute("aria-pressed"), "true");
+    await go(tech.replace("/h5", ""));
+    assert.equal(await page.getByRole("button", { name: "较大", exact: true }).getAttribute("aria-pressed"), "true");
+    assert.equal(await page.evaluate(() => localStorage.getItem("daytrace.readingFontSize.v1")), "large");
+    await go(tech);
+    await page.reload();
+    await page.waitForLoadState("networkidle");
+    assert.equal(await bodyFont(), "19px");
+    await page.evaluate(() => localStorage.setItem("daytrace.readingFontSize.v1", "invalid"));
+    await page.reload();
+    await page.waitForLoadState("networkidle");
+    assert.equal(await bodyFont(), "17px");
+    const xlarge = page.getByRole("button", { name: "特大", exact: true });
+    await xlarge.focus();
+    await page.keyboard.press("Space");
+    assert.equal(await bodyFont(), "21px");
+    for (const width of [390, 430]) {
+      await page.setViewportSize({ width, height: 844 });
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
+    }
+    await page.getByRole("button", { name: "标准", exact: true }).click();
     const longPre = page.locator("[data-reader-code-scroll]").nth(1);
     assert.equal(await longPre.evaluate(node => node.scrollWidth > node.clientWidth), true);
     await page.getByRole("button", { name: "复制代码", exact: true }).first().click();

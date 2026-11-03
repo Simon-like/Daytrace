@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ReaderArticle } from "../../../features/reader";
 import type { Metadata } from "next";
 import { isRecordId } from "@daytrace/contracts";
+import { ReadingFontSizeControl } from "@daytrace/ui/reading-font-size-control";
 import { notFound, permanentRedirect } from "next/navigation";
 import { findPublicRecordBySlug, getPublicRecord } from "../../../server/api";
 
@@ -47,5 +48,5 @@ export default async function RecordPage({ params }: RecordPageProps) {
   }
   const record = await getPublicRecord(recordRef);
   if (record === null) notFound();
-  return <main className="reader-main"><div className="reader-topline"><Link href="/archive">← 返回归档</Link><span>{process.env.DAYTRACE_DEMO === "1" ? "一页演示记录" : "一页记录"}</span></div><ReaderArticle record={record} marginNote="留下过程，也给后来一点线索。" /><div className="reader-bottom"><span>这一页，先记到这里。</span><Link href="/archive">继续翻阅归档 ↗</Link></div></main>;
+  return <main className="reader-main"><div className="reader-topline"><Link href="/archive">← 返回归档</Link><div className="reader-tools"><span>{process.env.DAYTRACE_DEMO === "1" ? "一页演示记录" : "一页记录"}</span><ReadingFontSizeControl /></div></div><ReaderArticle record={record} marginNote="留下过程，也给后来一点线索。" /><div className="reader-bottom"><span>这一页，先记到这里。</span><Link href="/archive">继续翻阅归档 ↗</Link></div></main>;
 }

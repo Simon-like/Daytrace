@@ -97,7 +97,7 @@
 }
 
 .body {
-  font-size: 1.075rem;
+  font-size: var(--reader-font-size);
   line-height: 1.95;
   letter-spacing: 0.012em;
   overflow-wrap: break-word;

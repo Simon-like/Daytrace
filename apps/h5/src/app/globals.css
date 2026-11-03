@@ -140,6 +140,7 @@ img, svg { flex-shrink: 0; }
 
 .h5-reader-back { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid var(--line); color: var(--muted); font-family: var(--mono); font-size: 9px; }
 .h5-reader-back a { display: inline-flex; min-height: 40px; align-items: center; color: var(--archive); font-family: var(--sans); font-size: 12px; text-decoration: none; }
+.h5-reader > .dt-reading-preferences { display: flex; width: fit-content; margin: 16px 0 4px; }
 .h5-reader-header { padding: 29px 0 27px; }
 .h5-reader-header h1 { margin: 0; font-family: var(--serif); font-size: clamp(30px, 8.5vw, 42px); font-weight: 500; line-height: 1.42; overflow-wrap: anywhere; }
 .h5-reader-header > p:not(.h5-kicker) { margin: 19px 0 0; color: var(--muted); font-size: 14px; line-height: 1.9; }
@@ -165,7 +166,7 @@ img, svg { flex-shrink: 0; }
 .h5-record-link-title[aria-current="page"] { color: var(--revision); }
 .h5-record-link-item > p { margin: 3px 0 0; color: var(--muted); font-size: 13px; line-height: 1.85; }
 
-.h5-reader-body { min-width: 0; font-size: 17px; line-height: 1.9; letter-spacing: .01em; overflow-wrap: break-word; }
+.h5-reader-body { min-width: 0; font-size: var(--h5-reader-font-size); line-height: 1.9; letter-spacing: .01em; overflow-wrap: break-word; }
 .h5-reader-body :where(p, ul, ol, blockquote) { margin: 1.25em 0; }
 .h5-reader-body :where(ul, ol) { padding-left: 1.4em; }
 .h5-reader-body :where(li + li) { margin-top: .4em; }

@@ -1,6 +1,7 @@
 import "katex/dist/katex.min.css";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import { readingFontSizeBootScript } from "@daytrace/ui/reading-preferences";
 import { SiteShell } from "../layouts/site-shell";
 import "./globals.css";
 import "../styles/redesign.css";
@@ -20,7 +21,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="zh-CN">
+    <html lang="zh-CN" suppressHydrationWarning>
+      <head><script dangerouslySetInnerHTML={{ __html: readingFontSizeBootScript }} /></head>
       <body><SiteShell>{children}</SiteShell></body>
     </html>
   );

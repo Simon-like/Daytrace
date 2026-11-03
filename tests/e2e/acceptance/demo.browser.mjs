@@ -39,6 +39,13 @@ try{
   assert.equal((await fetch(`${base}/api/v1/assets/ast_11111111-1111-4111-8111-000000009101`)).status,404);
   assert.equal((await fetch(`${base}/api/v1/not-an-allowed-route`)).status,404);
  });
+ await check("public feeds, sitemap and share metadata expose only canonical public records",async()=>{
+  const rssResponse=await fetch(`${base}/rss.xml`);assert.equal(rssResponse.status,200);assert.match(rssResponse.headers.get("content-type")??"",/application\/rss\+xml/);
+  const rss=await rssResponse.text();assert.equal((rss.match(/<item>/g)??[]).length,8);assert.ok(rss.includes("<rss version=\"2.0\">"));assert.ok(!rss.includes(secret));assert.ok(!rss.includes("000000000091"));assert.ok(!rss.includes("000000000092"));assert.ok(!rss.includes("000000000093"));
+  const sitemap=await(await fetch(`${base}/sitemap.xml`)).text();assert.equal((sitemap.match(/<loc>.*?\/records\/rec_/g)??[]).length,8);assert.ok(!sitemap.includes("/owner"));assert.ok(!sitemap.includes("/h5/"));assert.ok(!sitemap.includes("000000000091"));
+  const robots=await(await fetch(`${base}/robots.txt`)).text();assert.ok(robots.includes("Disallow: /owner/"));assert.ok(robots.includes(`${base}/sitemap.xml`));
+  const html=await(await fetch(base+tech)).text();assert.ok(html.includes(`property="og:title"`));assert.ok(html.includes(`content="${base}${tech}/"`));assert.ok(html.includes(`href="${base}${tech}/"`));assert.ok(html.includes(`name="twitter:card" content="summary_large_image"`));assert.ok(html.includes(`href="${base}/rss.xml"`));
+ });
  await check("home categories navigate to a live filtered archive",async()=>{
   await go("/");await page.getByRole("link",{name:/生活经验/}).click();
   await page.waitForURL(/archive\?type=recipe/);const category=page.getByRole("combobox",{name:"记录类别"});await category.waitFor();

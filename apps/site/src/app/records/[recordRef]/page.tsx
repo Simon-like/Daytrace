@@ -16,7 +16,26 @@ export async function generateMetadata({ params }: RecordPageProps): Promise<Met
   if (!isRecordId(recordRef)) return { title: "记录链接" };
   const record = await getPublicRecord(recordRef);
   if (record === null) return { title: "记录不可用" };
-  return { title: record.title, description: record.summary ?? undefined, alternates: { canonical: `/records/${record.id}/` } };
+  const description = record.summary ?? "有迹 Daytrace 的一页公开记录。";
+  const canonical = `/records/${record.id}/`;
+  const image = `/records/${record.id}/opengraph-image`;
+  return {
+    title: record.title,
+    description,
+    alternates: { canonical, types: { "application/rss+xml": "/rss.xml" } },
+    openGraph: {
+      title: record.title,
+      description,
+      url: canonical,
+      siteName: "有迹 Daytrace",
+      locale: "zh_CN",
+      type: "article",
+      publishedTime: record.occurredOn ?? record.updatedAt,
+      modifiedTime: record.updatedAt,
+      images: [{ url: image, width: 1200, height: 630, alt: record.title }],
+    },
+    twitter: { card: "summary_large_image", title: record.title, description, images: [image] },
+  };
 }
 
 export default async function RecordPage({ params }: RecordPageProps) {

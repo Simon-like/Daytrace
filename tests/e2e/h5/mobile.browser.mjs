@@ -8,7 +8,7 @@ const apiPort = process.env.H5_TEST_API_PORT ?? "3171";
 const h5Port = process.env.H5_TEST_H5_PORT ?? "3172";
 const base = `http://127.0.0.1:${sitePort}`;
 const direct = `http://127.0.0.1:${h5Port}`;
-const evidence = "docs/project/evidence/MOBILE-001";
+const evidence = process.env.H5_TEST_EVIDENCE_DIR ?? "docs/project/evidence/MOBILE-001";
 await mkdir(evidence, { recursive: true });
 await mkdir(".local/h5-test", { recursive: true });
 const log = await open(".local/h5-test/server.log", "w");
@@ -41,6 +41,14 @@ try {
     assert.equal((await fetch(`${direct}/h5/`)).status, 200);
     assert.equal((await fetch(`${direct}/api/v1/health/ready`)).status, 200);
     assert.equal(await page.locator(".h5-tabs a").count(), 5);
+    const detailHtml = await (await fetch(base + tech)).text();
+    const canonicalId = tech.split("/").at(-1);
+    assert.ok(detailHtml.includes(`rel="canonical" href="${base}/records/${canonicalId}/"`));
+    assert.ok(detailHtml.includes(`property="og:url" content="${base}/records/${canonicalId}/"`));
+    assert.ok(detailHtml.includes(`property="og:image" content="${base}/records/${canonicalId}/opengraph-image"`));
+    assert.ok(detailHtml.includes(`name="twitter:card" content="summary_large_image"`));
+    assert.ok(detailHtml.includes(`href="${base}/rss.xml"`));
+    assert.ok(!detailHtml.includes("写给自己的阶段提醒"));
   });
   await check("mobile navigation and bottom filter sheet preserve touch and scroll state", async () => {
     await page.locator(".h5-tabs").getByRole("link", { name: "归档" }).click();

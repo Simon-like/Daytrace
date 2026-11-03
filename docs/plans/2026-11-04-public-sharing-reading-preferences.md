@@ -27,10 +27,10 @@
 - Modify: `apps/h5/src/app/records/[recordRef]/page.tsx`
 - Test: `tests/unit/`、`tests/e2e/acceptance/`、`tests/e2e/h5/`
 
-- [ ] 为公开游标遍历、XML 转义、RSS 项与元数据写失败测试。
-- [ ] 实现每页最多 50 条的公开全量读取、RSS 2.0、sitemap、robots 和双端 OG/Twitter/canonical。
-- [ ] 验证 8 篇公开示例全部出现，私密／草稿 canary 和 owner／H5 别名不出现；桌面分享地址与 H5 canonical 一致。
-- [ ] 运行相关测试、lint、typecheck，独立提交并推送。
+- [x] 为公开游标遍历、XML 转义、RSS 项与元数据写失败测试。
+- [x] 实现每页最多 50 条的公开全量读取、RSS 2.0、sitemap、robots 和双端 OG/Twitter/canonical。
+- [x] 验证 8 篇公开示例全部出现，私密／草稿 canary 和 owner／H5 别名不出现；桌面分享地址与 H5 canonical 一致。
+- [x] 运行相关测试、lint、typecheck，独立提交并推送。
 
 ### Task 2：本地中文分享卡
 

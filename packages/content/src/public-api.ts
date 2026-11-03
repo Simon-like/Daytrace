@@ -52,8 +52,11 @@ async function request(path: string): Promise<Response> {
   return response;
 }
 
-export async function getPublicRecords(cursor?: string): Promise<RecordListData> {
-  const suffix = cursor === undefined ? "" : `?cursor=${encodeURIComponent(cursor)}`;
+export async function getPublicRecords(cursor?: string, limit?: number): Promise<RecordListData> {
+  const query = new URLSearchParams();
+  if (cursor !== undefined) query.set("cursor", cursor);
+  if (limit !== undefined) query.set("limit", String(Math.max(1, Math.min(50, Math.trunc(limit)))));
+  const suffix = query.size === 0 ? "" : `?${query.toString()}`;
   const response = await request(`/api/v1/records${suffix}`);
   if (!response.ok) throw await readError(response);
   try {
@@ -61,6 +64,24 @@ export async function getPublicRecords(cursor?: string): Promise<RecordListData>
   } catch {
     throw new PublicApiError(502, "CONTRACT_INVALID");
   }
+}
+
+export async function getAllPublicRecords(
+  readPage: (cursor?: string) => Promise<RecordListData> = cursor => getPublicRecords(cursor, 50),
+): Promise<readonly RecordSummary[]> {
+  const records: RecordSummary[] = [];
+  const visited = new Set<string>();
+  let cursor: string | undefined;
+  do {
+    const page = await readPage(cursor);
+    records.push(...page.items);
+    cursor = page.pageInfo.nextCursor ?? undefined;
+    if (cursor !== undefined) {
+      if (visited.has(cursor)) throw new PublicApiError(502, "CONTRACT_INVALID");
+      visited.add(cursor);
+    }
+  } while (cursor !== undefined);
+  return records;
 }
 
 export async function getPublicRecord(recordId: string): Promise<RecordDetail | null> {

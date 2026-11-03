@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.PUBLIC_ORIGIN ?? "http://127.0.0.1:3000"),
   title: { default: "有迹 Daytrace", template: "%s · 有迹 Daytrace" },
   description: "让经历有迹可循。技术实践、生活经验与随想认知的个人档案。",
+  alternates: { types: { "application/rss+xml": "/rss.xml" } },
 };
 
 export const viewport: Viewport = {

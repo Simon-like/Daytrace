@@ -37,13 +37,14 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertEqual(workflow["permissions"], {"contents": "read"})
         triggers = workflow.get("on", workflow.get(True))
         self.assertIn("pull_request", triggers)
+        self.assertEqual(set(triggers["push"]["branches"]), {"main", "dev"})
         pull_request = triggers["pull_request"] or {}
         self.assertNotIn("paths", pull_request)
         self.assertNotIn("paths-ignore", pull_request)
         raw = (WORKFLOWS / "ci.yml").read_text(encoding="utf-8")
         self.assertNotIn("secrets.", raw)
         self.assertNotIn("continue-on-error", raw)
-        for command in ("pnpm lint", "pnpm typecheck", "pnpm test:unit", "pnpm test:integration", "pnpm build", "privacy-check.mjs", "pnpm test:e2e"):
+        for command in ("pnpm lint", "pnpm typecheck", "pnpm test:unit", "pnpm test:integration", "pnpm build", "privacy-check.mjs", "pnpm test:e2e", "pnpm test:h5"):
             self.assertIn(command, raw)
 
     def test_release_is_main_only_and_uses_immutable_manifest(self) -> None:

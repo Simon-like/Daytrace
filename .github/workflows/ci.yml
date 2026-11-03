@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, dev]
 
 permissions:
   contents: read
@@ -114,6 +114,16 @@ jobs:
         with:
           name: demo-browser-evidence
           path: docs/project/evidence/DEMO-001/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Exercise independent H5 in mobile browser viewports
+        run: pnpm test:h5
+      - name: Upload synthetic H5 browser evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: h5-browser-evidence
+          path: docs/project/evidence/MOBILE-001/
           if-no-files-found: error
           retention-days: 14
 

@@ -129,7 +129,7 @@ export function SearchPanel({ initialQuery = "", onClose }: SearchPanelProps) {
           <Input
             ref={inputRef}
             id={inputId}
-            className="h-12 rounded-[12px] border-0 bg-transparent pl-12 pr-11 text-[17px] shadow-none hover:border-0 focus:border-0 focus:bg-transparent focus-visible:outline-offset-[-2px]"
+            className="h-12 rounded-[12px] border-0 bg-transparent pl-12 pr-11 text-[17px] shadow-none hover:border-0 focus:border-0 focus:bg-transparent focus-visible:outline-none"
             type="search"
             value={input}
             maxLength={100}

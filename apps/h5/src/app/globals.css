@@ -24,7 +24,7 @@ button, input { font: inherit; }
 button { cursor: pointer; }
 img, svg { flex-shrink: 0; }
 ::selection { background: #d7decd; color: var(--archive); }
-:focus-visible { outline: 2px solid var(--revision); outline-offset: 4px; }
+:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px; }
 
 .h5-skip { position: fixed; z-index: 100; top: 8px; left: 12px; padding: 8px 14px; background: var(--paper-light); transform: translateY(-160%); }
 .h5-skip:focus { transform: none; }
@@ -101,11 +101,11 @@ img, svg { flex-shrink: 0; }
 
 .h5-search-form { margin-top: 25px; }
 .h5-search-form > label { display: block; margin-bottom: 9px; color: var(--muted); font-size: 12px; }
-.h5-search-desk { position: relative; display: flex; align-items: center; padding: 5px; border: 1px solid #d2dacd; border-radius: 18px; background: var(--control-surface); box-shadow: 0 3px 0 #dfe4da, 0 12px 26px #2431280b; }
+.h5-search-desk { position: relative; display: flex; align-items: center; padding: 5px; border: 1px solid #d2dacd; border-radius: 18px; background: var(--control-surface); box-shadow: 0 3px 0 #dfe4da, 0 12px 26px #2431280b; transition: border-color var(--motion-duration-control), box-shadow var(--motion-duration-control); }
 .h5-search-desk > svg { position: absolute; z-index: 1; left: 15px; color: #65745f; pointer-events: none; }
 .h5-search-desk > input { height: 50px; padding: 0 70px 0 44px; border: 0; background: transparent; box-shadow: none; font-size: 16px; }
 .h5-search-desk > input:focus { border: 0; background: transparent; outline: none; }
-.h5-search-desk:focus-within { border-color: #73866f; outline: 2px solid var(--revision); outline-offset: 3px; }
+.h5-search-desk:focus-within { border-color: var(--focus-ring); outline: none; box-shadow: 0 3px 0 #dfe4da, 0 0 0 4px var(--focus-halo), 0 12px 26px #2431280b; }
 .h5-search-desk > button[type="submit"] { min-width: 79px; min-height: 48px; padding-inline: 12px; }
 .h5-search-desk > button[type="submit"] > span:last-child { display: none; }
 .h5-search-clear { position: absolute; right: 91px; display: grid; width: 32px; height: 32px; place-items: center; padding: 0; border: 0; border-radius: 50%; background: #edf0e8; color: var(--muted); }

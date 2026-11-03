@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-02T17:32:33.208765+00:00",
+  "updated": "2026-11-03T07:47:35.047492+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -570,6 +570,33 @@
       ]
     },
     {
+      "id": "UI-003",
+      "title": "跨端焦点样式与移动搜索键盘语义",
+      "status": "done",
+      "owner": "kimi-UI-003-focus",
+      "depends_on": [
+        "SYSTEM-001",
+        "MOBILE-001"
+      ],
+      "allowed_paths": [
+        "packages/ui/",
+        "apps/site/src/app/globals.css",
+        "apps/site/src/features/search/",
+        "apps/h5/src/app/globals.css",
+        "apps/h5/src/components/mobile-search.tsx",
+        "tests/e2e/",
+        "docs/project/reports/UI-003.md",
+        "docs/project/evidence/UI-003/",
+        "docs/collaboration/"
+      ],
+      "card": "docs/collaboration/tasks/UI-003.md",
+      "evidence": [
+        "docs/collaboration/handoffs/UI-003-kimi-focus.md"
+      ],
+      "review": "docs/collaboration/reviews/UI-003-self-review.md",
+      "reviewer": "kimi-UI-003-focus"
+    },
+    {
       "id": "SYSTEM-001",
       "title": "共享设计资产、桌面统一与入场编排",
       "status": "done",
@@ -1090,6 +1117,27 @@
       "action": "complete",
       "actor": "kimi-MOBILE-001-self-review",
       "evidence": "docs/collaboration/reviews/MOBILE-001-self-review.md"
+    },
+    {
+      "at": "2026-11-03T07:16:34.796908+00:00",
+      "task": "UI-003",
+      "action": "claim",
+      "actor": "kimi-UI-003-focus",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-03T07:47:34.934651+00:00",
+      "task": "UI-003",
+      "action": "submit",
+      "actor": "kimi-UI-003-focus",
+      "evidence": "docs/collaboration/handoffs/UI-003-kimi-focus.md"
+    },
+    {
+      "at": "2026-11-03T07:47:35.047492+00:00",
+      "task": "UI-003",
+      "action": "complete",
+      "actor": "kimi-UI-003-focus",
+      "evidence": "docs/collaboration/reviews/UI-003-self-review.md"
     }
   ],
   "dispatch_policy": {

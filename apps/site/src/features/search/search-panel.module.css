@@ -27,6 +27,10 @@
   min-width: 0;
 }
 
+.inputWrap input:focus-visible {
+  outline: none;
+}
+
 .searchIcon {
   position: absolute;
   top: 7px;

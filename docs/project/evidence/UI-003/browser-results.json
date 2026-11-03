@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-03",
+  "scope": "Chromium desktop and mobile viewport; not a real iPhone",
+  "checks": [
+    {
+      "name": "desktop search has one soft container focus and a visible keyboard ring",
+      "passed": true
+    },
+    {
+      "name": "H5 search removes the double outline and exposes search keyboard semantics",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "passed": true
+}

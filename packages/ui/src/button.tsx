@@ -16,7 +16,7 @@ export function Button({ variant = "primary", className = "", type = "button", c
   return (
     <button
       type={type}
-      className={`group inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-[14px] border px-5 py-2 text-sm font-medium tracking-[0.01em] transition-[color,background-color,border-color,box-shadow,transform] duration-[var(--motion-duration-control)] ease-[var(--motion-ease-standard)] outline-none hover:-translate-y-[2px] active:translate-y-[2px] active:scale-[.985] focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-revision disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0 disabled:active:translate-y-0 disabled:active:scale-100 ${variants[variant]} ${className}`}
+      className={`group inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-[14px] border px-5 py-2 text-sm font-medium tracking-[0.01em] transition-[color,background-color,border-color,box-shadow,transform] duration-[var(--motion-duration-control)] ease-[var(--motion-ease-standard)] outline-none hover:-translate-y-[2px] active:translate-y-[2px] active:scale-[.985] focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[var(--focus-ring)] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0 disabled:active:translate-y-0 disabled:active:scale-100 ${variants[variant]} ${className}`}
       {...props}
     >
       <span>{children}</span>

@@ -65,9 +65,9 @@ export function MobileSearch({ initialQuery }: { readonly initialQuery: string }
   }, []);
 
   return <section className="h5-search dt-scene-actions" aria-label="公开搜索">
-    <form className="h5-search-form" role="search" onSubmit={event => { event.preventDefault(); void run(input); }}>
+    <form className="h5-search-form" role="search" onSubmit={event => { event.preventDefault(); void run(input); inputRef.current?.blur(); }}>
       <label htmlFor="h5-search-input">搜索标题、标签和正文</label>
-      <div className="h5-search-desk"><Icon name="search" size={23} /><Input ref={inputRef} id="h5-search-input" type="search" value={input} maxLength={100} placeholder="输入一点线索" autoComplete="off" onChange={event => setInput(event.target.value)} />{input ? <button type="button" className="h5-search-clear" aria-label="清除搜索" onClick={() => clear()}><Icon name="close" size={15} /></button> : null}<Button type="submit" disabled={state.status === "loading"}>搜索</Button></div>
+      <div className="h5-search-desk"><Icon name="search" size={23} /><Input ref={inputRef} id="h5-search-input" type="search" value={input} maxLength={100} placeholder="输入一点线索" autoComplete="off" enterKeyHint="search" onChange={event => setInput(event.target.value)} />{input ? <button type="button" className="h5-search-clear" aria-label="清除搜索" onClick={() => clear()}><Icon name="close" size={15} /></button> : null}<Button type="submit" disabled={state.status === "loading"}>搜索</Button></div>
       <p><kbd>Enter</kbd> 只检索公开记录，私密内容仍留在主人空间。</p>
     </form>
     <nav className="h5-suggestions" aria-label="搜索建议"><span>不妨试试</span>{["微前端", "豆腐", "记录"].map(word => <Link key={word} href={`/search?q=${encodeURIComponent(word)}`} onClick={event => { event.preventDefault(); void run(word); }}>#{word}</Link>)}</nav>

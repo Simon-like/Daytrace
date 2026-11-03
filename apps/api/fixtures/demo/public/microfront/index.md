@@ -12,6 +12,8 @@ tags: ["微前端", "问题拆解", "前端"]
 summary: "接入主子应用时，先画清路由、资源和生命周期的边界，再沿着真实请求寻找答案。"
 status: published
 visibility: public
+relatedRecords:
+  - rec_11111111-1111-4111-8111-000000000004
 attachments: []
 ---
 

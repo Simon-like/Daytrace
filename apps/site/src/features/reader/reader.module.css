@@ -524,6 +524,72 @@
   line-height: 1.85;
 }
 
+.recordLinks {
+  margin-top: 3.5rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--line);
+}
+
+.recordLinksKicker {
+  margin: 0 0 0.55rem;
+  color: var(--revision);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  line-height: 1.7;
+}
+
+.recordLinks h2 {
+  margin: 0 0 1.25rem;
+  font-family: var(--serif);
+  font-size: 1.65rem;
+  font-weight: 500;
+}
+
+.recordLinkList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recordLinkItem {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 1.4rem;
+  padding: 1.15rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.recordLinkDate {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-top: 0.25rem;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+}
+
+.recordLinkDate span:last-child:not(:first-child) { color: var(--revision); }
+.recordLinkBody { min-width: 0; }
+
+.recordLinkTitle {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  color: var(--archive);
+  font-family: var(--serif);
+  font-size: 1.12rem;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+  text-decoration-color: var(--line);
+  text-underline-offset: 0.25em;
+}
+
+.recordLinkTitle:hover { color: var(--revision); }
+.recordLinkTitle:focus-visible { outline: 3px solid var(--revision); outline-offset: 3px; }
+.recordLinkBody p { margin: 0.35rem 0 0; color: var(--muted); font-size: 0.9rem; line-height: 1.8; }
+
 .lightbox {
   width: 100%;
   max-width: none;

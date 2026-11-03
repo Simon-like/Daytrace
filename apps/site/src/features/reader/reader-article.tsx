@@ -7,10 +7,12 @@ import {
   type ReaderSupplement,
 } from "./reader-model";
 import { TableOfContents } from "./table-of-contents";
+import { RecordLinks } from "./record-links";
 import styles from "./reader.module.css";
 
 export interface ReaderArticleProps {
   readonly record: RecordDetail;
+  readonly owner?: boolean;
   readonly supplements?: readonly ReaderSupplement[];
   readonly marginNote?: string;
 }
@@ -33,7 +35,7 @@ function Supplements({ items }: { readonly items: readonly ReaderSupplement[] })
   );
 }
 
-export function ReaderArticle({ record, supplements = [], marginNote }: ReaderArticleProps) {
+export function ReaderArticle({ record, owner = false, supplements = [], marginNote }: ReaderArticleProps) {
   const toc = createReaderToc(record.body.toc);
   const quickLinks = record.type === "recipe" ? createRecipeQuickLinks(toc) : [];
 
@@ -70,6 +72,7 @@ export function ReaderArticle({ record, supplements = [], marginNote }: ReaderAr
         <div className={styles.bodyColumn}>
           <RecordBody html={record.body.html} />
           <Supplements items={supplements} />
+          <RecordLinks record={record} owner={owner} />
         </div>
       </div>
     </article>

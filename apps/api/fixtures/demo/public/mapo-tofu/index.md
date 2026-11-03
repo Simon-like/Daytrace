@@ -12,6 +12,8 @@ tags: ["下厨", "川味", "周末"]
 summary: "一份适合边做边看的两人食菜谱。记住备菜顺序、分次勾芡，以及最后再决定的盐。"
 status: published
 visibility: public
+relatedRecords:
+  - rec_11111111-1111-4111-8111-000000000093
 attachments: 
   - id: ast_11111111-1111-4111-8111-000000001002
     path: images/mapo.webp

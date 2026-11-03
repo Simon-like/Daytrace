@@ -94,12 +94,33 @@ try {
     await page.getByRole("link", { name: "麻婆豆腐：把这次的火候留下来" }).click();
     await page.waitForURL(/\/h5\/records\/rec_/);
   });
-  await check("owner login, private search, reader, expiry and logout stay within H5", async () => {
+  await check("owner login, linked recipe practices, private search, reader, expiry and logout stay within H5", async () => {
     const privateId = "rec_11111111-1111-4111-8111-000000000091";
+    const secondId = "rec_11111111-1111-4111-8111-000000000093";
+    const secondTitle = "第二次麻婆豆腐实践：只改变豆腐";
+    await go(recipe);
+    assert.ok(!(await page.locator("main").textContent()).includes(secondTitle));
+    assert.ok(!(await page.locator("main").innerHTML()).includes(secondId));
     await go("/h5/owner");
     await page.getByRole("link", { name: "进入演示主人空间" }).click();
     await page.waitForURL(/\/h5\/owner$/);
     await page.getByRole("button", { name: "退出主人空间" }).waitFor();
+    await go(recipe.replace("/h5/records/", "/h5/owner/records/"));
+    const comparison = page.getByRole("region", { name: "跨次实践" });
+    await comparison.waitFor();
+    assert.deepEqual(await comparison.getByRole("link").allTextContents(), ["麻婆豆腐：把这次的火候留下来", secondTitle]);
+    for (const width of [390, 430]) {
+      await page.setViewportSize({ width, height: 844 });
+      const layout = await page.evaluate(() => ({ width: innerWidth, scroll: document.documentElement.scrollWidth }));
+      report.layouts.push({ width, path: "/h5/owner/records/recipe-comparison", ...layout, passed: layout.scroll <= width + 1 });
+    }
+    await page.setViewportSize({ width: 390, height: 844 });
+    const secondLink = comparison.getByRole("link", { name: secondTitle });
+    await secondLink.focus();
+    await page.keyboard.press("Enter");
+    await page.waitForURL(new RegExp(`/h5/owner/records/${secondId}/?$`));
+    await page.getByText("老豆腐更容易保持形状", { exact: false }).waitFor();
+    await go("/h5/owner");
     const input = page.getByRole("searchbox");
     await input.fill("阶段提醒");
     await page.getByRole("button", { name: "搜索", exact: true }).click();

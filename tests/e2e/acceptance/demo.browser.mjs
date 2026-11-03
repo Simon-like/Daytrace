@@ -158,9 +158,15 @@ try{
   await page.getByRole("dialog").waitFor({state:"hidden"});assert.notEqual(await page.evaluate(()=>document.body.style.overflow),"hidden");
   await page.screenshot({path:`${evidence}/recipe-desktop.png`,fullPage:true});
  });
- await check("owner login, private search, session recovery, logout and stale cookie rejection",async()=>{
+ await check("owner login, linked recipe practices, private search, session recovery and logout",async()=>{
+  const secondId="rec_11111111-1111-4111-8111-000000000093";const secondTitle="第二次麻婆豆腐实践：只改变豆腐";
+  await go(recipe);assert.ok(!(await page.locator("main").textContent()).includes(secondTitle));assert.ok(!(await page.locator("main").innerHTML()).includes(secondId));
   await go("/owner");await page.getByRole("link",{name:"进入演示主人空间"}).click();
   await page.getByRole("button",{name:"退出主人空间"}).waitFor();
+  await go(`/owner/records/${recipe.split("/").at(-1)}`);const comparison=page.getByRole("region",{name:"跨次实践"});await comparison.waitFor();
+  const practiceTitles=await comparison.getByRole("link").allTextContents();assert.deepEqual(practiceTitles,["麻婆豆腐：把这次的火候留下来",secondTitle]);
+  const secondLink=comparison.getByRole("link",{name:secondTitle});await secondLink.focus();await page.keyboard.press("Enter");await page.waitForURL(new RegExp(`/owner/records/${secondId}/?$`));await waitForText("老豆腐更容易保持形状");
+  await go("/owner");
   const ownerInput=page.getByRole("searchbox");await ownerInput.fill("阶段提醒");await page.getByRole("button",{name:"搜索",exact:true}).click();
   await page.getByRole("list",{name:"主人搜索结果"}).getByRole("link",{name:"写给自己的阶段提醒"}).waitFor();
   await page.route("**/api/v1/search?*scope=owner*",route=>route.fulfill({status:401,contentType:"application/json",body:JSON.stringify({schemaVersion:"1.0",error:{code:"AUTH_REQUIRED",message:"synthetic expired",requestId:"synthetic-expired",details:[]}})}));

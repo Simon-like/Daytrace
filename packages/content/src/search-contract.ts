@@ -1,6 +1,7 @@
 import {
   API_SCHEMA_VERSION,
   CONTENT_REVISION_PATTERN,
+  parseOwnerRecordSummary,
   parsePublicRecordSummary,
   type RecordSummary,
 } from "@daytrace/contracts";
@@ -49,7 +50,7 @@ function parseMatch(value: unknown): PublicSearchMatch {
   return { field: match.field as PublicSearchMatch["field"], text: match.text, ranges };
 }
 
-export function parsePublicSearchResponse(value: unknown): PublicSearchResponse {
+function parseSearchResponse(value: unknown, publicOnly: boolean): PublicSearchResponse {
   const envelope = object(value);
   const data = object(envelope.data);
   const pageInfo = object(data.pageInfo);
@@ -66,10 +67,19 @@ export function parsePublicSearchResponse(value: unknown): PublicSearchResponse 
       items: data.items.map((value): PublicSearchItem => {
         const item = object(value);
         if (!Array.isArray(item.matches)) throw new Error("SEARCH_ITEM_INVALID");
-        return { record: parsePublicRecordSummary(item.record), matches: item.matches.map(parseMatch) };
+        const record = publicOnly ? parsePublicRecordSummary(item.record) : parseOwnerRecordSummary(item.record);
+        return { record, matches: item.matches.map(parseMatch) };
       }),
       pageInfo: { hasMore: pageInfo.hasMore, nextCursor: pageInfo.nextCursor as string | null },
     },
     meta: { requestId: meta.requestId, contentRevision: meta.contentRevision },
   };
+}
+
+export function parsePublicSearchResponse(value: unknown): PublicSearchResponse {
+  return parseSearchResponse(value, true);
+}
+
+export function parseOwnerSearchResponse(value: unknown): PublicSearchResponse {
+  return parseSearchResponse(value, false);
 }

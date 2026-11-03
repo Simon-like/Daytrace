@@ -169,23 +169,26 @@ export function isAssetId(value: string): boolean {
   return ASSET_ID_PATTERN.test(value);
 }
 
-export function parsePublicRecordSummary(value: unknown): RecordSummary {
+function parseRecordSummary(value: unknown, publicOnly: boolean): RecordSummary {
   const record = object(value, "RECORD");
   const id = string(record.id, "RECORD_ID");
   const type = string(record.type, "RECORD_TYPE") as RecordType;
+  const status = string(record.status, "RECORD_STATUS") as RecordStatus;
+  const visibility = string(record.visibility, "RECORD_VISIBILITY") as Visibility;
   const slug = string(record.slug, "RECORD_SLUG");
   const occurredOn = record.occurredOn === null ? null : string(record.occurredOn, "OCCURRED_ON");
   const revision = positiveInteger(record.revision, "RECORD_REVISION");
   if (
     !isRecordId(id) ||
     !RECORD_TYPES.includes(type) ||
+    !["draft", "published", "archived"].includes(status) ||
+    !["public", "private"].includes(visibility) ||
     !SLUG_PATTERN.test(slug) ||
     slug.length > 80 ||
     (occurredOn !== null && !DATE_PATTERN.test(occurredOn)) ||
-    record.status !== "published" ||
-    record.visibility !== "public"
+    (publicOnly && (status !== "published" || visibility !== "public"))
   ) {
-    throw new Error("PUBLIC_RECORD_INVALID");
+    throw new Error(publicOnly ? "PUBLIC_RECORD_INVALID" : "OWNER_RECORD_INVALID");
   }
   return {
     id,
@@ -198,9 +201,17 @@ export function parsePublicRecordSummary(value: unknown): RecordSummary {
     revision,
     tags: strings(record.tags, "RECORD_TAGS"),
     summary: record.summary === null ? null : string(record.summary, "RECORD_SUMMARY", true),
-    status: "published",
-    visibility: "public",
+    status,
+    visibility,
   };
+}
+
+export function parsePublicRecordSummary(value: unknown): RecordSummary {
+  return parseRecordSummary(value, true);
+}
+
+export function parseOwnerRecordSummary(value: unknown): RecordSummary {
+  return parseRecordSummary(value, false);
 }
 
 function parseAttachment(value: unknown): RecordAttachment {

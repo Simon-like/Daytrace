@@ -1,5 +1,5 @@
 import { parseApiErrorResponse } from "@daytrace/contracts";
-import { parsePublicSearchResponse, type PublicSearchResponse } from "./search-contract";
+import { parseOwnerSearchResponse, parsePublicSearchResponse, type PublicSearchResponse } from "./search-contract";
 import type { SearchFailure } from "./search-state";
 
 export class SearchRequestError extends Error {
@@ -9,8 +9,15 @@ export class SearchRequestError extends Error {
   }
 }
 
+export type SearchScope = "public" | "owner";
+
 export async function fetchPublicSearch(query: string, signal?: AbortSignal): Promise<PublicSearchResponse> {
+  return fetchSearch(query, "public", signal);
+}
+
+export async function fetchSearch(query: string, scope: SearchScope, signal?: AbortSignal): Promise<PublicSearchResponse> {
   const params = new URLSearchParams({ q: query.trim(), limit: "20" });
+  if (scope === "owner") params.set("scope", "owner");
   let response: Response;
   try {
     response = await fetch(`/api/v1/search?${params.toString()}`, {
@@ -33,7 +40,8 @@ export async function fetchPublicSearch(query: string, signal?: AbortSignal): Pr
     }
   }
   try {
-    return parsePublicSearchResponse(await response.json());
+    const payload = await response.json();
+    return scope === "owner" ? parseOwnerSearchResponse(payload) : parsePublicSearchResponse(payload);
   } catch {
     throw new SearchRequestError({ code: "CONTRACT_INVALID" });
   }

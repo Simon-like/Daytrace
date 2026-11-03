@@ -158,10 +158,17 @@ try{
   await page.getByRole("dialog").waitFor({state:"hidden"});assert.notEqual(await page.evaluate(()=>document.body.style.overflow),"hidden");
   await page.screenshot({path:`${evidence}/recipe-desktop.png`,fullPage:true});
  });
- await check("owner login, private Markdown, logout and stale cookie rejection",async()=>{
+ await check("owner login, private search, session recovery, logout and stale cookie rejection",async()=>{
   await go("/owner");await page.getByRole("link",{name:"进入演示主人空间"}).click();
   await page.getByRole("button",{name:"退出主人空间"}).waitFor();
-  await page.getByRole("link",{name:"写给自己的阶段提醒"}).click();await waitForText(secret);
+  const ownerInput=page.getByRole("searchbox");await ownerInput.fill("阶段提醒");await page.getByRole("button",{name:"搜索",exact:true}).click();
+  await page.getByRole("list",{name:"主人搜索结果"}).getByRole("link",{name:"写给自己的阶段提醒"}).waitFor();
+  await page.route("**/api/v1/search?*scope=owner*",route=>route.fulfill({status:401,contentType:"application/json",body:JSON.stringify({schemaVersion:"1.0",error:{code:"AUTH_REQUIRED",message:"synthetic expired",requestId:"synthetic-expired",details:[]}})}));
+  await ownerInput.fill("会话失效");await page.getByRole("button",{name:"搜索",exact:true}).click();
+  await page.getByRole("link",{name:"重新登录主人空间"}).waitFor();assert.equal(await page.getByRole("list",{name:"主人搜索结果"}).count(),0);
+  await page.unroute("**/api/v1/search?*scope=owner*");await page.getByRole("button",{name:"重试搜索"}).count().then(count=>assert.equal(count,0));
+  await ownerInput.fill("阶段提醒");await page.getByRole("button",{name:"搜索",exact:true}).click();
+  await page.getByRole("list",{name:"主人搜索结果"}).getByRole("link",{name:"写给自己的阶段提醒"}).click();await waitForText(secret);
   const saved=(await context.cookies()).find(item=>item.name==="__Host-daytrace_session");assert.ok(saved?.httpOnly&&saved.secure);
   const publicSearch=await context.request.get(`${base}/api/v1/search?q=${encodeURIComponent(secret)}`);assert.equal((await publicSearch.json()).data.items.length,0);
   await page.getByRole("button",{name:"退出主人空间"}).click();await page.waitForURL(base+"/owner");await page.getByRole("link",{name:"进入演示主人空间"}).waitFor();

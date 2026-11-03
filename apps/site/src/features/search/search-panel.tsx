@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useReducer, useRef, useState } from "react";
 import { Button, Input } from "../../components/ui";
-import { fetchPublicSearch, SearchRequestError } from "./search-api";
+import { fetchSearch, SearchRequestError, type SearchScope } from "./search-api";
 import { SearchResults } from "./search-results";
 import {
   createSearchUrl,
@@ -15,6 +15,7 @@ import styles from "./search-panel.module.css";
 interface SearchPanelProps {
   readonly initialQuery?: string;
   readonly onClose?: () => void;
+  readonly scope?: SearchScope;
 }
 
 type SearchNavigation = "push" | "none";
@@ -27,7 +28,7 @@ function savedScroll(value: unknown, query: string): number | undefined {
     : undefined;
 }
 
-export function SearchPanel({ initialQuery = "", onClose }: SearchPanelProps) {
+export function SearchPanel({ initialQuery = "", onClose, scope = "public" }: SearchPanelProps) {
   const inputId = useId();
   const [state, dispatch] = useReducer(searchReducer, { ...initialSearchState, query: initialQuery.trim() });
   const [input, setInput] = useState(initialQuery);
@@ -78,7 +79,7 @@ export function SearchPanel({ initialQuery = "", onClose }: SearchPanelProps) {
       window.history.pushState({ ...window.history.state, daytraceSearch: null }, "", url);
     }
     try {
-      const response = await fetchPublicSearch(normalized, controller.signal);
+      const response = await fetchSearch(normalized, scope, controller.signal);
       if (controller.signal.aborted) return;
       dispatch({ type: "success", attempt, result: response.data, contentRevision: response.meta.contentRevision });
       window.history.replaceState({
@@ -116,9 +117,11 @@ export function SearchPanel({ initialQuery = "", onClose }: SearchPanelProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const owner = scope === "owner";
+  const expired = owner && state.error?.code === "AUTH_REQUIRED";
   return (
-    <section className={`${styles.panel} dt-scene-actions`} aria-label="公开搜索" data-content-revision={state.contentRevision ?? undefined}>
-      <label className="mb-3 block text-sm text-muted" htmlFor={inputId}>搜索公开记录的标题、标签和正文</label>
+    <section className={`${styles.panel} dt-scene-actions`} aria-label={owner ? "主人搜索" : "公开搜索"} data-content-revision={state.contentRevision ?? undefined}>
+      <label className="mb-3 block text-sm text-muted" htmlFor={inputId}>{owner ? "搜索全部主人记录的标题、标签和正文" : "搜索公开记录的标题、标签和正文"}</label>
       <form
         className={styles.form}
         role="search"
@@ -148,22 +151,23 @@ export function SearchPanel({ initialQuery = "", onClose }: SearchPanelProps) {
         <Button className="h-12 min-w-[108px] rounded-[13px] px-4" type="submit" disabled={state.status === "loading"}>搜索</Button>
       </form>
       {onClose === undefined ? null : <Button variant="secondary" className="mt-3" onClick={onClose}>关闭搜索</Button>}
-      <p className={styles.hint}><kbd>Enter</kbd> 检索公开记录，私密内容仍只留在主人空间。</p>
+      <p className={styles.hint}><kbd>Enter</kbd> {owner ? "检索公开、私密与草稿；结果不会进入公开索引。" : "检索公开记录，私密内容仍只留在主人空间。"}</p>
       <p className={styles.status} aria-live="polite">
         {state.status === "idle" ? "输入关键词开始查找。" :
           state.status === "loading" ? `正在搜索“${state.query}”…` :
-          state.status === "empty" ? `没有找到与“${state.query}”匹配的公开记录。` :
+          state.status === "empty" ? `没有找到与“${state.query}”匹配的${owner ? "主人" : "公开"}记录。` :
           state.status === "results" ? `找到 ${state.result?.items.length ?? 0} 条当前页结果。` :
+          expired ? "主人会话已失效，私密结果已清除。" :
           state.status === "error" ? "搜索服务暂时失败，这不表示没有结果。" : ""}
       </p>
       {state.status === "error" ? (
         <div className={styles.failure} role="alert">
-          <p>无法完成这次检索，请重试。</p>
+          <p>{expired ? "请重新登录后再检索主人记录。" : "无法完成这次检索，请重试。"}</p>
           <p className={styles.requestId}>错误码：{state.error?.code ?? "API_UNAVAILABLE"}{state.error?.requestId ? ` · requestId：${state.error.requestId}` : ""}</p>
-          <Button type="button" variant="secondary" onClick={() => void run(state.query)}>重试搜索</Button>
+          {expired ? <a className="text-link" href="/api/v1/auth/login?returnTo=/owner">重新登录主人空间 ↗</a> : <Button type="button" variant="secondary" onClick={() => void run(state.query)}>重试搜索</Button>}
         </div>
       ) : null}
-      {state.status === "results" && state.result !== null ? <SearchResults items={state.result.items} onRecordClick={savePosition} /> : null}
+      {state.status === "results" && state.result !== null ? <SearchResults items={state.result.items} onRecordClick={savePosition} scope={scope} /> : null}
     </section>
   );
 }

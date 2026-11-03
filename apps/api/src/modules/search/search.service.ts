@@ -3,6 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { ApiError, invalidQuery } from "../../common/api-error";
 import { PublicSearchIndex } from "./public-search.index";
 import type {
+  OwnerSearchQuery,
   PublicSearchQuery,
   SearchIndexRecord,
   SearchIndexReader,
@@ -73,16 +74,27 @@ export class SearchService {
   constructor(private readonly index: SearchIndexReader) {}
 
   searchPublic(query: PublicSearchQuery): SearchPage {
+    return this.search(query, "public");
+  }
+
+  searchOwner(query: OwnerSearchQuery): SearchPage {
+    return this.search(query, "owner");
+  }
+
+  private search(query: OwnerSearchQuery, scope: "public" | "owner"): SearchPage {
     const q = query.q.trim().normalize("NFC");
     if (codePointLength(q) < 1 || codePointLength(q) > 100) throw invalidQuery("q 去除首尾空白后需为 1–100 字", "q");
     const snapshot = this.index.read();
-    const fingerprint = this.fingerprint(query, q);
+    const fingerprint = this.fingerprint(query, q, scope);
     let offset = 0;
     if (query.cursor !== undefined) offset = this.decodeCursor(query.cursor, snapshot.contentRevision, fingerprint);
     const matches = snapshot.records
       .filter(({ record }) =>
         (query.type === undefined || record.type === query.type) &&
-        query.tags.every((tag) => record.tags.includes(tag))
+        query.tags.every((tag) => record.tags.includes(tag)) &&
+        (scope === "public" ||
+          (query.status === undefined || record.status === query.status) &&
+          (query.visibility === undefined || record.visibility === query.visibility))
       )
       .map((record, order) => rankRecord(record, q, order))
       .filter((value): value is RankedResult => value !== null)
@@ -99,13 +111,15 @@ export class SearchService {
     };
   }
 
-  private fingerprint(query: PublicSearchQuery, normalizedQuery: string): string {
+  private fingerprint(query: OwnerSearchQuery, normalizedQuery: string, scope: "public" | "owner"): string {
     return createHash("sha256").update(JSON.stringify({
-      scope: "public",
+      scope,
       q: normalizedQuery,
       type: query.type ?? null,
       tags: [...query.tags].sort(),
       limit: query.limit,
+      status: scope === "owner" ? query.status ?? null : null,
+      visibility: scope === "owner" ? query.visibility ?? null : null,
     })).digest("hex");
   }
 

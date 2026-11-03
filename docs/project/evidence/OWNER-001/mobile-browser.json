@@ -1,0 +1,214 @@
+{
+  "date": "2026-11-03",
+  "scope": "Independent H5 in Chromium mobile viewports; not a real iPhone",
+  "checks": [
+    {
+      "name": "basePath, shared assets and direct H5 API proxy work",
+      "passed": true
+    },
+    {
+      "name": "mobile navigation and bottom filter sheet preserve touch and scroll state",
+      "passed": true
+    },
+    {
+      "name": "sheet Escape, repeated opening and reduced motion are immediate",
+      "passed": true
+    },
+    {
+      "name": "search submit, clear, suggestions and result navigation work under /h5",
+      "passed": true
+    },
+    {
+      "name": "owner login, private search, reader, expiry and logout stay within H5",
+      "passed": true
+    },
+    {
+      "name": "server Markdown, code copy, local overflow and image lightbox work",
+      "passed": true
+    }
+  ],
+  "layouts": [
+    {
+      "width": 390,
+      "path": "/h5/owner/records/private",
+      "scroll": 390,
+      "passed": true
+    },
+    {
+      "width": 430,
+      "path": "/h5/owner/records/private",
+      "scroll": 430,
+      "passed": true
+    },
+    {
+      "width": 320,
+      "path": "/h5/",
+      "scroll": 320,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 320,
+      "path": "/h5/archive",
+      "scroll": 320,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 320,
+      "path": "/h5/search",
+      "scroll": 320,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 320,
+      "path": "/h5/about",
+      "scroll": 320,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 320,
+      "path": "/h5/records/rec_11111111-1111-4111-8111-000000000001",
+      "scroll": 320,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 320,
+      "path": "/h5/records/rec_11111111-1111-4111-8111-000000000002",
+      "scroll": 320,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "path": "/h5/",
+      "scroll": 390,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "path": "/h5/archive",
+      "scroll": 390,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "path": "/h5/search",
+      "scroll": 390,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "path": "/h5/about",
+      "scroll": 390,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "path": "/h5/records/rec_11111111-1111-4111-8111-000000000001",
+      "scroll": 390,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "path": "/h5/records/rec_11111111-1111-4111-8111-000000000002",
+      "scroll": 390,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 430,
+      "path": "/h5/",
+      "scroll": 430,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 430,
+      "path": "/h5/archive",
+      "scroll": 430,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 430,
+      "path": "/h5/search",
+      "scroll": 430,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 430,
+      "path": "/h5/about",
+      "scroll": 430,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 430,
+      "path": "/h5/records/rec_11111111-1111-4111-8111-000000000001",
+      "scroll": 430,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 430,
+      "path": "/h5/records/rec_11111111-1111-4111-8111-000000000002",
+      "scroll": 430,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 768,
+      "path": "/h5/",
+      "scroll": 768,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 768,
+      "path": "/h5/archive",
+      "scroll": 768,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 768,
+      "path": "/h5/search",
+      "scroll": 768,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 768,
+      "path": "/h5/about",
+      "scroll": 768,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 768,
+      "path": "/h5/records/rec_11111111-1111-4111-8111-000000000001",
+      "scroll": 768,
+      "tabHeight": 67,
+      "passed": true
+    },
+    {
+      "width": 768,
+      "path": "/h5/records/rec_11111111-1111-4111-8111-000000000002",
+      "scroll": 768,
+      "tabHeight": 67,
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "passed": true
+}

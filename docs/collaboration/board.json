@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-03T10:09:59.121247+00:00",
+  "updated": "2026-11-03T16:28:37.212012+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -756,6 +756,80 @@
       ],
       "review": "docs/collaboration/reviews/READER-003-self-review.md",
       "reviewer": "kimi-READER-003-scrollspy"
+    },
+    {
+      "id": "OWNER-001",
+      "title": "真实主人身份与双端私密检索",
+      "status": "done",
+      "owner": "kimi-F1-001-owner",
+      "depends_on": [
+        "ACCESS-001",
+        "CONTENT-003"
+      ],
+      "allowed_paths": [
+        "apps/api/src/app.module.ts",
+        "apps/api/src/main.ts",
+        "apps/api/src/modules/auth/",
+        "apps/api/src/modules/search/",
+        "apps/api/package.json",
+        "apps/site/src/app/owner/",
+        "apps/site/src/features/search/",
+        "apps/site/src/features/owner/",
+        "apps/h5/",
+        "packages/content/src/search-api.ts",
+        "tests/e2e/find/",
+        "tests/e2e/acceptance/",
+        "tests/e2e/h5/",
+        "tests/integration/access/",
+        "tests/unit/find/",
+        "pnpm-lock.yaml",
+        ".env.example",
+        ".github/workflows/ci.yml",
+        "tests/cicd/",
+        "docs/plans/2026-11-03-owner-identity-search.md",
+        "docs/project/reports/OWNER-001.md",
+        "docs/project/evidence/OWNER-001/",
+        "docs/collaboration/",
+        "docs/context/当前工作上下文.md",
+        "docs/project/项目进度.md"
+      ],
+      "card": "docs/collaboration/tasks/OWNER-001.md",
+      "evidence": [
+        "docs/collaboration/handoffs/OWNER-001-kimi-owner.md"
+      ],
+      "review": "docs/collaboration/reviews/OWNER-001-self-review.md",
+      "reviewer": "kimi-F1-001-owner"
+    },
+    {
+      "id": "LINK-001",
+      "title": "记录关联与跨次菜谱实践对照",
+      "status": "queued",
+      "owner": null,
+      "depends_on": [
+        "CONTENT-003"
+      ],
+      "allowed_paths": [
+        "packages/contracts/src/",
+        "apps/api/src/modules/content/",
+        "apps/api/src/modules/content-management/",
+        "apps/api/fixtures/demo/",
+        "apps/site/src/features/reader/",
+        "apps/site/src/app/owner/",
+        "apps/site/src/server/owner-api.ts",
+        "apps/h5/src/",
+        "tests/unit/",
+        "tests/integration/",
+        "tests/e2e/",
+        "docs/plans/2026-11-04-record-links-practice-comparison.md",
+        "docs/architecture/contracts/",
+        "docs/project/reports/LINK-001.md",
+        "docs/project/evidence/LINK-001/",
+        "docs/collaboration/",
+        "docs/context/当前工作上下文.md",
+        "docs/project/项目进度.md"
+      ],
+      "card": "docs/collaboration/tasks/LINK-001.md",
+      "evidence": []
     }
   ],
   "history": [
@@ -1339,6 +1413,41 @@
       "action": "complete",
       "actor": "kimi-READER-003-scrollspy",
       "evidence": "docs/collaboration/reviews/READER-003-self-review.md"
+    },
+    {
+      "at": "2026-11-03T15:46:17.501466+00:00",
+      "task": "OWNER-001",
+      "action": "create",
+      "actor": "kimi-F1-001-owner",
+      "evidence": "docs/collaboration/tasks/OWNER-001.md"
+    },
+    {
+      "at": "2026-11-03T15:46:17.613489+00:00",
+      "task": "OWNER-001",
+      "action": "claim",
+      "actor": "kimi-F1-001-owner",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-03T16:25:00.180176+00:00",
+      "task": "LINK-001",
+      "action": "create",
+      "actor": "kimi-LINK-001-relations",
+      "evidence": "docs/collaboration/tasks/LINK-001.md"
+    },
+    {
+      "at": "2026-11-03T16:28:37.106505+00:00",
+      "task": "OWNER-001",
+      "action": "submit",
+      "actor": "kimi-F1-001-owner",
+      "evidence": "docs/collaboration/handoffs/OWNER-001-kimi-owner.md"
+    },
+    {
+      "at": "2026-11-03T16:28:37.212012+00:00",
+      "task": "OWNER-001",
+      "action": "complete",
+      "actor": "kimi-F1-001-owner",
+      "evidence": "docs/collaboration/reviews/OWNER-001-self-review.md"
     }
   ],
   "dispatch_policy": {

@@ -1,0 +1,14 @@
+{
+  "family": "Noto Sans SC",
+  "source_repository": "https://github.com/google/fonts/tree/main/ofl/notosanssc",
+  "download_mirror": "https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
+  "license": "SIL Open Font License 1.1",
+  "variable_sha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+  "static_instance": "NotoSansSC-Regular.ttf",
+  "static_weight": 400,
+  "static_sha256": "d0e8d49c4c5bbb589b10519e743a6026cd24e8ceacc9ca3e676e8d23c3221383",
+  "static_bytes": 10595932,
+  "cmap_mappings": 30890,
+  "subset_by_fixture_text": false,
+  "note": "Full variable font instantiated with fontTools; no fixture-title glyph subsetting."
+}

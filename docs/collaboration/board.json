@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-03T17:09:28.196638+00:00",
+  "updated": "2026-11-03T17:51:44.819247+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -838,7 +838,7 @@
     {
       "id": "SHARE-001",
       "title": "公开分享与双端阅读偏好",
-      "status": "active",
+      "status": "done",
       "owner": "kimi-F4-001-sharing",
       "depends_on": [
         "LINK-001"
@@ -861,7 +861,11 @@
         "docs/project/项目进度.md"
       ],
       "card": "docs/collaboration/tasks/SHARE-001.md",
-      "evidence": []
+      "evidence": [
+        "docs/project/reports/SHARE-001.md"
+      ],
+      "review": "docs/collaboration/reviews/SHARE-001-self-review.md",
+      "reviewer": "kimi-F4-001-sharing"
     }
   ],
   "history": [
@@ -1508,6 +1512,20 @@
       "action": "claim",
       "actor": "kimi-F4-001-sharing",
       "evidence": null
+    },
+    {
+      "at": "2026-11-03T17:51:44.705974+00:00",
+      "task": "SHARE-001",
+      "action": "submit",
+      "actor": "kimi-F4-001-sharing",
+      "evidence": "docs/project/reports/SHARE-001.md"
+    },
+    {
+      "at": "2026-11-03T17:51:44.819247+00:00",
+      "task": "SHARE-001",
+      "action": "complete",
+      "actor": "kimi-F4-001-sharing",
+      "evidence": "docs/collaboration/reviews/SHARE-001-self-review.md"
     }
   ],
   "dispatch_policy": {

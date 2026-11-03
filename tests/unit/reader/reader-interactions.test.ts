@@ -5,6 +5,7 @@ import {
   captureViewport,
   copyCodeText,
   preferredScrollBehavior,
+  resolveActiveHeadingId,
   restoreFocusAndScroll,
   type FocusTarget,
   type ViewportWindow,
@@ -83,4 +84,22 @@ test("image close still restores viewport when the trigger disappeared", () => {
     scrollTo(options) { restored = `${options.left}:${options.top}`; },
   });
   assert.equal(restored, "0:280");
+});
+
+test("scrollspy follows the last heading above the reading line in both directions", () => {
+  const headings = [
+    { id: "intro", top: -500 },
+    { id: "configuration", top: -80 },
+    { id: "verification", top: 140 },
+    { id: "summary", top: 700 },
+  ];
+  assert.equal(resolveActiveHeadingId(headings, 180, false), "verification");
+  assert.equal(resolveActiveHeadingId(headings.map((heading) => ({ ...heading, top: heading.top + 250 })), 180, false), "configuration");
+  assert.equal(resolveActiveHeadingId([{ id: "intro", top: 400 }], 180, false), "intro");
+});
+
+test("scrollspy selects the final section at document end and handles an empty outline", () => {
+  const headings = [{ id: "intro", top: -900 }, { id: "summary", top: 400 }];
+  assert.equal(resolveActiveHeadingId(headings, 180, true), "summary");
+  assert.equal(resolveActiveHeadingId([], 180, false), null);
 });

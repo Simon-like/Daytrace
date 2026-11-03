@@ -32,6 +32,28 @@ export function preferredScrollBehavior(reducedMotion: boolean): ScrollBehavior 
   return reducedMotion ? "auto" : "smooth";
 }
 
+export interface HeadingScrollPosition {
+  readonly id: string;
+  readonly top: number;
+}
+
+/** Select the last heading above the reading line; the document end always selects the final section. */
+export function resolveActiveHeadingId(
+  headings: readonly HeadingScrollPosition[],
+  activationTop: number,
+  documentEndReached: boolean,
+): string | null {
+  const first = headings[0];
+  if (first === undefined) return null;
+  if (documentEndReached) return headings[headings.length - 1]?.id ?? first.id;
+  let activeId = first.id;
+  for (const heading of headings) {
+    if (heading.top > activationTop) break;
+    activeId = heading.id;
+  }
+  return activeId;
+}
+
 /** Copy only the code node's own text; toolbar labels and external line numbers never enter it. */
 export async function copyCodeText(
   source: CodeTextSource,

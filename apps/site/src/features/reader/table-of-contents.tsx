@@ -3,7 +3,7 @@
 import type { MouseEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 import type { TocItem } from "@daytrace/contracts";
-import { anchorIdFromHash, preferredScrollBehavior } from "./reader-interactions";
+import { anchorIdFromHash, preferredScrollBehavior, resolveActiveHeadingId } from "./reader-interactions";
 import styles from "./reader.module.css";
 
 interface TableOfContentsProps {
@@ -38,16 +38,31 @@ export function TableOfContents({ items, marginNote }: TableOfContentsProps) {
   }, []);
 
   useEffect(() => {
-    if (!("IntersectionObserver" in window)) return;
-    const observer = new IntersectionObserver((entries) => {
-      const visible = entries.find((entry) => entry.isIntersecting);
-      if (visible !== undefined) setActiveId(visible.target.id);
-    }, { rootMargin: "-18% 0px -68% 0px", threshold: 0 });
-    for (const item of items) {
-      const heading = document.getElementById(item.id);
-      if (heading !== null) observer.observe(heading);
-    }
-    return () => observer.disconnect();
+    const headings = items.flatMap((item) => {
+      const element = document.getElementById(item.id);
+      return element === null ? [] : [{ id: item.id, element }];
+    });
+    if (headings.length === 0) return;
+    let frame = 0;
+    const update = (): void => {
+      frame = 0;
+      const positions = headings.map(({ id, element }) => ({ id, top: element.getBoundingClientRect().top }));
+      const activationTop = Math.min(180, window.innerHeight * 0.24);
+      const documentEndReached = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+      const nextId = resolveActiveHeadingId(positions, activationTop, documentEndReached);
+      setActiveId((currentId) => currentId === nextId ? currentId : nextId);
+    };
+    const schedule = (): void => {
+      if (frame === 0) frame = window.requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      if (frame !== 0) window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+    };
   }, [items]);
 
   const followLink = (event: MouseEvent<HTMLAnchorElement>, id: string): void => {
@@ -55,6 +70,7 @@ export function TableOfContents({ items, marginNote }: TableOfContentsProps) {
     const target = document.getElementById(id);
     if (target === null) return;
     event.preventDefault();
+    setActiveId(id);
     const hash = `#${encodeURIComponent(id)}`;
     if (window.location.hash !== hash) window.history.pushState(null, "", hash);
     if (mobileDetails.current !== null) mobileDetails.current.open = false;

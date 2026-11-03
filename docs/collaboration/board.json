@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-03T08:54:14.595170+00:00",
+  "updated": "2026-11-03T10:09:59.121247+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -732,6 +732,30 @@
       ],
       "review": "docs/collaboration/reviews/CONTENT-003-self-review.md",
       "reviewer": "codex-CONTENT-003-self-review"
+    },
+    {
+      "id": "READER-003",
+      "title": "文章目录滚动定位",
+      "status": "done",
+      "owner": "kimi-READER-003-scrollspy",
+      "depends_on": [
+        "READER-002",
+        "CONTENT-003"
+      ],
+      "allowed_paths": [
+        "apps/site/src/features/reader/",
+        "tests/unit/reader/",
+        "tests/e2e/reader/",
+        "docs/project/reports/READER-003.md",
+        "docs/project/evidence/READER-003/",
+        "docs/collaboration/"
+      ],
+      "card": "docs/collaboration/tasks/READER-003.md",
+      "evidence": [
+        "docs/collaboration/handoffs/READER-003-kimi-scrollspy.md"
+      ],
+      "review": "docs/collaboration/reviews/READER-003-self-review.md",
+      "reviewer": "kimi-READER-003-scrollspy"
     }
   ],
   "history": [
@@ -1294,6 +1318,27 @@
       "action": "complete",
       "actor": "codex-CONTENT-003-self-review",
       "evidence": "docs/collaboration/reviews/CONTENT-003-self-review.md"
+    },
+    {
+      "at": "2026-11-03T09:58:05.796067+00:00",
+      "task": "READER-003",
+      "action": "claim",
+      "actor": "kimi-READER-003-scrollspy",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-03T10:09:59.008640+00:00",
+      "task": "READER-003",
+      "action": "submit",
+      "actor": "kimi-READER-003-scrollspy",
+      "evidence": "docs/collaboration/handoffs/READER-003-kimi-scrollspy.md"
+    },
+    {
+      "at": "2026-11-03T10:09:59.121247+00:00",
+      "task": "READER-003",
+      "action": "complete",
+      "actor": "kimi-READER-003-scrollspy",
+      "evidence": "docs/collaboration/reviews/READER-003-self-review.md"
     }
   ],
   "dispatch_policy": {

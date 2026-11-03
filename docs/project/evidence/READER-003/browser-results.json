@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-03",
+  "scope": "Chromium desktop reader; not a real Safari device",
+  "checks": [
+    {
+      "name": "desktop outline follows downward, upward and document-end reading positions",
+      "passed": true
+    },
+    {
+      "name": "outline click still updates the hash and active location",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "passed": true
+}

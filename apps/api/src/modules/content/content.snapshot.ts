@@ -93,6 +93,7 @@ async function readSourceRecord(root: string, group: string, directoryName: stri
       summary: metadata.summary,
       status: metadata.status,
       visibility: metadata.visibility,
+      relatedRecords: [],
       body: { html: rendered.html, toc: rendered.toc, parseRevision: rendered.parseRevision },
       attachments: metadata.attachments.map((attachment) => ({
         id: attachment.id,
@@ -159,6 +160,11 @@ export async function loadContentSnapshot(contentRoot: string): Promise<ContentS
     for (const attachment of metadata.attachments) {
       if (assets.has(attachment.id)) issues.push(issue(record.sourceFile, "CONTENT_DUPLICATE_ASSET_ID", "附件 ID 重复", "attachments"));
       else assets.set(attachment.id, record.sourceFile);
+    }
+  }
+  for (const record of records) {
+    for (const relatedId of record.metadata.relatedRecords) {
+      if (!ids.has(relatedId)) issues.push(issue(record.sourceFile, "CONTENT_FIELD_INVALID", `关联记录不存在：${relatedId}`, "relatedRecords"));
     }
   }
   if (issues.length > 0) throw new ContentSnapshotInvalidError(issues);

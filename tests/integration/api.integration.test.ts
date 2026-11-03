@@ -50,6 +50,9 @@ test("real Nest HTTP list and detail satisfy the shared runtime contract", async
   assert.ok(detail.data.body.html.includes(`/api/v1/assets/${assetId}`));
   assert.equal(detail.data.body.toc[0]?.id, "dt-从问题开始");
   assert.equal(detail.meta.contentRevision, list.meta.contentRevision);
+  assert.deepEqual(detail.data.relatedRecords, []);
+  assert.ok(!JSON.stringify(detail).includes(privateId));
+  assert.ok(!JSON.stringify(detail).includes("DRAFT_TITLE_CANARY_77A1"));
 });
 
 test("public asset ID serves controlled bytes without a source path", async () => {

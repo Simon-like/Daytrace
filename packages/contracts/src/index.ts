@@ -45,6 +45,7 @@ export interface RecordDetail extends RecordSummary {
     readonly parseRevision: typeof MARKDOWN_PARSE_REVISION;
   };
   readonly attachments: readonly RecordAttachment[];
+  readonly relatedRecords: readonly RecordSummary[];
 }
 
 export interface ResponseMeta {
@@ -236,7 +237,7 @@ export function parsePublicRecordDetail(value: unknown): RecordDetail {
   const summary = parsePublicRecordSummary(value);
   const record = object(value, "RECORD");
   const body = object(record.body, "RECORD_BODY");
-  if (body.parseRevision !== MARKDOWN_PARSE_REVISION || !Array.isArray(body.toc) || !Array.isArray(record.attachments)) {
+  if (body.parseRevision !== MARKDOWN_PARSE_REVISION || !Array.isArray(body.toc) || !Array.isArray(record.attachments) || !Array.isArray(record.relatedRecords)) {
     throw new Error("RECORD_BODY_INVALID");
   }
   const toc = body.toc.map((item): TocItem => {
@@ -257,6 +258,7 @@ export function parsePublicRecordDetail(value: unknown): RecordDetail {
       parseRevision: MARKDOWN_PARSE_REVISION,
     },
     attachments: record.attachments.map(parseAttachment),
+    relatedRecords: record.relatedRecords.map(parsePublicRecordSummary),
   };
 }
 

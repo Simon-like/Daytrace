@@ -35,6 +35,14 @@ test("public response parser rejects private data and incompatible shapes", () =
       attachments: [{ ...detail.data.attachments[0], url: "/api/v1/assets?path=secret" }],
     },
   }));
+  const relatedRecord = syntheticRecordListResponse().data.items[0];
+  assert.throws(() => parseRecordDetailResponse({
+    ...detail,
+    data: {
+      ...detail.data,
+      relatedRecords: [{ ...relatedRecord, visibility: "private" }],
+    },
+  }));
 });
 
 test("compatible additive response fields remain readable", () => {

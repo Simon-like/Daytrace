@@ -46,6 +46,7 @@ export const privateDetail: RecordDetail = {
   summary: "PRIVATE_SUMMARY_CANARY_5B11",
   status: "published",
   visibility: "private",
+  relatedRecords: [],
   body: {
     html: `<p>${PRIVATE_CANARY}</p>`,
     toc: [],

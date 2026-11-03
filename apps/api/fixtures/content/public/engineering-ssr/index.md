@@ -12,6 +12,7 @@ tags: [发布, 验证]
 summary: 用于 ENGINE-001 纵向切片的合成技术记录，不代表真实经历。
 status: published
 visibility: public
+relatedRecords: [rec_7d0c0f2d-8f5b-4f0e-a3a6-555555555555, rec_7d0c0f2d-8f5b-4f0e-a3a6-777777777777]
 attachments:
   - id: ast_7d0c0f2d-8f5b-4f0e-a3a6-444444444444
     path: images/check.png

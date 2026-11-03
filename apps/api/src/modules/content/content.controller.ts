@@ -111,7 +111,7 @@ export class ContentController {
     response.setHeader("ETag", `"${scope === "owner" ? this.content.ownerContentRevision : this.content.contentRevision}:${record.metadata.id}:${record.metadata.revision}"`);
     return {
       schemaVersion: API_SCHEMA_VERSION,
-      data: record.detail,
+      data: this.content.projectDetail(record, scope === "owner" ? "owner" : "public"),
       meta: { requestId: request.requestId, contentRevision: scope === "owner" ? this.content.ownerContentRevision : this.content.contentRevision },
     };
   }

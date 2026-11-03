@@ -4,7 +4,7 @@ import type { ContentIssue, SourceAttachment, SourceFrontmatter } from "./conten
 
 const ALLOWED_FIELDS = new Set([
   "schemaVersion", "id", "type", "title", "slug", "oldSlugs", "occurredOn",
-  "updatedAt", "revision", "tags", "summary", "status", "visibility", "attachments",
+  "updatedAt", "revision", "tags", "summary", "status", "visibility", "relatedRecords", "attachments",
 ]);
 const REQUIRED_FIELDS = [
   "schemaVersion", "id", "type", "title", "slug", "occurredOn", "updatedAt",
@@ -169,6 +169,14 @@ export function parseFrontmatter(source: string, file: string): {
   if (summary !== null && (typeof summary !== "string" || summary.length > 280 || summary !== summary.trim())) {
     issues.push(issue(file, "CONTENT_FIELD_INVALID", "summary 必须为不超过 280 字的文本或 null", "summary"));
   }
+  const relatedRecords = data.relatedRecords ?? [];
+  if (
+    !Array.isArray(relatedRecords) || relatedRecords.length > 16 ||
+    !relatedRecords.every(id => typeof id === "string" && RECORD_ID_PATTERN.test(id)) ||
+    new Set(relatedRecords).size !== relatedRecords.length || relatedRecords.includes(data.id)
+  ) {
+    issues.push(issue(file, "CONTENT_FIELD_INVALID", "relatedRecords 必须是最多 16 个不重复且不含自身的记录 ID", "relatedRecords"));
+  }
   const attachments = parseAttachments(data.attachments ?? [], file, issues);
   if (issues.length > 0) return { metadata: null, body: parsed.content, issues };
   return {
@@ -186,6 +194,7 @@ export function parseFrontmatter(source: string, file: string): {
       summary: summary as string | null,
       status: data.status as SourceFrontmatter["status"],
       visibility: visibility as SourceFrontmatter["visibility"],
+      relatedRecords: relatedRecords as string[],
       attachments,
     },
     body: parsed.content,

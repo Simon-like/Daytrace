@@ -1,6 +1,6 @@
 # 可迁移 Markdown 内容协议 v1
 
-状态：CONTENT-001 契约已由 ENGINE-001 实现，CONTENT-003 扩展服务端渲染与管理闭环。规则中的“必须”用于阻止不安全或不可迁移的内容进入可用快照。
+状态：CONTENT-001 契约已由 ENGINE-001 实现，CONTENT-003 扩展服务端渲染与管理闭环，LINK-001 增加记录关联。规则中的“必须”用于阻止不安全或不可迁移的内容进入可用快照。
 
 ## 1. 内容包与类型
 
@@ -44,6 +44,7 @@
 | `summary` | 否 | 默认 `null`；最多 280 字；公开摘要只能来自已授权的公开记录 |
 | `status` | 是 | `draft` / `published` / `archived` |
 | `visibility` | 是 | `public` / `private`；与 `status` 完全独立 |
+| `relatedRecords` | 否 | 默认 `[]`；最多 16 个稳定记录 ID，不得重复、自关联或引用不存在的记录 |
 | `attachments` | 否 | 默认 `[]`；每项只能含 `id`、`path`、`mediaType`、`title`、`width`、`height` |
 
 未列字段必须报 `CONTENT_FIELD_INVALID`，避免把拼错的 `visiblity` 当成安全默认值。缺失 `visibility` 时，任何内部投影都必须按 `private` 处理，同时报 `CONTENT_VISIBILITY_MISSING` 并使候选快照失败；“默认不公开”不是“跳过错误后照常发布”。
@@ -61,6 +62,8 @@
  canonical 网页路径为 `/records/<id>/`。标题、slug、类型或目录变化不改变 canonical 路径。
 
 slug 和 `oldSlugs` 构成一个全库共享命名空间，任何两项都不能冲突，包括同一记录内。旧 slug 的网页解析只对当前调用方可见的记录生效：访客得到 308 跳转到公开 canonical；私密、草稿和已归档记录不能通过旧链接向访客泄露标题或存在性。删除记录后不把它曾经的 slug 分配给另一条记录；若确需复用，必须先评审旧链接语义。
+
+`relatedRecords` 只声明稳定的记录 ID，不复制目标标题、摘要或正文。详情响应在完整快照建立后生成正向与反向关联，并按目标 ID 排序。公开调用方只能得到 `published + public` 目标；主人调用方只能得到主人范围可见目标。关联不提升目标权限，也不证明目标存在性，浏览器不得用全库内容自行补全或过滤私密关联。未知 ID、自关联和重复 ID 使整份候选快照失败，校验必须在全部记录 ID 建完后执行，以支持前向引用。
 
 `revision` 是单条记录的作者可见修订号，不等同于快照 `contentRevision`。后者由发布器对经过校验的 Markdown 与附件字节确定性计算；任一源字节变化都应得到新值。列表和详情同时携带 `contentRevision`，派生索引、HTML、缓存和发布清单必须指向同一快照。
 

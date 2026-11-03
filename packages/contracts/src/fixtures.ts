@@ -31,6 +31,7 @@ export function syntheticRecordDetailResponse(): RecordDetailResponse {
         toc: [{ id: "section-1", text: "验证", level: 2 }],
         parseRevision: MARKDOWN_PARSE_REVISION,
       },
+      relatedRecords: [],
       attachments: [{
         id: SYNTHETIC_ASSET_ID,
         mediaType: "image/png",
@@ -49,7 +50,7 @@ export function syntheticRecordDetailResponse(): RecordDetailResponse {
 
 export function syntheticRecordListResponse(): RecordListResponse {
   const detail = syntheticRecordDetailResponse();
-  const { body: _body, attachments: _attachments, ...summary } = detail.data;
+  const { body: _body, attachments: _attachments, relatedRecords: _relatedRecords, ...summary } = detail.data;
   return {
     schemaVersion: API_SCHEMA_VERSION,
     data: { items: [summary], pageInfo: { hasMore: false, nextCursor: null } },

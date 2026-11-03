@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-03T16:28:37.212012+00:00",
+  "updated": "2026-11-03T16:29:59.342749+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -803,8 +803,8 @@
     {
       "id": "LINK-001",
       "title": "记录关联与跨次菜谱实践对照",
-      "status": "queued",
-      "owner": null,
+      "status": "active",
+      "owner": "kimi-LINK-001-relations",
       "depends_on": [
         "CONTENT-003"
       ],
@@ -1448,6 +1448,13 @@
       "action": "complete",
       "actor": "kimi-F1-001-owner",
       "evidence": "docs/collaboration/reviews/OWNER-001-self-review.md"
+    },
+    {
+      "at": "2026-11-03T16:29:59.342749+00:00",
+      "task": "LINK-001",
+      "action": "claim",
+      "actor": "kimi-LINK-001-relations",
+      "evidence": null
     }
   ],
   "dispatch_policy": {

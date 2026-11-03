@@ -30,6 +30,7 @@ export interface SourceFrontmatter {
   readonly summary: string | null;
   readonly status: RecordStatus;
   readonly visibility: Visibility;
+  readonly relatedRecords: readonly string[];
   readonly attachments: readonly SourceAttachment[];
 }
 
@@ -61,6 +62,6 @@ export type ContentIssue = ApiErrorDetail & {
 };
 
 export function toPublicSummary(record: SourceRecord): RecordSummary {
-  const { body: _body, attachments: _attachments, ...summary } = record.detail;
+  const { body: _body, attachments: _attachments, relatedRecords: _relatedRecords, ...summary } = record.detail;
   return summary;
 }

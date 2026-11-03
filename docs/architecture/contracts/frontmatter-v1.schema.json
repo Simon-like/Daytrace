@@ -19,6 +19,13 @@
     "summary": {"type": ["string", "null"], "maxLength": 280, "default": null},
     "status": {"enum": ["draft", "published", "archived"]},
     "visibility": {"enum": ["public", "private"]},
+    "relatedRecords": {
+      "type": "array",
+      "maxItems": 16,
+      "uniqueItems": true,
+      "default": [],
+      "items": {"type": "string", "pattern": "^rec_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"}
+    },
     "attachments": {
       "type": "array",
       "maxItems": 100,

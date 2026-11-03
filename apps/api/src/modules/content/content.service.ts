@@ -129,6 +129,15 @@ export class ContentService implements OnModuleInit {
     return record;
   }
 
+  projectDetail(record: SourceRecord, scope: "public" | "owner"): import("@daytrace/contracts").RecordDetail {
+    const pool = scope === "owner" ? this.current().records : this.current().publicRecords;
+    const relatedRecords = pool.filter(candidate => candidate.metadata.id !== record.metadata.id &&
+      (record.metadata.relatedRecords.includes(candidate.metadata.id) ||
+       candidate.metadata.relatedRecords.includes(record.metadata.id)))
+      .map(toPublicSummary).sort((a, b) => a.id.localeCompare(b.id));
+    return { ...record.detail, relatedRecords };
+  }
+
   findPublishedAsset(assetId: string) {
     for (const record of this.current().records) {
       const asset = record.metadata.attachments.find((item) => item.id === assetId);

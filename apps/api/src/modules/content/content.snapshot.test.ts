@@ -65,3 +65,20 @@ test("private-only edits never change the public revision or pagination fingerpr
     assert.equal(after.publicContentRevision, before.publicContentRevision);
   } finally { await rm(temporary, { recursive: true, force: true }); }
 });
+
+
+test("unknown related record IDs invalidate the whole candidate snapshot", async () => {
+  const temporary = await mkdtemp(join(tmpdir(), "daytrace-related-"));
+  try {
+    await cp(fixtureRoot, temporary, { recursive: true });
+    const file = join(temporary, "public/engineering-ssr/index.md");
+    await writeFile(file, (await readFile(file, "utf8")).replace(/relatedRecords: \[[^\n]+\]/, "relatedRecords: [rec_7d0c0f2d-8f5b-4f0e-a3a6-999999999999]"));
+    await assert.rejects(loadContentSnapshot(temporary), (error: unknown) => {
+      assert.ok(error instanceof ContentSnapshotInvalidError);
+      assert.ok(error.details.some(item => item.code === "CONTENT_FIELD_INVALID" && item.field === "relatedRecords"));
+      return true;
+    });
+  } finally {
+    await rm(temporary, { recursive: true, force: true });
+  }
+});

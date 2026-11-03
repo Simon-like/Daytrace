@@ -24,8 +24,9 @@ function markdown(record: {
   status?: string;
   visibility?: string;
   body: string;
+  relatedRecords?: readonly string[];
 }): string {
-  return `---\nschemaVersion: 1\nid: ${record.id}\ntype: reflection\ntitle: ${record.title}\nslug: ${record.slug}\noldSlugs: []\noccurredOn: 2026-11-03\nupdatedAt: "2026-11-03T09:30:00+08:00"\nrevision: 1\ntags: [主人, 检索]\nsummary: null\nstatus: ${record.status ?? "published"}\nvisibility: ${record.visibility ?? "private"}\nattachments: []\n---\n\n## 合成主人检索样本\n\n${record.body}\n`;
+  return `---\nschemaVersion: 1\nid: ${record.id}\ntype: reflection\ntitle: ${record.title}\nslug: ${record.slug}\noldSlugs: []\noccurredOn: 2026-11-03\nupdatedAt: "2026-11-03T09:30:00+08:00"\nrevision: 1\ntags: [主人, 检索]\nsummary: null\nstatus: ${record.status ?? "published"}\nvisibility: ${record.visibility ?? "private"}${record.relatedRecords ? `\nrelatedRecords: [${record.relatedRecords.join(", ")}]` : ""}\nattachments: []\n---\n\n## 合成主人检索样本\n\n${record.body}\n`;
 }
 
 async function availablePort(): Promise<number> {
@@ -72,6 +73,7 @@ before(async () => {
     title: "公开的主人检索样本",
     slug: "public-owner-search",
     visibility: "public",
+    relatedRecords: [PRIVATE_ID, DRAFT_ID],
     body: "这里只有公开正文。",
   }));
   await writeFile(join(root, "private", "private-note", "index.md"), markdown({
@@ -142,4 +144,21 @@ test("owner status and visibility filters include drafts without changing public
   const publicResponse = await fetch(`${origin}/api/v1/search?q=${encodeURIComponent(PRIVATE_CANARY)}`);
   const publicPayload = await publicResponse.json() as { data: { items: unknown[] } };
   assert.deepEqual(publicPayload.data.items, []);
+});
+
+
+test("record details project forward and reverse relations only within caller authority", async () => {
+  const publicId = "rec_00000000-0000-4000-8000-000000000101";
+  const publicResponse = await fetch(`${origin}/api/v1/records/${publicId}`);
+  assert.equal(publicResponse.status, 200);
+  const publicText = await publicResponse.text();
+  assert.ok(!publicText.includes(PRIVATE_ID));
+  assert.ok(!publicText.includes(PRIVATE_CANARY));
+  const ownerResponse = await fetch(`${origin}/api/v1/records/${publicId}?scope=owner`, { headers: { cookie: `__Host-daytrace_session=${session}` } });
+  assert.equal(ownerResponse.status, 200);
+  const ownerDetail = await ownerResponse.json() as { data: { relatedRecords: { id: string }[] } };
+  assert.deepEqual(ownerDetail.data.relatedRecords.map(item => item.id), [PRIVATE_ID, DRAFT_ID]);
+  const reverseResponse = await fetch(`${origin}/api/v1/records/${PRIVATE_ID}?scope=owner`, { headers: { cookie: `__Host-daytrace_session=${session}` } });
+  const reverseDetail = await reverseResponse.json() as { data: { relatedRecords: { id: string }[] } };
+  assert.deepEqual(reverseDetail.data.relatedRecords.map(item => item.id), [publicId]);
 });

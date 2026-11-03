@@ -7,6 +7,7 @@ import {
   isAssetId,
   isRecordId,
   parseApiErrorResponse,
+  parseOwnerRecordSummary,
   type RecordDetail,
   type RecordListData,
   type RecordSummary,
@@ -71,7 +72,7 @@ function ownerDetail(value: unknown): RecordDetail {
   const summary = ownerSummary(value);
   const record = object(value);
   const body = object(record.body);
-  if (body.parseRevision !== MARKDOWN_PARSE_REVISION || !Array.isArray(body.toc) || !Array.isArray(record.attachments)) {
+  if (body.parseRevision !== MARKDOWN_PARSE_REVISION || !Array.isArray(body.toc) || !Array.isArray(record.attachments) || !Array.isArray(record.relatedRecords)) {
     throw new Error("OWNER_BODY_INVALID");
   }
   return {
@@ -86,6 +87,7 @@ function ownerDetail(value: unknown): RecordDetail {
       }),
       parseRevision: MARKDOWN_PARSE_REVISION,
     },
+    relatedRecords: record.relatedRecords.map(parseOwnerRecordSummary),
     attachments: record.attachments.map((item) => {
       const attachment = object(item);
       const id = text(attachment.id);

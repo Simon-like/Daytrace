@@ -22,6 +22,7 @@ test("frontmatter applies portable defaults and normalizes YAML dates", () => {
   assert.equal(result.metadata?.occurredOn, "2026-10-30");
   assert.deepEqual(result.metadata?.oldSlugs, []);
   assert.deepEqual(result.metadata?.attachments, []);
+  assert.deepEqual(result.metadata?.relatedRecords, []);
 });
 
 test("missing visibility fails closed instead of becoming a valid private record", () => {
@@ -37,4 +38,16 @@ test("unknown fields and invalid calendar dates have exact locations", () => {
   );
   assert.ok(result.issues.some((item) => item.code === "CONTENT_FIELD_INVALID" && item.field === "occurredOn"));
   assert.ok(result.issues.some((item) => item.code === "CONTENT_FIELD_INVALID" && item.field === "visiblity"));
+});
+
+
+test("related record IDs are portable, unique and cannot reference the record itself", () => {
+  const target = "rec_7d0c0f2d-8f5b-4f0e-a3a6-555555555555";
+  const related = valid.replace("visibility: public", `visibility: public\nrelatedRecords: [${target}]`);
+  assert.deepEqual(parseFrontmatter(related, "public/related/index.md").metadata?.relatedRecords, [target]);
+  for (const value of [`[${target}, ${target}]`, "[rec_7d0c0f2d-8f5b-4f0e-a3a6-111111111111]", "[not-a-record]"]) {
+    const result = parseFrontmatter(valid.replace("visibility: public", `visibility: public\nrelatedRecords: ${value}`), "public/related/index.md");
+    assert.equal(result.metadata, null);
+    assert.ok(result.issues.some(item => item.code === "CONTENT_FIELD_INVALID" && item.field === "relatedRecords"));
+  }
 });

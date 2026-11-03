@@ -49,7 +49,7 @@ export const privateDetail: RecordDetail = {
   body: {
     html: `<p>${PRIVATE_CANARY}</p>`,
     toc: [],
-    parseRevision: "daytrace-markdown-1",
+    parseRevision: "daytrace-markdown-2",
   },
   attachments: [{
     id: PRIVATE_ASSET_ID,

@@ -42,6 +42,14 @@ registerMicroApps([
 
 这段代码只是示意，具体API以实际使用的框架为准。关键是把**浏览器地址、子应用入口和资源公共路径**放在一起看，而不是盲目修改每一个配置。
 
+~~先逐项改配置，再看报错是否消失。~~ 先记录可复现路径，再缩小变量。
+
+```unknown-language
+const resourceEntry = '/sub-apps/operations/assets/index.js';
+const diagnosticMessage = '保留一条足够长的日志，用来检查代码块只在自身区域横向滚动，而不会把整个正文撑宽。';
+console.log({ resourceEntry, diagnosticMessage });
+```
+
 ### 一个白屏问题的排查顺序
 
 1. 直接打开子应用入口，确认它能独立加载。

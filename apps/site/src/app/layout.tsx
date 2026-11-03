@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { SiteShell } from "../layouts/site-shell";
 import "./globals.css";
+import "../styles/redesign.css";
 
 export const metadata: Metadata = {
   title: { default: "有迹 Daytrace", template: "%s · 有迹 Daytrace" },
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#29352C",
+  themeColor: "#243128",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

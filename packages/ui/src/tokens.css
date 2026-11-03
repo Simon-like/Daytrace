@@ -1,0 +1,55 @@
+:root {
+  --paper: #f4f4ed;
+  --paper-light: #fafaf6;
+  --archive: #243128;
+  --ink: #202720;
+  --muted: #667065;
+  --revision: #93634f;
+  --line: #d8ddd3;
+  --sage: #e7ebe1;
+  --control-primary: #31503d;
+  --control-primary-hover: #3d5d47;
+  --control-primary-edge: #1b2e22;
+  --control-surface: #fffef8;
+  --control-fill: #e9ede4;
+  --control-line: #cbd4c5;
+  --control-radius: 14px;
+  --panel-radius: 20px;
+  --serif: "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", Georgia, serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --hand: "Kaiti SC", "STKaiti", var(--serif);
+  --motion-duration-micro: 120ms;
+  --motion-duration-control: 160ms;
+  --motion-duration-enter: 200ms;
+  --motion-duration-exit: 140ms;
+  --motion-duration-overlay: 240ms;
+  --motion-duration-scene: 260ms;
+  --motion-ease-standard: cubic-bezier(.2, 0, 0, 1);
+  --motion-ease-enter: cubic-bezier(.16, 1, .3, 1);
+  --motion-ease-exit: cubic-bezier(.4, 0, 1, 1);
+  --motion-distance-control: 4px;
+  --motion-distance-scene: 12px;
+}
+
+.dt-brand { display: inline-flex; align-items: center; gap: 13px; line-height: 1.2; }
+.dt-brand > img { display: block; flex: none; }
+.dt-brand__type { display: grid; }
+.dt-brand__type strong { font-family: var(--serif); font-size: 29px; font-weight: 500; letter-spacing: .2em; }
+.dt-brand__type small { margin-top: 7px; font-family: var(--mono); font-size: 9px; letter-spacing: .2em; }
+.dt-brand--compact { gap: 10px; }
+.dt-brand--compact .dt-brand__type strong { font-size: 23px; }
+.dt-brand--compact .dt-brand__type small { margin-top: 4px; font-size: 7px; letter-spacing: .22em; }
+
+.dt-scene-title, .dt-scene-actions {
+  animation: dt-scene-enter var(--motion-duration-scene) var(--motion-ease-enter) both;
+}
+.dt-scene-actions { animation-delay: 45ms; }
+@keyframes dt-scene-enter {
+  from { opacity: 0; transform: translateY(var(--motion-distance-scene)); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dt-scene-title, .dt-scene-actions { animation: none; }
+}

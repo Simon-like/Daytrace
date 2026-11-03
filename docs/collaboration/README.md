@@ -26,18 +26,32 @@ python3 scripts/task_claim.py complete TASK-001 reviewer-name --evidence docs/co
 
 一项工作一个owner、一个主要写入域。需要接管未完成任务时先留下原owner交接与用户/协调者的实际派发依据，不静默抢任务或删除锁。脚本保留依赖、原子写入和重叠范围检查；中断锁由协调者核对进程后处理。
 
-## 多worktree和多设备
+## 分支、worktree和多设备
 
-正式并行开发使用独立`agent/TASK-ID/short-name`分支/worktree；共享路由、契约、依赖与锁文件由集成者串行合并。
+长期只维护两个开发入口：
 
-同机的worktree有自己的台账副本，**不能作为中央状态**。用主checkout认领，或显式指定主checkout：
+- `dev`：唯一日常开发分支。所有功能、修复、文档和开发成果先提交到这里，查看开发成果直接切换并启动`dev`。
+- `main`：稳定集成分支，只通过用户或集成者明确执行的`dev → main`合并更新。合并不等于部署或正式QA通过。
+
+不再新建`agent/TASK-ID/short-name`等任务分支。任务ID继续用于board、owner、提交说明和证据关联，不再映射成长期Git分支。既有agent分支只作历史记录，不自动删除，也不作为后续开发入口。
+
+日常开始与提交：
+
+```sh
+git switch dev
+git pull origin dev
+# 完成修改、验证和提交后
+git push origin dev
+```
+
+共享路由、契约、依赖与锁文件仍由集成者串行处理。worktree不能另建交付分支；确需使用时也必须服从`dev`／`main`两分支模型和中央协调。同机worktree的台账副本**不能作为中央状态**，认领仍使用主checkout或显式`--root`：
 
 ```sh
 python3 scripts/task_claim.py --root /path/to/primary-checkout status
 python3 scripts/task_claim.py --root /path/to/primary-checkout claim TASK-001 kimi-TASK-001-main
 ```
 
-先同步本次文档迁移后的主分支，旧版本脚本不认识新路径。跨设备的文件锁无效，由一个中央协调者实际认领，其他设备通过分支/PR及交接返回；不各写board后直接覆盖。此约定不自动联系另一个聊天或启动Agent。
+跨设备的文件锁无效，由一个中央协调者实际认领并串行同步`dev`，不能各自写board后直接覆盖。此约定不自动联系另一个聊天或启动Agent。
 
 ## 收尾最少交什么
 

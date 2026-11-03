@@ -28,3 +28,10 @@ attachments: []
 ## 给自己的提醒
 
 表达清楚自己的边界，也给别人把话说完的空间。想不明白的时候，可以先记下来，不必马上变成一个成熟的观点。
+
+1. 先听完事实和感受。
+2. 再确认自己理解的重点。
+   - 不急着替对方下结论。
+   - 不把不同意见当成否定。
+
+需要引用资料时，长链接也应该在正文中自然折行，而不是撑破页面：[阅读资料示例](https://example.com/a/very/long/path/that/keeps/going/and/going/to/check/reader/wrapping/without/creating/page/overflow)。

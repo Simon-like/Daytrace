@@ -1,5 +1,5 @@
 export const API_SCHEMA_VERSION = "1.0" as const;
-export const MARKDOWN_PARSE_REVISION = "daytrace-markdown-1" as const;
+export const MARKDOWN_PARSE_REVISION = "daytrace-markdown-2" as const;
 export const RECORD_ID_PATTERN = /^rec_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 export const ASSET_ID_PATTERN = /^ast_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 export const CONTENT_REVISION_PATTERN = /^sha256:[0-9a-f]{64}$/;

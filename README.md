@@ -5,10 +5,20 @@
 ```sh
 nvm use
 pnpm install --frozen-lockfile
-pnpm demo
+pnpm dev
 ```
 
-打开 http://127.0.0.1:3000 。当前使用合成内容和演示身份；运行边界见[Demo手册](docs/development/demo.md)。
+一键启动桌面、独立 H5 和 API：
+
+- 桌面：http://127.0.0.1:3000
+- H5：http://127.0.0.1:3002/h5/
+- 主站 H5 代理：http://127.0.0.1:3000/h5/
+
+按 `Ctrl+C` 同时停止三个服务。自定义端口使用 `pnpm dev -- --port 7100 --h5-port 7102`；只启动 H5 使用 `pnpm dev:h5`。完整命令表见[本地开发手册](docs/development/local-dev.md)。
+
+只需要桌面生产构建 Demo 时运行 `pnpm demo`。当前使用合成内容和演示身份，运行边界见[Demo手册](docs/development/demo.md)。
+
+日常开发成果统一在`dev`分支，稳定集成成果在`main`分支；后续不再新建任务分支。开始开发先运行`git switch dev && git pull origin dev`。
 
 - **找文档**：[docs目录](docs/README.md)。
 - **Kimi / Codex接手**：[AGENTS.md](AGENTS.md) → [当前工作](docs/context/当前工作上下文.md) → [协作协议](docs/collaboration/README.md)。

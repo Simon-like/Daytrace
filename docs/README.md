@@ -7,7 +7,7 @@
 | 启动并体验网站 | [Demo运行手册](development/demo.md) |
 | 让Kimi或Codex接力 | [当前工作](context/当前工作上下文.md) → [共同协作协议](collaboration/README.md) |
 | 看真实进度与剩余问题 | [项目进度](project/项目进度.md) |
-| 修改功能或设计 | [产品需求](product/PRD-v1.0.md)、[视觉基线](design/视觉风格基线-v1.0.md)、[技术架构](architecture/技术选型与研发路径.md) |
+| 修改功能或设计 | [产品需求](product/PRD-v1.0.md)、[视觉基线](design/视觉风格基线-v1.0.md)、[动效基线](design/动效系统基线-v1.0.md)、[技术架构](architecture/技术选型与研发路径.md) |
 
 ## 文档分区
 
@@ -60,6 +60,8 @@
 | [设计资产索引](design/资产索引.md) | 素材源文件、来源和采用状态 | active | 设计 |
 | [ADR-0004文档集中决策](architecture/decisions/ADR-0004-项目文档统一到docs.md) | 文档归位及Kimi/Codex共用协议 | accepted | 集成 |
 | [文档收敛验收报告](project/reports/DOCS-001.md) | 迁移清单、引用修复、脚本回归与保留现场 | reference | 集成 |
+| [动效系统基线](design/动效系统基线-v1.0.md) | 阅读优先的动效令牌、组件契约、减少动态效果与性能验收 | baseline | 设计与前端 |
+| [阅读型产品动效调研](research/2026-11-02-阅读型产品动效调研.md) | 优秀团队方法、官方来源与技术取舍 | reference | 设计与前端 |
 <!-- catalog:end -->
 
 </details>

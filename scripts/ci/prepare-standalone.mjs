@@ -31,7 +31,7 @@ let tracedContract = null;
 let tracedConfig = null;
 for (const file of serverFiles) {
   const body = await readFile(file, "utf8");
-  if (tracedContract === null && body.includes("daytrace-markdown-1") && body.includes("AUTH_REQUIRED")) {
+  if (tracedContract === null && body.includes("daytrace-markdown-2") && body.includes("AUTH_REQUIRED")) {
     tracedContract = file;
   }
   if (tracedConfig === null && body.includes("API_INTERNAL_ORIGIN")) tracedConfig = file;

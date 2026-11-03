@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-02T06:00:32.918118+00:00",
+  "updated": "2026-11-02T17:32:33.208765+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -403,6 +403,229 @@
       ],
       "review": "docs/collaboration/reviews/DOCS-001-self-review.md",
       "reviewer": "codex-self-review"
+    },
+    {
+      "id": "DOCS-002",
+      "title": "进度同步与后续开发基准",
+      "status": "done",
+      "owner": "kimi-DOCS-002-baseline",
+      "depends_on": [
+        "DOCS-001"
+      ],
+      "allowed_paths": [
+        "docs/context/当前工作上下文.md",
+        "docs/project/项目进度.md",
+        "docs/project/项目路线图与阶段管理.md",
+        "docs/development/local-dev.md",
+        "docs/architecture/技术选型与研发路径.md",
+        "docs/development/demo.md",
+        "docs/architecture/研发交接与任务编排.md",
+        "docs/collaboration/"
+      ],
+      "card": "docs/collaboration/tasks/DOCS-002.md",
+      "evidence": [
+        "docs/collaboration/handoffs/DOCS-002-kimi-baseline.md"
+      ],
+      "review": "docs/collaboration/reviews/DOCS-002-self-review.md",
+      "reviewer": "kimi-DOCS-002-self-review"
+    },
+    {
+      "id": "UI-001",
+      "title": "前端信息架构与本地组件体系重塑",
+      "status": "done",
+      "owner": "kimi-UI-001-shell",
+      "depends_on": [
+        "DOCS-002"
+      ],
+      "allowed_paths": [
+        "apps/site/src/app/",
+        "apps/site/src/layouts/",
+        "apps/site/src/components/",
+        "apps/site/src/features/records/",
+        "apps/site/src/features/search/",
+        "apps/site/package.json",
+        "apps/site/postcss.config.mjs",
+        "pnpm-lock.yaml",
+        "tests/unit/find/",
+        "tests/e2e/find/",
+        "tests/e2e/acceptance/",
+        "docs/research/",
+        "docs/design/",
+        "docs/project/reports/UI-001.md",
+        "docs/project/evidence/UI-001/",
+        "docs/collaboration/"
+      ],
+      "card": "docs/collaboration/tasks/UI-001.md",
+      "evidence": [
+        "docs/collaboration/handoffs/UI-001-kimi-shell.md"
+      ],
+      "review": "docs/collaboration/reviews/UI-001-self-review.md",
+      "reviewer": "kimi-UI-001-self-review"
+    },
+    {
+      "id": "MOTION-001",
+      "title": "阅读优先的动效系统与设计准则",
+      "status": "done",
+      "owner": "kimi-MOTION-001-system",
+      "depends_on": [
+        "UI-001"
+      ],
+      "allowed_paths": [
+        "docs/research/2026-11-02-阅读型产品动效调研.md",
+        "docs/design/动效系统基线-v1.0.md",
+        "docs/project/reports/MOTION-001.md",
+        "docs/catalog.json",
+        "docs/README.md",
+        "docs/collaboration/"
+      ],
+      "card": "docs/collaboration/tasks/MOTION-001.md",
+      "evidence": [
+        "docs/collaboration/handoffs/MOTION-001-kimi-system.md"
+      ],
+      "review": "docs/collaboration/reviews/MOTION-001-self-review.md",
+      "reviewer": "kimi-MOTION-001-self-review"
+    },
+    {
+      "id": "MOTION-002",
+      "title": "动效参考实现与本地组件推广",
+      "status": "done",
+      "owner": "kimi-MOTION-002-reference",
+      "depends_on": [
+        "MOTION-001"
+      ],
+      "allowed_paths": [
+        "apps/site/src/app/globals.css",
+        "apps/site/src/components/",
+        "apps/site/src/styles/",
+        "apps/site/src/features/records/record-filters.tsx",
+        "apps/site/src/features/search/",
+        "apps/site/src/features/reader/",
+        "tests/e2e/acceptance/",
+        "docs/plans/2026-11-02-motion-reference.md",
+        "docs/project/reports/MOTION-002.md",
+        "docs/project/evidence/MOTION-002/",
+        "docs/collaboration/"
+      ],
+      "card": "docs/collaboration/tasks/MOTION-002.md",
+      "evidence": [
+        "docs/collaboration/handoffs/MOTION-002-kimi-reference.md"
+      ],
+      "review": "docs/collaboration/reviews/MOTION-002-self-review.md",
+      "reviewer": "kimi-MOTION-002-self-review"
+    },
+    {
+      "id": "READER-002",
+      "title": "完整Markdown正文阅读专项",
+      "status": "done",
+      "owner": "kimi-READER-002-reader",
+      "depends_on": [
+        "MOTION-002"
+      ],
+      "allowed_paths": [
+        "apps/api/src/modules/content/markdown.ts",
+        "apps/api/src/modules/content/markdown.test.ts",
+        "apps/api/fixtures/demo/public/microfront/index.md",
+        "apps/api/fixtures/demo/public/mapo-tofu/index.md",
+        "apps/api/fixtures/demo/public/listen/index.md",
+        "apps/site/src/features/reader/",
+        "tests/unit/reader/",
+        "tests/e2e/acceptance/",
+        "docs/architecture/contracts/markdown-v1.md",
+        "docs/plans/2026-11-02-markdown-reader.md",
+        "docs/project/reports/READER-002.md",
+        "docs/project/evidence/READER-002/",
+        "docs/collaboration/"
+      ],
+      "card": "docs/collaboration/tasks/READER-002.md",
+      "evidence": [
+        "docs/collaboration/handoffs/READER-002-kimi-reader.md"
+      ],
+      "review": "docs/collaboration/reviews/READER-002-self-review.md",
+      "reviewer": "kimi-READER-002-self-review"
+    },
+    {
+      "id": "UI-002",
+      "title": "控件质感、归档节奏与方向性动效优化",
+      "status": "blocked",
+      "owner": "kimi-UI-002-controls",
+      "depends_on": [
+        "READER-002"
+      ],
+      "allowed_paths": [
+        "apps/site/src/app/globals.css",
+        "apps/site/src/components/ui/",
+        "apps/site/src/styles/redesign.css",
+        "apps/site/src/features/records/",
+        "apps/site/src/features/search/",
+        "tests/e2e/acceptance/",
+        "docs/plans/2026-11-02-control-refinement.md",
+        "docs/project/reports/UI-002.md",
+        "docs/project/evidence/UI-002/",
+        "docs/collaboration/"
+      ],
+      "card": "docs/collaboration/tasks/UI-002.md",
+      "evidence": [
+        "docs/collaboration/handoffs/UI-002-kimi-controls.md",
+        "docs/collaboration/handoffs/UI-002-scope-transition.md"
+      ]
+    },
+    {
+      "id": "SYSTEM-001",
+      "title": "共享设计资产、桌面统一与入场编排",
+      "status": "done",
+      "owner": "kimi-SYSTEM-001-design",
+      "depends_on": [
+        "READER-002"
+      ],
+      "allowed_paths": [
+        "apps/site/",
+        "packages/ui/",
+        "packages/content/",
+        "tests/unit/find/",
+        "tests/e2e/acceptance/",
+        "package.json",
+        "pnpm-lock.yaml",
+        "docs/plans/2026-11-03-unified-h5-system.md",
+        "docs/design/",
+        "docs/project/reports/SYSTEM-001.md",
+        "docs/project/evidence/SYSTEM-001/",
+        "docs/collaboration/"
+      ],
+      "card": "docs/collaboration/tasks/SYSTEM-001.md",
+      "evidence": [
+        "docs/collaboration/handoffs/SYSTEM-001-kimi-design.md"
+      ],
+      "review": "docs/collaboration/reviews/SYSTEM-001-self-review.md",
+      "reviewer": "kimi-SYSTEM-001-self-review"
+    },
+    {
+      "id": "MOBILE-001",
+      "title": "独立移动 H5 应用与触摸导航",
+      "status": "done",
+      "owner": "kimi-MOBILE-001-h5",
+      "depends_on": [
+        "SYSTEM-001"
+      ],
+      "allowed_paths": [
+        "apps/h5/",
+        "apps/site/next.config.ts",
+        "scripts/dev/",
+        "tests/e2e/h5/",
+        "package.json",
+        "pnpm-lock.yaml",
+        "docs/plans/2026-11-03-unified-h5-system.md",
+        "docs/development/local-dev.md",
+        "docs/development/demo.md",
+        "docs/project/reports/MOBILE-001.md",
+        "docs/project/evidence/MOBILE-001/",
+        "docs/collaboration/"
+      ],
+      "card": "docs/collaboration/tasks/MOBILE-001.md",
+      "evidence": [
+        "docs/collaboration/handoffs/MOBILE-001-kimi-h5.md"
+      ],
+      "review": "docs/collaboration/reviews/MOBILE-001-self-review.md",
+      "reviewer": "kimi-MOBILE-001-self-review"
     }
   ],
   "history": [
@@ -692,11 +915,186 @@
       "action": "complete",
       "actor": "codex-self-review",
       "evidence": "docs/collaboration/reviews/DOCS-001-self-review.md"
+    },
+    {
+      "at": "2026-11-02T06:33:19.035339+00:00",
+      "task": "DOCS-002",
+      "action": "claim",
+      "actor": "kimi-DOCS-002-baseline",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-02T06:38:50.064378+00:00",
+      "task": "DOCS-002",
+      "action": "submit",
+      "actor": "kimi-DOCS-002-baseline",
+      "evidence": "docs/collaboration/handoffs/DOCS-002-kimi-baseline.md"
+    },
+    {
+      "at": "2026-11-02T06:38:50.173142+00:00",
+      "task": "DOCS-002",
+      "action": "complete",
+      "actor": "kimi-DOCS-002-self-review",
+      "evidence": "docs/collaboration/reviews/DOCS-002-self-review.md"
+    },
+    {
+      "at": "2026-11-02T07:02:18.107378+00:00",
+      "task": "UI-001",
+      "action": "claim",
+      "actor": "kimi-UI-001-shell",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-02T07:45:56.212648+00:00",
+      "task": "UI-001",
+      "action": "submit",
+      "actor": "kimi-UI-001-shell",
+      "evidence": "docs/collaboration/handoffs/UI-001-kimi-shell.md"
+    },
+    {
+      "at": "2026-11-02T07:45:56.318738+00:00",
+      "task": "UI-001",
+      "action": "complete",
+      "actor": "kimi-UI-001-self-review",
+      "evidence": "docs/collaboration/reviews/UI-001-self-review.md"
+    },
+    {
+      "at": "2026-11-02T09:17:47.512718+00:00",
+      "task": "MOTION-001",
+      "action": "claim",
+      "actor": "kimi-MOTION-001-system",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-02T09:27:11.323779+00:00",
+      "task": "MOTION-001",
+      "action": "submit",
+      "actor": "kimi-MOTION-001-system",
+      "evidence": "docs/collaboration/handoffs/MOTION-001-kimi-system.md"
+    },
+    {
+      "at": "2026-11-02T09:27:11.506196+00:00",
+      "task": "MOTION-001",
+      "action": "complete",
+      "actor": "kimi-MOTION-001-self-review",
+      "evidence": "docs/collaboration/reviews/MOTION-001-self-review.md"
+    },
+    {
+      "at": "2026-11-02T10:22:56.124449+00:00",
+      "task": "MOTION-002",
+      "action": "claim",
+      "actor": "kimi-MOTION-002-reference",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-02T10:38:18.690467+00:00",
+      "task": "MOTION-002",
+      "action": "submit",
+      "actor": "kimi-MOTION-002-reference",
+      "evidence": "docs/collaboration/handoffs/MOTION-002-kimi-reference.md"
+    },
+    {
+      "at": "2026-11-02T10:38:18.802707+00:00",
+      "task": "MOTION-002",
+      "action": "complete",
+      "actor": "kimi-MOTION-002-self-review",
+      "evidence": "docs/collaboration/reviews/MOTION-002-self-review.md"
+    },
+    {
+      "at": "2026-11-02T10:38:18.914922+00:00",
+      "task": "READER-002",
+      "action": "claim",
+      "actor": "kimi-READER-002-reader",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-02T10:58:20.904447+00:00",
+      "task": "READER-002",
+      "action": "submit",
+      "actor": "kimi-READER-002-reader",
+      "evidence": "docs/collaboration/handoffs/READER-002-kimi-reader.md"
+    },
+    {
+      "at": "2026-11-02T10:58:21.015588+00:00",
+      "task": "READER-002",
+      "action": "complete",
+      "actor": "kimi-READER-002-self-review",
+      "evidence": "docs/collaboration/reviews/READER-002-self-review.md"
+    },
+    {
+      "at": "2026-11-02T12:14:07.346961+00:00",
+      "task": "UI-002",
+      "action": "claim",
+      "actor": "kimi-UI-002-controls",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-02T16:48:55.351770+00:00",
+      "task": "UI-002",
+      "action": "block",
+      "actor": "kimi-SYSTEM-001-coordinator",
+      "evidence": "docs/collaboration/handoffs/UI-002-scope-transition.md"
+    },
+    {
+      "at": "2026-11-02T16:48:55.351770+00:00",
+      "task": "SYSTEM-001",
+      "action": "create",
+      "actor": "kimi-SYSTEM-001-coordinator",
+      "evidence": "docs/collaboration/tasks/SYSTEM-001.md"
+    },
+    {
+      "at": "2026-11-02T16:48:55.351770+00:00",
+      "task": "MOBILE-001",
+      "action": "create",
+      "actor": "kimi-SYSTEM-001-coordinator",
+      "evidence": "docs/collaboration/tasks/MOBILE-001.md"
+    },
+    {
+      "at": "2026-11-02T16:48:55.481369+00:00",
+      "task": "SYSTEM-001",
+      "action": "claim",
+      "actor": "kimi-SYSTEM-001-design",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-02T17:04:01.745039+00:00",
+      "task": "SYSTEM-001",
+      "action": "submit",
+      "actor": "kimi-SYSTEM-001-design",
+      "evidence": "docs/collaboration/handoffs/SYSTEM-001-kimi-design.md"
+    },
+    {
+      "at": "2026-11-02T17:04:01.859973+00:00",
+      "task": "SYSTEM-001",
+      "action": "complete",
+      "actor": "kimi-SYSTEM-001-self-review",
+      "evidence": "docs/collaboration/reviews/SYSTEM-001-self-review.md"
+    },
+    {
+      "at": "2026-11-02T17:04:01.974338+00:00",
+      "task": "MOBILE-001",
+      "action": "claim",
+      "actor": "kimi-MOBILE-001-h5",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-02T17:32:33.092520+00:00",
+      "task": "MOBILE-001",
+      "action": "submit",
+      "actor": "kimi-MOBILE-001-h5",
+      "evidence": "docs/collaboration/handoffs/MOBILE-001-kimi-h5.md"
+    },
+    {
+      "at": "2026-11-02T17:32:33.208765+00:00",
+      "task": "MOBILE-001",
+      "action": "complete",
+      "actor": "kimi-MOBILE-001-self-review",
+      "evidence": "docs/collaboration/reviews/MOBILE-001-self-review.md"
     }
   ],
   "dispatch_policy": {
     "mode": "manual",
-    "current_scope": "documentation consolidation for Kimi and Codex; no business or production changes",
+    "current_scope": "unify desktop through shared local design/content packages and short grouped entrances; build an independent apps/h5 mobile experience with shared assets; preserve reading and API boundaries",
     "technical_tasks": "Next.js + NestJS + pnpm workspace direction confirmed; development by separately dispatched agents; no production authorization implied"
   }
 }

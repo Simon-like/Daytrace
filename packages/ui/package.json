@@ -1,0 +1,26 @@
+{
+  "name": "@daytrace/ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tokens.css": "./src/tokens.css",
+    "./button": "./src/button.tsx",
+    "./input": "./src/input.tsx",
+    "./select": "./src/select.tsx",
+    "./checkbox": "./src/checkbox.tsx",
+    "./icon": "./src/icon.tsx",
+    "./brand-mark": "./src/brand-mark.tsx"
+  },
+  "dependencies": {
+    "@radix-ui/react-checkbox": "1.4.1",
+    "@radix-ui/react-select": "2.4.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0"
+  }
+}

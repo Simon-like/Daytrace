@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { RecordListData } from "@daytrace/contracts";
+import { Button } from "../../components/ui";
 import {
   createDiscoveryEntry,
   createDiscoveryUrl,
@@ -146,7 +147,7 @@ export function RecordsDiscovery({
   }, []);
 
   return (
-    <div>
+    <div className="dt-scene-actions">
       <RecordFilters
         filters={selected}
         availableTags={tags}
@@ -163,7 +164,7 @@ export function RecordsDiscovery({
         <div className={styles.failure} role="alert">
           <p>暂时无法读取公开记录。服务失败不会显示成“无结果”。</p>
           <p className={styles.requestId}>错误码：{error?.code ?? "API_UNAVAILABLE"}{error?.requestId ? ` · requestId：${error.requestId}` : ""}</p>
-          <button type="button" onClick={() => void load(selected)}>重试</button>
+          <Button type="button" variant="secondary" onClick={() => void load(selected)}>重试</Button>
         </div>
       ) : null}
       {status === "ready" || status === "empty" ? (

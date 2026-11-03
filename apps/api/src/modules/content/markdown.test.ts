@@ -32,19 +32,40 @@ test("raw HTML, H1, dangerous links and undeclared assets fail validation", () =
   }
 });
 
-test("HTML-looking code remains readable text", () => {
+test("HTML-looking code remains readable text with server-rendered code semantics", () => {
   const result = renderMarkdown("```html\n<script>example()</script>\n```", [], "public/a/index.md");
   assert.ok(result.html?.includes("&lt;script&gt;"));
   assert.ok(!result.html?.includes("<script>"));
+  assert.match(result.html ?? "", /data-reader-code/);
+  assert.match(result.html ?? "", /data-code-copy/);
+  assert.match(result.html ?? "", />HTML<\/span>/);
+  assert.match(result.html ?? "", /tabindex="0" role="region"/);
 });
 
-test("declared image dimensions reserve the reading layout before the image arrives", () => {
-  const result = renderMarkdown("![示例图](images/meal.webp)", [{
+test("GFM structures keep formatting and stay inside local scroll containers", () => {
+  const source = "~~旧结论~~\n\n- [x] 已完成\n- [ ] 待验证\n\n| 名称 | **结果** |\n| :--- | ---: |\n| 测试 | `通过` |";
+  const result = renderMarkdown(source, [], "public/a/index.md");
+  assert.match(result.html ?? "", /<del>旧结论<\/del>/);
+  assert.match(result.html ?? "", /<input checked disabled="disabled" type="checkbox" \/>/);
+  assert.match(result.html ?? "", /data-reader-table/);
+  assert.match(result.html ?? "", /<th align="left">名称<\/th>/);
+  assert.match(result.html ?? "", /<td align="right"><code>通过<\/code><\/td>/);
+});
+
+test("declared image dimensions, caption and loading priority are server-rendered", () => {
+  const first = {
     id: "ast_11111111-1111-4111-8111-000000001002", path: "images/meal.webp",
-    mediaType: "image/webp", width: 960, height: 640,
-  }], "public/meal/index.md");
+    mediaType: "image/webp" as const, width: 960, height: 640,
+  };
+  const second = { ...first, id: "ast_11111111-1111-4111-8111-000000001003", path: "images/next.webp" };
+  const result = renderMarkdown("![示例图](images/meal.webp \"本次成品\")\n\n![下一张](images/next.webp)", [first, second], "public/meal/index.md");
   assert.equal(result.issues.length, 0);
   assert.match(result.html ?? "", /width="960"/);
   assert.match(result.html ?? "", /height="640"/);
+  assert.match(result.html ?? "", /<figcaption>本次成品<\/figcaption>/);
+  assert.match(result.html ?? "", /loading="eager"/);
   assert.match(result.html ?? "", /loading="lazy"/);
+  assert.match(result.html ?? "", /decoding="async"/);
+  assert.match(result.html ?? "", /data-reader-image/);
+  assert.match(result.html ?? "", /data-image-error/);
 });

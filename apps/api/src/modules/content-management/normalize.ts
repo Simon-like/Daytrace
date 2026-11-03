@@ -119,6 +119,7 @@ export function normalize(files: InputFile[], current: ContentSnapshot, options:
       occurredOn: data.occurredOn ?? previous?.metadata.occurredOn ?? null,
       updatedAt: new Date().toISOString(), revision: (previous?.metadata.revision ?? 0) + 1,
       tags: data.tags ?? previous?.metadata.tags ?? [], summary: data.summary ?? previous?.metadata.summary ?? null,
+      relatedRecords: data.relatedRecords ?? previous?.metadata.relatedRecords ?? [],
       status: "draft", visibility: "private", attachments,
     };
     const markdown = matter.stringify(body, metadata);

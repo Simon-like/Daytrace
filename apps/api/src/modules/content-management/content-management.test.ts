@@ -138,3 +138,25 @@ test("Unicode filenames from decomposed file systems normalize without losing re
   assert.equal(preview.records[0]?.attachments.length, 1);
   await service.discard(preview.id);
 });
+
+test("update and export preserve record links while updates remain private drafts", async () => {
+  const service = new ContentManagementService(app.get(ContentService));
+  const linked = service.content.currentSnapshot().records.find(record => record.metadata.relatedRecords.length > 0)!;
+  const preview = await service.import([{ path: "update.md", bytes: Buffer.from("# 关联更新\n\n保留已有关系。") }], {
+    updateId: linked.metadata.id,
+    expectedRevision: linked.metadata.revision,
+  });
+  assert.equal(preview.records[0]?.status, "draft");
+  assert.equal(preview.records[0]?.visibility, "private");
+  await service.commit(preview.id, { baseRevision: preview.baseRevision, status: "draft", visibility: "private" });
+  assert.deepEqual(service.content.getOwnerRecord(linked.metadata.id).metadata.relatedRecords, linked.metadata.relatedRecords);
+  const exported = await fetch(`${origin}/owner/content/${linked.metadata.id}/export`, { headers: { cookie } });
+  assert.equal(exported.status, 200);
+  const archive = unzipSync(Buffer.from(await exported.arrayBuffer()));
+  const entry = Object.entries(archive).find(([path]) => path.endsWith("/index.md"))!;
+  const markdown = new TextDecoder().decode(entry[1]);
+  assert.match(markdown, /relatedRecords:/);
+  for (const relatedId of linked.metadata.relatedRecords) assert.ok(markdown.includes(relatedId));
+  assert.equal(service.content.getOwnerRecord(linked.metadata.id).metadata.status, "draft");
+  assert.equal(service.content.getOwnerRecord(linked.metadata.id).metadata.visibility, "private");
+});

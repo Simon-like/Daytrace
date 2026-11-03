@@ -62,6 +62,7 @@
 | [文档收敛验收报告](project/reports/DOCS-001.md) | 迁移清单、引用修复、脚本回归与保留现场 | reference | 集成 |
 | [动效系统基线](design/动效系统基线-v1.0.md) | 阅读优先的动效令牌、组件契约、减少动态效果与性能验收 | baseline | 设计与前端 |
 | [阅读型产品动效调研](research/2026-11-02-阅读型产品动效调研.md) | 优秀团队方法、官方来源与技术取舍 | reference | 设计与前端 |
+| [Markdown 渲染与内容管理方案](research/2026-11-03-Markdown渲染与内容管理方案.md) | 官方资料与源码核对、快捷上传、内容目录和文章路由实施建议 | reference | 内容与架构 |
 <!-- catalog:end -->
 
 </details>

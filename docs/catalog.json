@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-02",
+  "updated": "2026-11-03",
   "documents": [
     {
       "id": "context",
@@ -289,6 +289,14 @@
       "purpose": "优秀团队方法、官方来源与技术取舍",
       "status": "reference",
       "owner_role": "设计与前端"
+    },
+    {
+      "id": "markdown-management-research",
+      "title": "Markdown 渲染与内容管理方案",
+      "path": "docs/research/2026-11-03-Markdown渲染与内容管理方案.md",
+      "purpose": "官方资料与源码核对、快捷上传、内容目录和文章路由实施建议",
+      "status": "reference",
+      "owner_role": "内容与架构"
     }
   ]
 }

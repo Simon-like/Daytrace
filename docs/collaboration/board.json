@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-03T07:53:05.145747+00:00",
+  "updated": "2026-11-03T08:20:38.932581+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -674,6 +674,32 @@
       ],
       "review": "docs/collaboration/reviews/MOBILE-001-self-review.md",
       "reviewer": "kimi-MOBILE-001-self-review"
+    },
+    {
+      "id": "CONTENT-002",
+      "title": "Markdown 渲染、快捷导入、目录与文章路由调研",
+      "status": "done",
+      "owner": "codex-CONTENT-002-research",
+      "depends_on": [
+        "CONTENT-001",
+        "READER-002",
+        "DOCS-003"
+      ],
+      "allowed_paths": [
+        "docs/research/2026-11-03-Markdown渲染与内容管理方案.md",
+        "docs/development/content.md",
+        "docs/context/当前工作上下文.md",
+        "docs/project/项目进度.md",
+        "docs/catalog.json",
+        "docs/README.md",
+        "docs/collaboration/"
+      ],
+      "card": "docs/collaboration/tasks/CONTENT-002.md",
+      "evidence": [
+        "docs/collaboration/handoffs/CONTENT-002-codex-research.md"
+      ],
+      "review": "docs/collaboration/reviews/CONTENT-002-self-review.md",
+      "reviewer": "codex-CONTENT-002-self-review"
     }
   ],
   "history": [
@@ -1180,6 +1206,34 @@
       "action": "complete",
       "actor": "kimi-DOCS-003-milestones",
       "evidence": "docs/collaboration/reviews/DOCS-003-self-review.md"
+    },
+    {
+      "at": "2026-11-03T08:16:18.585122+00:00",
+      "task": "CONTENT-002",
+      "action": "create",
+      "actor": "codex-CONTENT-002-research",
+      "evidence": "docs/collaboration/tasks/CONTENT-002.md"
+    },
+    {
+      "at": "2026-11-03T08:16:18.696310+00:00",
+      "task": "CONTENT-002",
+      "action": "claim",
+      "actor": "codex-CONTENT-002-research",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-03T08:20:38.824714+00:00",
+      "task": "CONTENT-002",
+      "action": "submit",
+      "actor": "codex-CONTENT-002-research",
+      "evidence": "docs/collaboration/handoffs/CONTENT-002-codex-research.md"
+    },
+    {
+      "at": "2026-11-03T08:20:38.932581+00:00",
+      "task": "CONTENT-002",
+      "action": "complete",
+      "actor": "codex-CONTENT-002-self-review",
+      "evidence": "docs/collaboration/reviews/CONTENT-002-self-review.md"
     }
   ],
   "dispatch_policy": {

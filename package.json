@@ -11,12 +11,13 @@
     "dev": "node scripts/dev/run-dev.mjs",
     "build:packages": "pnpm --filter @daytrace/config build && pnpm --filter @daytrace/contracts build",
     "dev:site": "pnpm run build:packages && pnpm --filter @daytrace/site dev",
+    "dev:h5": "pnpm run build:packages && pnpm --filter @daytrace/h5 dev -- --port 3002",
     "dev:api": "pnpm run build:packages && pnpm --filter @daytrace/api dev",
     "lint": "oxlint apps packages tests scripts",
-    "typecheck": "pnpm run build:packages && pnpm --filter @daytrace/api typecheck && pnpm --filter @daytrace/site typecheck",
+    "typecheck": "pnpm run build:packages && pnpm --filter @daytrace/api typecheck && pnpm --filter @daytrace/site typecheck && pnpm --filter @daytrace/h5 typecheck",
     "test:unit": "pnpm run build:packages && tsx --tsconfig apps/api/tsconfig.json --test packages/config/src/*.test.ts packages/contracts/src/*.test.ts apps/api/src/common/*.test.ts apps/api/src/modules/content/*.test.ts tests/unit/reader/*.test.ts tests/unit/find/*.test.ts",
     "test:integration": "pnpm run build:packages && tsx --tsconfig apps/api/tsconfig.json --test tests/integration/api.integration.test.ts tests/e2e/find/*.test.ts && tsx --tsconfig tests/integration/access/tsconfig.json --test tests/integration/access/*.test.ts && pnpm test:demo",
-    "build": "pnpm run build:packages && pnpm --filter @daytrace/api build && pnpm --filter @daytrace/site build",
+    "build": "pnpm run build:packages && pnpm --filter @daytrace/api build && pnpm --filter @daytrace/site build && pnpm --filter @daytrace/h5 build",
     "test:e2e": "pnpm run build && tsx --test tests/integration/ssr.e2e.test.ts",
     "content:validate": "pnpm run build:packages && tsx apps/api/src/cli/validate-content.ts",
     "docs:validate": "python3 scripts/project_check.py",
@@ -24,6 +25,7 @@
     "test:modules": "tsx --tsconfig tests/integration/access/tsconfig.json --test tests/unit/reader/*.test.ts tests/unit/find/*.test.ts tests/e2e/find/*.test.ts tests/integration/access/*.test.ts",
     "test:demo": "tsx --tsconfig apps/api/tsconfig.json --test tests/integration/demo/*.test.ts",
     "test:browser": "node tests/e2e/acceptance/demo.browser.mjs",
+    "test:h5": "node tests/e2e/h5/mobile.browser.mjs",
     "content:validate:demo": "CONTENT_ROOT=apps/api/fixtures/demo pnpm content:validate"
   },
   "devDependencies": {

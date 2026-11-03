@@ -1,0 +1,148 @@
+import assert from "node:assert/strict";
+import { spawn } from "node:child_process";
+import { mkdir, open, writeFile } from "node:fs/promises";
+import { chromium } from "playwright";
+
+const sitePort = process.env.H5_TEST_SITE_PORT ?? "3170";
+const apiPort = process.env.H5_TEST_API_PORT ?? "3171";
+const h5Port = process.env.H5_TEST_H5_PORT ?? "3172";
+const base = `http://127.0.0.1:${sitePort}`;
+const direct = `http://127.0.0.1:${h5Port}`;
+const evidence = "docs/project/evidence/MOBILE-001";
+await mkdir(evidence, { recursive: true });
+await mkdir(".local/h5-test", { recursive: true });
+const log = await open(".local/h5-test/server.log", "w");
+const managed = spawn(process.execPath, ["scripts/dev/run-dev.mjs", "--port", sitePort, "--h5-port", h5Port], {
+  env: { ...process.env, API_PORT: apiPort, CONTENT_ROOT: "apps/api/fixtures/demo", DAYTRACE_DEMO: "1" },
+  stdio: ["ignore", log.fd, log.fd],
+});
+for (let attempt = 0; attempt < 150; attempt += 1) {
+  try { if ((await fetch(`${base}/api/v1/health/ready`)).ok && (await fetch(`${base}/h5/`)).ok) break; } catch {}
+  if (attempt === 149) { managed.kill("SIGTERM"); throw new Error("H5 services did not become ready"); }
+  await new Promise(resolve => setTimeout(resolve, 300));
+}
+
+const browser = await chromium.launch({ headless: true });
+const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, permissions: ["clipboard-read", "clipboard-write"] });
+const page = await context.newPage();
+const report = { date: "2026-11-03", scope: "Independent H5 in Chromium mobile viewports; not a real iPhone", checks: [], layouts: [], errors: [], passed: false };
+page.on("pageerror", error => report.errors.push(error.message));
+const tech = "/h5/records/rec_11111111-1111-4111-8111-000000000001";
+const recipe = "/h5/records/rec_11111111-1111-4111-8111-000000000002";
+async function go(path) { const response = await page.goto(base + path); await page.waitForLoadState("networkidle"); return response; }
+async function check(name, run) { try { await run(); report.checks.push({ name, passed: true }); console.log(`PASS ${name}`); } catch (error) { report.checks.push({ name, passed: false, error: error.message }); console.error(`FAIL ${name}: ${error.message}`); await page.screenshot({ path: `${evidence}/failure-${report.checks.length}.png`, fullPage: true }).catch(() => {}); } }
+
+try {
+  await check("basePath, shared assets and direct H5 API proxy work", async () => {
+    const response = await go("/h5/");
+    assert.equal(response.status(), 200);
+    assert.ok((await page.locator("main").textContent()).includes("把日常"));
+    assert.equal((await fetch(`${base}/h5/brand/daytrace-icon-reverse.svg`)).status, 200);
+    assert.equal((await fetch(`${direct}/h5/`)).status, 200);
+    assert.equal((await fetch(`${direct}/api/v1/health/ready`)).status, 200);
+    assert.equal(await page.locator(".h5-tabs a").count(), 4);
+  });
+  await check("mobile navigation and bottom filter sheet preserve touch and scroll state", async () => {
+    await page.locator(".h5-tabs").getByRole("link", { name: "归档" }).click();
+    await page.waitForURL(/\/h5\/archive/);
+    const trigger = page.getByRole("button", { name: /筛选记录/ });
+    await trigger.click();
+    const dialog = page.getByRole("dialog");
+    await dialog.waitFor();
+    assert.equal(await page.evaluate(() => document.body.style.overflow), "hidden");
+    await page.getByRole("combobox", { name: "记录类别" }).click();
+    await page.getByRole("listbox").getByRole("option", { name: "生活经验" }).click();
+    await page.getByRole("button", { name: /查看 \d+ 篇记录/ }).click();
+    await page.waitForURL(/type=recipe/);
+    await dialog.waitFor({ state: "hidden" });
+    assert.notEqual(await page.evaluate(() => document.body.style.overflow), "hidden");
+    await page.getByText("麻婆豆腐：把这次的火候留下来", { exact: true }).waitFor();
+    assert.ok(!(await page.locator(".h5-records").textContent()).includes("微前端接入"));
+    await page.getByRole("link", { name: "麻婆豆腐：把这次的火候留下来" }).click();
+    await page.waitForURL(/\/h5\/records\//);
+    await page.goBack();
+    await page.waitForLoadState("networkidle");
+    assert.match(page.url(), /type=recipe/);
+    assert.match(await page.getByRole("button", { name: /筛选记录/ }).textContent(), /1/);
+  });
+  await check("sheet Escape, repeated opening and reduced motion are immediate", async () => {
+    await go("/h5/archive");
+    const trigger = page.getByRole("button", { name: /筛选记录/ });
+    await trigger.click();
+    await page.keyboard.press("Escape");
+    await page.getByRole("dialog").waitFor({ state: "hidden" });
+    assert.equal(await trigger.evaluate(node => node === document.activeElement), true);
+    await trigger.click();
+    assert.equal(await page.getByRole("dialog").count(), 1);
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    assert.equal(await page.getByRole("dialog").evaluate(node => getComputedStyle(node).transitionDuration), "0s");
+    assert.equal(await page.locator(".dt-scene-title").evaluate(node => getComputedStyle(node).animationName), "none");
+    await page.keyboard.press("Escape");
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+  });
+  await check("search submit, clear, suggestions and result navigation work under /h5", async () => {
+    await go("/h5/search");
+    const input = page.getByRole("searchbox");
+    await input.fill("豆腐");
+    await page.getByRole("button", { name: "搜索", exact: true }).click();
+    await page.getByRole("link", { name: "麻婆豆腐：把这次的火候留下来" }).waitFor();
+    assert.match(page.url(), /\/h5\/search\?q=/);
+    await page.getByRole("button", { name: "清除搜索" }).click();
+    assert.equal(await input.inputValue(), "");
+    await page.getByRole("link", { name: "#豆腐" }).click();
+    await page.getByRole("link", { name: "麻婆豆腐：把这次的火候留下来" }).waitFor();
+    await page.getByRole("link", { name: "麻婆豆腐：把这次的火候留下来" }).click();
+    await page.waitForURL(/\/h5\/records\/rec_/);
+  });
+  await check("server Markdown, code copy, local overflow and image lightbox work", async () => {
+    await go(tech);
+    assert.equal(await page.locator("[data-reader-code]").count(), 2);
+    assert.equal(await page.locator("[data-reader-table]").count(), 1);
+    const bodyFont = await page.locator(".h5-reader-body").evaluate(node => getComputedStyle(node).fontSize);
+    assert.ok(parseFloat(bodyFont) >= 17);
+    const longPre = page.locator("[data-reader-code-scroll]").nth(1);
+    assert.equal(await longPre.evaluate(node => node.scrollWidth > node.clientWidth), true);
+    await page.getByRole("button", { name: "复制代码", exact: true }).first().click();
+    await page.getByRole("button", { name: "已复制", exact: true }).waitFor();
+    assert.ok((await page.evaluate(() => navigator.clipboard.readText())).includes("registerMicroApps"));
+    await go(recipe);
+    const image = page.locator("[data-reader-image] img").first();
+    await image.scrollIntoViewIfNeeded();
+    await image.click();
+    await page.getByRole("dialog", { name: "查看正文图片" }).waitFor();
+    await page.keyboard.press("Escape");
+    await page.getByRole("dialog").waitFor({ state: "hidden" });
+    const noJs = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
+    const staticPage = await noJs.newPage();
+    await staticPage.goto(base + tech);
+    await staticPage.getByText("registerMicroApps", { exact: false }).first().waitFor();
+    assert.equal(await staticPage.locator("[data-reader-table]").count(), 1);
+    await noJs.close();
+  });
+  for (const width of [320, 390, 430, 768]) {
+    await page.setViewportSize({ width, height: 844 });
+    for (const path of ["/h5/", "/h5/archive", "/h5/search", "/h5/about", tech, recipe]) {
+      await go(path);
+      const layout = await page.evaluate(() => ({ width: innerWidth, scroll: document.documentElement.scrollWidth, tabHeight: document.querySelector(".h5-tabs")?.getBoundingClientRect().height ?? 0 }));
+      report.layouts.push({ width, path, ...layout, passed: layout.scroll <= width + 1 && layout.tabHeight >= 59 });
+    }
+  }
+  for (const [name, path, width] of [["home-390", "/h5/", 390], ["archive-390", "/h5/archive", 390], ["search-390", "/h5/search?q=豆腐", 390], ["reader-390", tech, 390], ["home-320", "/h5/", 320], ["home-768", "/h5/", 768]]) {
+    await page.setViewportSize({ width, height: 844 });
+    await go(path);
+    await page.screenshot({ path: `${evidence}/${name}.png`, fullPage: true, animations: "disabled" });
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+  await go("/h5/archive");
+  await page.getByRole("button", { name: /筛选记录/ }).click();
+  await page.screenshot({ path: `${evidence}/filter-sheet-390.png`, animations: "disabled" });
+  await page.keyboard.press("Escape");
+  report.passed = report.checks.every(item => item.passed) && report.layouts.every(item => item.passed) && report.errors.length === 0;
+} finally {
+  await writeFile(`${evidence}/browser-results.json`, JSON.stringify(report, null, 2) + "\n");
+  await browser.close();
+  managed.kill("SIGTERM");
+  await new Promise(resolve => setTimeout(resolve, 700));
+}
+console.log(JSON.stringify({ passed: report.passed, checks: report.checks.length, layouts: report.layouts.length, failures: report.checks.filter(item => !item.passed), layoutFailures: report.layouts.filter(item => !item.passed), errors: report.errors }, null, 2));
+if (!report.passed) process.exitCode = 1;

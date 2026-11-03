@@ -15,7 +15,7 @@
     "dev:api": "pnpm run build:packages && pnpm --filter @daytrace/api dev",
     "lint": "oxlint apps packages tests scripts",
     "typecheck": "pnpm run build:packages && pnpm --filter @daytrace/api typecheck && pnpm --filter @daytrace/site typecheck && pnpm --filter @daytrace/h5 typecheck",
-    "test:unit": "pnpm run build:packages && tsx --tsconfig apps/api/tsconfig.json --test packages/config/src/*.test.ts packages/contracts/src/*.test.ts apps/api/src/common/*.test.ts apps/api/src/modules/content/*.test.ts tests/unit/reader/*.test.ts tests/unit/find/*.test.ts",
+    "test:unit": "pnpm run build:packages && tsx --tsconfig apps/api/tsconfig.json --test packages/config/src/*.test.ts packages/contracts/src/*.test.ts apps/api/src/common/*.test.ts apps/api/src/modules/auth/*.test.ts apps/api/src/modules/content/*.test.ts tests/unit/reader/*.test.ts tests/unit/find/*.test.ts",
     "test:integration": "pnpm run build:packages && tsx --tsconfig apps/api/tsconfig.json --test tests/integration/api.integration.test.ts tests/e2e/find/*.test.ts && tsx --tsconfig tests/integration/access/tsconfig.json --test tests/integration/access/*.test.ts && pnpm test:demo",
     "build": "pnpm run build:packages && pnpm --filter @daytrace/api build && pnpm --filter @daytrace/site build && pnpm --filter @daytrace/h5 build",
     "test:e2e": "pnpm run build && tsx --test tests/integration/ssr.e2e.test.ts",

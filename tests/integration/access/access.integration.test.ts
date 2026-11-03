@@ -286,6 +286,46 @@ test("persistent SQLite sessions survive restart and store only token hashes", a
   }
 });
 
+test("legacy hashed login nonces migrate without replaying old transactions", async () => {
+  const firstHarness = await createHarness();
+  let secondHarness: Awaited<ReturnType<typeof createHarness>> | undefined;
+  try {
+    await firstHarness.app.close();
+    const legacy = new DatabaseSync(firstHarness.databasePath);
+    legacy.exec("DROP TABLE login_transactions");
+    legacy.exec(`
+      CREATE TABLE login_transactions (
+        transaction_hash TEXT PRIMARY KEY,
+        state_hash TEXT NOT NULL UNIQUE,
+        nonce_hash TEXT NOT NULL,
+        code_verifier TEXT NOT NULL,
+        return_to TEXT NOT NULL,
+        expires_at INTEGER NOT NULL,
+        consumed_at INTEGER
+      )
+    `);
+    legacy.prepare("INSERT INTO login_transactions VALUES (?, ?, ?, ?, ?, ?, NULL)")
+      .run("old-transaction", "old-state", "old-hash", "old-verifier", "/owner", 9999999999999);
+    legacy.close();
+
+    secondHarness = await createHarness({
+      temporaryRoot: firstHarness.temporaryRoot,
+      databasePath: firstHarness.databasePath,
+      clock: firstHarness.clock,
+    });
+    const migrated = new DatabaseSync(firstHarness.databasePath, { readOnly: true });
+    const columns = migrated.prepare("PRAGMA table_info(login_transactions)").all();
+    const transactions = migrated.prepare("SELECT * FROM login_transactions").all();
+    migrated.close();
+    assert.ok(columns.some((column) => "name" in column && column.name === "nonce"));
+    assert.ok(!columns.some((column) => "name" in column && column.name === "nonce_hash"));
+    assert.equal(transactions.length, 0);
+  } finally {
+    if (secondHarness !== undefined) await secondHarness.close();
+    else await firstHarness.close();
+  }
+});
+
 test("login transactions are one-time and return targets stay local", async () => {
   const harness = await createHarness();
   try {

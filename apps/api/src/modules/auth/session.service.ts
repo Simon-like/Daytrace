@@ -67,7 +67,7 @@ export class SessionService {
     this.store.insertLoginTransaction({
       transactionHash: hash(transactionToken),
       stateHash: hash(state),
-      nonceHash: hash(nonce),
+      nonce,
       codeVerifier: pkce.verifier,
       returnTo,
       expiresAt: this.now() + this.loginTtlMs,
@@ -91,7 +91,7 @@ export class SessionService {
     return {
       transactionToken,
       state,
-      nonceHash: stored.nonceHash,
+      nonce: stored.nonce,
       codeVerifier: stored.codeVerifier,
       returnTo: stored.returnTo,
     };

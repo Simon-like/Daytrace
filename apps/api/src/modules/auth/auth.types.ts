@@ -17,7 +17,7 @@ export interface AuthorizationRequest {
 
 export interface LoginTransaction {
   readonly state: string;
-  readonly nonceHash: string;
+  readonly nonce: string;
   readonly codeVerifier: string;
   readonly returnTo: string;
 }

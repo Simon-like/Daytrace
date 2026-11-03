@@ -7,7 +7,7 @@ import type { OwnerIdentity } from "./auth.types";
 export interface StoredLoginTransaction {
   readonly transactionHash: string;
   readonly stateHash: string;
-  readonly nonceHash: string;
+  readonly nonce: string;
   readonly codeVerifier: string;
   readonly returnTo: string;
   readonly expiresAt: number;
@@ -84,13 +84,28 @@ export class SqliteSessionStore implements OnModuleDestroy {
       CREATE TABLE IF NOT EXISTS login_transactions (
         transaction_hash TEXT PRIMARY KEY,
         state_hash TEXT NOT NULL UNIQUE,
-        nonce_hash TEXT NOT NULL,
+        nonce TEXT NOT NULL,
         code_verifier TEXT NOT NULL,
         return_to TEXT NOT NULL,
         expires_at INTEGER NOT NULL,
         consumed_at INTEGER
       );
     `);
+    const legacyNonce = this.database.prepare("PRAGMA table_info(login_transactions)").all().some((column) =>
+      typeof column === "object" && column !== null && "name" in column && column.name === "nonce_hash"
+    );
+    if (legacyNonce) {
+      this.database.exec("BEGIN");
+      try {
+        // Hashed nonces cannot be used for exact OIDC validation; old short-lived logins must restart.
+        this.database.exec("ALTER TABLE login_transactions RENAME COLUMN nonce_hash TO nonce");
+        this.database.exec("DELETE FROM login_transactions");
+        this.database.exec("COMMIT");
+      } catch (error: unknown) {
+        this.database.exec("ROLLBACK");
+        throw error;
+      }
+    }
   }
 
   onModuleDestroy(): void {
@@ -106,12 +121,12 @@ export class SqliteSessionStore implements OnModuleDestroy {
   insertLoginTransaction(transaction: StoredLoginTransaction): void {
     this.database.prepare(`
       INSERT INTO login_transactions (
-        transaction_hash, state_hash, nonce_hash, code_verifier, return_to, expires_at, consumed_at
+        transaction_hash, state_hash, nonce, code_verifier, return_to, expires_at, consumed_at
       ) VALUES (?, ?, ?, ?, ?, ?, NULL)
     `).run(
       transaction.transactionHash,
       transaction.stateHash,
-      transaction.nonceHash,
+      transaction.nonce,
       transaction.codeVerifier,
       transaction.returnTo,
       transaction.expiresAt,
@@ -126,7 +141,7 @@ export class SqliteSessionStore implements OnModuleDestroy {
     return {
       transactionHash: text(row.transaction_hash),
       stateHash: text(row.state_hash),
-      nonceHash: text(row.nonce_hash),
+      nonce: text(row.nonce),
       codeVerifier: text(row.code_verifier),
       returnTo: text(row.return_to),
       expiresAt: integer(row.expires_at),

@@ -118,6 +118,19 @@ img, svg { flex-shrink: 0; }
 .h5-match > span:first-child { color: #87907f; font-size: 10px; }
 .h5-match mark { padding: 0 2px; background: #e2e7d9; color: var(--archive); }
 
+.h5-owner-heading { border-bottom: 0; }
+.h5-owner-toolbar { display: flex; min-height: 52px; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 0 13px; border-bottom: 1px solid var(--line); }
+.h5-owner-toolbar > span { display: inline-flex; align-items: center; gap: 7px; color: var(--archive); font-size: 12px; }
+.h5-owner-session button { min-height: 44px; padding: 6px 0 6px 12px; border: 0; background: transparent; color: var(--muted); font-size: 11px; }
+.h5-owner-session p { margin: 0; color: var(--revision); font-size: 11px; }
+.h5-owner-note { margin: 14px 0 0; color: var(--muted); font-size: 11px; }
+.h5-owner-records { margin-top: 30px; }
+.h5-owner-empty { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.h5-owner-empty p { max-width: 310px; line-height: 1.9; }
+.h5-owner-login { display: inline-flex; min-height: 48px; align-items: center; margin-top: 8px; padding: 10px 20px; border-radius: 12px; background: var(--archive); color: var(--paper); font-size: 13px; text-decoration: none; }
+.h5-owner-empty small { max-width: 290px; color: var(--muted); font-size: 10px; line-height: 1.8; }
+.h5-private-banner { margin: 18px 0 0; padding: 10px 13px; border-left: 2px solid var(--revision); background: #eee9df; color: #6e5549; font-size: 11px; }
+
 .h5-about-note { margin: 28px 0; padding: 24px 22px; border-radius: 18px; background: var(--archive); color: #d4ddc8; }
 .h5-about-note > span { display: block; height: 32px; font-family: Georgia, serif; font-size: 46px; line-height: 1; }
 .h5-about-note p { margin: 10px 0 0; font-family: var(--hand); font-size: 18px; line-height: 1.9; transform: rotate(-2deg); }

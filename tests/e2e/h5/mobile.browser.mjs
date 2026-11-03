@@ -13,7 +13,7 @@ await mkdir(evidence, { recursive: true });
 await mkdir(".local/h5-test", { recursive: true });
 const log = await open(".local/h5-test/server.log", "w");
 const managed = spawn(process.execPath, ["scripts/dev/run-dev.mjs", "--port", sitePort, "--h5-port", h5Port], {
-  env: { ...process.env, API_PORT: apiPort, CONTENT_ROOT: "apps/api/fixtures/demo", DAYTRACE_DEMO: "1" },
+  env: { ...process.env, API_PORT: apiPort, CONTENT_ROOT: "apps/api/fixtures/demo", DAYTRACE_DEMO: "1", PUBLIC_ORIGIN: base },
   stdio: ["ignore", log.fd, log.fd],
 });
 for (let attempt = 0; attempt < 150; attempt += 1) {
@@ -40,7 +40,7 @@ try {
     assert.equal((await fetch(`${base}/h5/brand/daytrace-icon-reverse.svg`)).status, 200);
     assert.equal((await fetch(`${direct}/h5/`)).status, 200);
     assert.equal((await fetch(`${direct}/api/v1/health/ready`)).status, 200);
-    assert.equal(await page.locator(".h5-tabs a").count(), 4);
+    assert.equal(await page.locator(".h5-tabs a").count(), 5);
   });
   await check("mobile navigation and bottom filter sheet preserve touch and scroll state", async () => {
     await page.locator(".h5-tabs").getByRole("link", { name: "归档" }).click();
@@ -93,6 +93,43 @@ try {
     await page.getByRole("link", { name: "麻婆豆腐：把这次的火候留下来" }).waitFor();
     await page.getByRole("link", { name: "麻婆豆腐：把这次的火候留下来" }).click();
     await page.waitForURL(/\/h5\/records\/rec_/);
+  });
+  await check("owner login, private search, reader, expiry and logout stay within H5", async () => {
+    const privateId = "rec_11111111-1111-4111-8111-000000000091";
+    await go("/h5/owner");
+    await page.getByRole("link", { name: "进入演示主人空间" }).click();
+    await page.waitForURL(/\/h5\/owner$/);
+    await page.getByRole("button", { name: "退出主人空间" }).waitFor();
+    const input = page.getByRole("searchbox");
+    await input.fill("阶段提醒");
+    await page.getByRole("button", { name: "搜索", exact: true }).click();
+    const results = page.getByRole("list", { name: "主人搜索结果" });
+    await results.getByRole("link", { name: "写给自己的阶段提醒" }).waitFor();
+    assert.equal((await (await context.request.get(`${base}/api/v1/search?q=${encodeURIComponent("阶段提醒")}`)).json()).data.items.length, 0);
+    await results.getByRole("link", { name: "写给自己的阶段提醒" }).click();
+    await page.waitForURL(new RegExp(`/h5/owner/records/${privateId}/?$`));
+    await page.getByText("这份记录只在主人演示空间可见。", { exact: false }).waitFor();
+    for (const width of [390, 430]) {
+      await page.setViewportSize({ width, height: 844 });
+      const layout = await page.evaluate(() => ({ width: innerWidth, scroll: document.documentElement.scrollWidth }));
+      report.layouts.push({ width, path: "/h5/owner/records/private", ...layout, passed: layout.scroll <= width + 1 });
+    }
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.screenshot({ path: `${evidence}/owner-reader-390.png`, fullPage: true, animations: "disabled" });
+    await go("/h5/owner");
+    await input.fill("阶段提醒");
+    await page.getByRole("button", { name: "搜索", exact: true }).click();
+    await results.getByRole("link", { name: "写给自己的阶段提醒" }).waitFor();
+    await page.route("**/api/v1/search?*scope=owner*", route => route.fulfill({ status: 401, contentType: "application/json", body: JSON.stringify({ schemaVersion: "1.0", error: { code: "AUTH_REQUIRED", message: "synthetic expired", requestId: "h5-expired", details: [] } }) }));
+    await input.fill("会话失效");
+    await page.getByRole("button", { name: "搜索", exact: true }).click();
+    await page.getByRole("link", { name: "重新登录主人空间" }).waitFor();
+    assert.equal(await page.getByRole("list", { name: "主人搜索结果" }).count(), 0);
+    await page.unroute("**/api/v1/search?*scope=owner*");
+    await page.getByRole("button", { name: "退出主人空间" }).click();
+    await page.waitForURL(/\/h5\/owner$/);
+    await page.getByRole("link", { name: "进入演示主人空间" }).waitFor();
+    assert.ok(!(await page.locator("body").textContent()).includes("这份记录只在主人演示空间可见"));
   });
   await check("server Markdown, code copy, local overflow and image lightbox work", async () => {
     await go(tech);

@@ -11,6 +11,7 @@ const items = [
   { href: "/archive", label: "归档", icon: "archive" },
   { href: "/search", label: "找一找", icon: "search" },
   { href: "/about", label: "关于", icon: "about" },
+  { href: "/owner", label: "我的", icon: "lock" },
 ] as const;
 
 export function MobileShell({ children }: { children: ReactNode }) {

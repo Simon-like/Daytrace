@@ -1,0 +1,681 @@
+{
+  "date": "2026-11-02",
+  "scope": "Local functional demo; performance budget, real-device and production acceptance are separate",
+  "formalReleaseReady": false,
+  "base": "http://127.0.0.1:3140",
+  "browser": "156.0.8078.4",
+  "data": "synthetic demonstration content only",
+  "checks": [
+    {
+      "name": "server HTML contains actual Markdown, public private boundary and scoped proxy",
+      "passed": true
+    },
+    {
+      "name": "home categories navigate to a live filtered archive",
+      "passed": true
+    },
+    {
+      "name": "local Select, progressive tags and search focus support keyboard interaction",
+      "passed": true
+    },
+    {
+      "name": "Select uses bounded enter and exit motion with a static reduced-motion fallback",
+      "passed": true
+    },
+    {
+      "name": "mobile dialog supports interruptible native transitions without focus or scroll residue",
+      "passed": true
+    },
+    {
+      "name": "lightbox uses composited dialog motion and immediate reduced-motion feedback",
+      "passed": true
+    },
+    {
+      "name": "archive detail and browser back restore filtering",
+      "passed": true
+    },
+    {
+      "name": "real search, empty result, failure distinction and clear",
+      "passed": true
+    },
+    {
+      "name": "search suggestion links update results on the same route",
+      "passed": true
+    },
+    {
+      "name": "reader desktop layout, code copy and directory anchors",
+      "passed": true
+    },
+    {
+      "name": "complete Markdown semantics stay readable, scroll locally and preserve mobile type",
+      "passed": true
+    },
+    {
+      "name": "code copy failure selects only code and missing images expose useful feedback",
+      "passed": true
+    },
+    {
+      "name": "server-rendered Markdown remains complete without JavaScript",
+      "passed": true
+    },
+    {
+      "name": "recipe image uses same-origin asset, caption, opens and closes with restored scroll",
+      "passed": true
+    },
+    {
+      "name": "owner login, private Markdown, logout and stale cookie rejection",
+      "passed": true
+    },
+    {
+      "name": "mobile menu traps focus, closes on Escape and restores scrolling",
+      "passed": true
+    },
+    {
+      "name": "mobile recipe shortcuts and reduced-motion preference",
+      "passed": true
+    },
+    {
+      "name": "unknown record renders a useful 404",
+      "passed": true
+    }
+  ],
+  "layouts": [
+    {
+      "width": 320,
+      "path": "/",
+      "scroll": 320,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 320,
+      "path": "/archive",
+      "scroll": 320,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 320,
+      "path": "/search",
+      "scroll": 320,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 320,
+      "path": "/about",
+      "scroll": 320,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 320,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000001",
+      "scroll": 320,
+      "overflow": [
+        {
+          "tag": "TABLE",
+          "cls": ""
+        },
+        {
+          "tag": "THEAD",
+          "cls": ""
+        },
+        {
+          "tag": "TR",
+          "cls": ""
+        },
+        {
+          "tag": "TH",
+          "cls": ""
+        },
+        {
+          "tag": "TH",
+          "cls": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "width": 320,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000002",
+      "scroll": 320,
+      "overflow": [
+        {
+          "tag": "TABLE",
+          "cls": ""
+        },
+        {
+          "tag": "THEAD",
+          "cls": ""
+        },
+        {
+          "tag": "TR",
+          "cls": ""
+        },
+        {
+          "tag": "TH",
+          "cls": ""
+        },
+        {
+          "tag": "TBODY",
+          "cls": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "width": 320,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000003",
+      "scroll": 320,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 320,
+      "path": "/owner",
+      "scroll": 320,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 360,
+      "path": "/",
+      "scroll": 360,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 360,
+      "path": "/archive",
+      "scroll": 360,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 360,
+      "path": "/search",
+      "scroll": 360,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 360,
+      "path": "/about",
+      "scroll": 360,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 360,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000001",
+      "scroll": 360,
+      "overflow": [
+        {
+          "tag": "TABLE",
+          "cls": ""
+        },
+        {
+          "tag": "THEAD",
+          "cls": ""
+        },
+        {
+          "tag": "TR",
+          "cls": ""
+        },
+        {
+          "tag": "TH",
+          "cls": ""
+        },
+        {
+          "tag": "TH",
+          "cls": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "width": 360,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000002",
+      "scroll": 360,
+      "overflow": [
+        {
+          "tag": "TABLE",
+          "cls": ""
+        },
+        {
+          "tag": "THEAD",
+          "cls": ""
+        },
+        {
+          "tag": "TR",
+          "cls": ""
+        },
+        {
+          "tag": "TH",
+          "cls": ""
+        },
+        {
+          "tag": "TBODY",
+          "cls": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "width": 360,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000003",
+      "scroll": 360,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 360,
+      "path": "/owner",
+      "scroll": 360,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 390,
+      "path": "/",
+      "scroll": 390,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 390,
+      "path": "/archive",
+      "scroll": 390,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 390,
+      "path": "/search",
+      "scroll": 390,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 390,
+      "path": "/about",
+      "scroll": 390,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 390,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000001",
+      "scroll": 390,
+      "overflow": [
+        {
+          "tag": "TABLE",
+          "cls": ""
+        },
+        {
+          "tag": "THEAD",
+          "cls": ""
+        },
+        {
+          "tag": "TR",
+          "cls": ""
+        },
+        {
+          "tag": "TH",
+          "cls": ""
+        },
+        {
+          "tag": "TH",
+          "cls": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "width": 390,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000002",
+      "scroll": 390,
+      "overflow": [
+        {
+          "tag": "TABLE",
+          "cls": ""
+        },
+        {
+          "tag": "THEAD",
+          "cls": ""
+        },
+        {
+          "tag": "TR",
+          "cls": ""
+        },
+        {
+          "tag": "TH",
+          "cls": ""
+        },
+        {
+          "tag": "TBODY",
+          "cls": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "width": 390,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000003",
+      "scroll": 390,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 390,
+      "path": "/owner",
+      "scroll": 390,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 430,
+      "path": "/",
+      "scroll": 430,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 430,
+      "path": "/archive",
+      "scroll": 430,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 430,
+      "path": "/search",
+      "scroll": 430,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 430,
+      "path": "/about",
+      "scroll": 430,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 430,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000001",
+      "scroll": 430,
+      "overflow": [
+        {
+          "tag": "TABLE",
+          "cls": ""
+        },
+        {
+          "tag": "THEAD",
+          "cls": ""
+        },
+        {
+          "tag": "TR",
+          "cls": ""
+        },
+        {
+          "tag": "TH",
+          "cls": ""
+        },
+        {
+          "tag": "TBODY",
+          "cls": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "width": 430,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000002",
+      "scroll": 430,
+      "overflow": [
+        {
+          "tag": "TABLE",
+          "cls": ""
+        },
+        {
+          "tag": "THEAD",
+          "cls": ""
+        },
+        {
+          "tag": "TR",
+          "cls": ""
+        },
+        {
+          "tag": "TH",
+          "cls": ""
+        },
+        {
+          "tag": "TBODY",
+          "cls": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "width": 430,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000003",
+      "scroll": 430,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 430,
+      "path": "/owner",
+      "scroll": 430,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 768,
+      "path": "/",
+      "scroll": 768,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 768,
+      "path": "/archive",
+      "scroll": 768,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 768,
+      "path": "/search",
+      "scroll": 768,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 768,
+      "path": "/about",
+      "scroll": 768,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 768,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000001",
+      "scroll": 768,
+      "overflow": [
+        {
+          "tag": "TABLE",
+          "cls": ""
+        },
+        {
+          "tag": "THEAD",
+          "cls": ""
+        },
+        {
+          "tag": "TR",
+          "cls": ""
+        },
+        {
+          "tag": "TH",
+          "cls": ""
+        },
+        {
+          "tag": "TBODY",
+          "cls": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "width": 768,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000002",
+      "scroll": 768,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 768,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000003",
+      "scroll": 768,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 768,
+      "path": "/owner",
+      "scroll": 768,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "path": "/",
+      "scroll": 1024,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "path": "/archive",
+      "scroll": 1024,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "path": "/search",
+      "scroll": 1024,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "path": "/about",
+      "scroll": 1024,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000001",
+      "scroll": 1024,
+      "overflow": [
+        {
+          "tag": "CODE",
+          "cls": "language-unknown-language"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000002",
+      "scroll": 1024,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000003",
+      "scroll": 1024,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "path": "/owner",
+      "scroll": 1024,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "path": "/",
+      "scroll": 1440,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "path": "/archive",
+      "scroll": 1440,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "path": "/search",
+      "scroll": 1440,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "path": "/about",
+      "scroll": 1440,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000001",
+      "scroll": 1440,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000002",
+      "scroll": 1440,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "path": "/records/rec_11111111-1111-4111-8111-000000000003",
+      "scroll": 1440,
+      "overflow": [],
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "path": "/owner",
+      "scroll": 1440,
+      "overflow": [],
+      "passed": true
+    }
+  ],
+  "consoleErrors": [],
+  "resources": {
+    "page": "/records/rec_11111111-1111-4111-8111-000000000001",
+    "necessaryAndRequestedJsGzipBytes": 141627,
+    "initialBudgetBytes": 81920,
+    "budgetMet": false,
+    "note": "Fresh browser script requests including any automatic route prefetch; local synthetic run, not field Core Web Vitals"
+  },
+  "realIphone": "not tested",
+  "production": "not deployed",
+  "passed": true
+}

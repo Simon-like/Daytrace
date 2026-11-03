@@ -10,7 +10,9 @@ pnpm install --frozen-lockfile
 pnpm demo
 ```
 
-打开 `http://127.0.0.1:3000`。首次命令先构建Next/Nest，准备standalone，然后启动两服务；Ctrl+C同时停止。Node固定24.18.0、pnpm11.23.0，已在本机验证。原交接报告记录24.22.1，但当前环境没有此二进制，已统一nvm/CI/Docker建议版本为实际可用版本；不改写历史报告。
+打开 `http://127.0.0.1:3000`。首次命令先构建Next/Nest，准备standalone，然后启动桌面与API两服务；Ctrl+C同时停止。Node固定24.18.0、pnpm11.23.0，以根`.nvmrc`、`.node-version`和`package.json`为当前工程基准。历史报告中的其他Node版本保留为当时实验记录，不作为现在接手的版本依据。
+
+这个生产构建Demo暂未接入独立H5。移动H5开发预览使用 `pnpm dev`，打开 `http://127.0.0.1:3000/h5/`；直连应用为 `http://127.0.0.1:3002/h5/`。
 
 已有构建时可 `pnpm demo --skip-build`。指定其他端口：
 
@@ -34,6 +36,7 @@ pnpm typecheck
 pnpm test:unit
 pnpm test:integration
 pnpm test:e2e
+pnpm test:h5
 pnpm content:validate:demo
 ```
 

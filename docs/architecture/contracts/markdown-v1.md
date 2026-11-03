@@ -90,7 +90,9 @@ v1 支持 CommonMark 与明确的 GFM 表格、任务列表、删除线、围栏
 
 HTML 与目录必须来自**同一次 Markdown token 解析**：遍历该 token 流时同时写入标题 ID、生成目录并渲染 HTML，不能分别调用两次解析器后拼接可能不同的结果。v1 回退标题 ID 为 `section-1`、`section-2` 等文档顺序编号，目录项为 `{id,text,level}`；同一 `contentRevision` 内稳定。调整标题顺序可能改变回退 ID，因此需要长期外部引用的标题应在后续协议增加显式 ID 扩展，而不是由前端自行猜测 slug。
 
-响应中的 `parseRevision` 当前固定为 `daytrace-markdown-1`。解析规则、清洗允许列表或高亮行为变化时递增，并按内容快照重建，不能在同一 `contentRevision` 下静默混用两套 HTML。
+响应中的 `parseRevision` 当前固定为 `daytrace-markdown-2`。解析规则、清洗允许列表或高亮行为变化时递增，并按内容快照重建，不能在同一 `contentRevision` 下静默混用两套 HTML。
+
+v2 在服务端同一 token 渲染阶段直接输出受控的阅读语义：代码块包含语言、复制按钮、可聚焦滚动区和溢出提示；表格包含局部滚动容器；图片包含灯箱按钮、尺寸、异步解码、错误状态容器，Markdown 图片 title 同时作为可见 `figcaption`，alt 保持为替代文本。第一张内容图使用 eager，其余使用 lazy。浏览器只绑定复制、溢出观察、图片错误和灯箱，不得在 hydration 后搬动或重新包装正文 DOM。新增元素、类名及 data／ARIA 属性仍由固定 sanitizer 白名单约束。
 
 ## 6. 正文附件引用
 

@@ -1,0 +1,103 @@
+{
+  "date": "2026-11-02",
+  "scope": "Local Chromium lab traces; not field Web Vitals or real-device evidence",
+  "browser": "156.0.8078.4",
+  "scenarios": [
+    {
+      "scenario": "select",
+      "cpuThrottle": 1,
+      "trace": "select-normal-trace.json",
+      "runTasksOver50ms": [],
+      "observerLongTasks": [],
+      "droppedFrames": 0,
+      "layoutCount": 44,
+      "updateLayoutTreeCount": 131,
+      "paintCount": 120,
+      "layoutShiftScore": 0,
+      "unexpectedLayoutShiftScore": 0,
+      "consoleErrors": [],
+      "passed": true
+    },
+    {
+      "scenario": "select",
+      "cpuThrottle": 4,
+      "trace": "select-cpu-4x-trace.json",
+      "runTasksOver50ms": [],
+      "observerLongTasks": [
+        {
+          "startTime": 630.7999999970198,
+          "duration": 52
+        }
+      ],
+      "droppedFrames": 0,
+      "layoutCount": 44,
+      "updateLayoutTreeCount": 141,
+      "paintCount": 138,
+      "layoutShiftScore": 0,
+      "unexpectedLayoutShiftScore": 0,
+      "consoleErrors": [],
+      "passed": false
+    },
+    {
+      "scenario": "mobile-navigation",
+      "cpuThrottle": 1,
+      "trace": "mobile-navigation-normal-trace.json",
+      "runTasksOver50ms": [],
+      "observerLongTasks": [],
+      "droppedFrames": 0,
+      "layoutCount": 12,
+      "updateLayoutTreeCount": 75,
+      "paintCount": 19,
+      "layoutShiftScore": 0,
+      "unexpectedLayoutShiftScore": 0,
+      "consoleErrors": [],
+      "passed": true
+    },
+    {
+      "scenario": "mobile-navigation",
+      "cpuThrottle": 4,
+      "trace": "mobile-navigation-cpu-4x-trace.json",
+      "runTasksOver50ms": [],
+      "observerLongTasks": [],
+      "droppedFrames": 0,
+      "layoutCount": 12,
+      "updateLayoutTreeCount": 75,
+      "paintCount": 23,
+      "layoutShiftScore": 0,
+      "unexpectedLayoutShiftScore": 0,
+      "consoleErrors": [],
+      "passed": true
+    },
+    {
+      "scenario": "lightbox",
+      "cpuThrottle": 1,
+      "trace": "lightbox-normal-trace.json",
+      "runTasksOver50ms": [],
+      "observerLongTasks": [],
+      "droppedFrames": 0,
+      "layoutCount": 13,
+      "updateLayoutTreeCount": 42,
+      "paintCount": 10,
+      "layoutShiftScore": 0,
+      "unexpectedLayoutShiftScore": 0,
+      "consoleErrors": [],
+      "passed": true
+    },
+    {
+      "scenario": "lightbox",
+      "cpuThrottle": 4,
+      "trace": "lightbox-cpu-4x-trace.json",
+      "runTasksOver50ms": [],
+      "observerLongTasks": [],
+      "droppedFrames": 0,
+      "layoutCount": 14,
+      "updateLayoutTreeCount": 45,
+      "paintCount": 13,
+      "layoutShiftScore": 0,
+      "unexpectedLayoutShiftScore": 0,
+      "consoleErrors": [],
+      "passed": true
+    }
+  ],
+  "passed": false
+}

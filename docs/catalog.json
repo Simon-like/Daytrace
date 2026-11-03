@@ -273,6 +273,22 @@
       "purpose": "迁移清单、引用修复、脚本回归与保留现场",
       "status": "reference",
       "owner_role": "集成"
+    },
+    {
+      "id": "motion-system",
+      "title": "动效系统基线",
+      "path": "docs/design/动效系统基线-v1.0.md",
+      "purpose": "阅读优先的动效令牌、组件契约、减少动态效果与性能验收",
+      "status": "baseline",
+      "owner_role": "设计与前端"
+    },
+    {
+      "id": "research-motion",
+      "title": "阅读型产品动效调研",
+      "path": "docs/research/2026-11-02-阅读型产品动效调研.md",
+      "purpose": "优秀团队方法、官方来源与技术取舍",
+      "status": "reference",
+      "owner_role": "设计与前端"
     }
   ]
 }

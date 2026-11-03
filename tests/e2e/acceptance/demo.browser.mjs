@@ -46,6 +46,18 @@ try{
   const robots=await(await fetch(`${base}/robots.txt`)).text();assert.ok(robots.includes("Disallow: /owner/"));assert.ok(robots.includes(`${base}/sitemap.xml`));
   const html=await(await fetch(base+tech)).text();assert.ok(html.includes(`property="og:title"`));assert.ok(html.includes(`content="${base}${tech}/"`));assert.ok(html.includes(`href="${base}${tech}/"`));assert.ok(html.includes(`name="twitter:card" content="summary_large_image"`));assert.ok(html.includes(`href="${base}/rss.xml"`));
  });
+ await check("share cards are local PNGs and private or unknown records share one generic card",async()=>{
+  const publicResponse=await fetch(`${base}${tech}/opengraph-image`);assert.equal(publicResponse.status,200);assert.match(publicResponse.headers.get("content-type")??"",/^image\/png/);
+  const publicPng=Buffer.from(await publicResponse.arrayBuffer());assert.equal(publicPng.subarray(1,4).toString(),"PNG");assert.equal(publicPng.readUInt32BE(16),1200);assert.equal(publicPng.readUInt32BE(20),630);assert.ok(publicPng.length>10000);await writeFile(`${evidence}/share-public.png`,publicPng);
+  const privatePng=Buffer.from(await(await fetch(`${base}/records/${privateId}/opengraph-image`)).arrayBuffer());
+  const unknownPng=Buffer.from(await(await fetch(`${base}/records/rec_11111111-1111-4111-8111-999999999999/opengraph-image`)).arrayBuffer());
+  const draftPng=Buffer.from(await(await fetch(`${base}/records/rec_11111111-1111-4111-8111-000000000092/opengraph-image`)).arrayBuffer());
+  assert.equal(privatePng.subarray(1,4).toString(),"PNG");assert.ok(privatePng.equals(unknownPng));assert.ok(privatePng.equals(draftPng));assert.ok(!publicPng.equals(privatePng));
+  const privateMetadata=await(await fetch(`${base}/records/${privateId}`)).text();assert.ok(!privateMetadata.includes(secret));assert.ok(!privateMetadata.includes("写给自己的阶段提醒"));
+  const unknownMetadata=await(await fetch(`${base}/records/rec_11111111-1111-4111-8111-999999999999`)).text();
+  const ogTitle=html=>html.match(/<meta property="og:title" content="([^"]*)"/)?.[1];assert.equal(ogTitle(privateMetadata),"有迹 Daytrace");assert.equal(ogTitle(privateMetadata),ogTitle(unknownMetadata));
+  assert.ok(privateMetadata.includes(`/records/${privateId}/opengraph-image`));
+ });
  await check("home categories navigate to a live filtered archive",async()=>{
   await go("/");await page.getByRole("link",{name:/生活经验/}).click();
   await page.waitForURL(/archive\?type=recipe/);const category=page.getByRole("combobox",{name:"记录类别"});await category.waitFor();

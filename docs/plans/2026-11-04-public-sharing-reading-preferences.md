@@ -39,10 +39,10 @@
 - Create: `apps/site/src/app/records/[recordRef]/opengraph-image.tsx`
 - Test: `tests/e2e/acceptance/`、`docs/project/evidence/SHARE-001/`
 
-- [ ] 下载并校验官方完整中文字体及 OFL 文件；必要时生成完整静态 400 字重实例，而非按示例文本裁剪。
-- [ ] 用 `ImageResponse` 输出 1200×630、纸张／档案绿风格的公开标题、类型、日期与 Daytrace 品牌；动态读取公开详情。
-- [ ] 私密或未知 ID 输出通用卡，不返回记录存在性或私密标题。
-- [ ] 验证 Content-Type、PNG magic bytes 和公开／私密元数据负例，保存并实际查看中文 PNG；独立提交并推送。
+- [x] 下载并校验官方完整中文字体及 OFL 文件；必要时生成完整静态 400 字重实例，而非按示例文本裁剪。
+- [x] 用 `ImageResponse` 输出 1200×630、纸张／档案绿风格的公开标题、类型、日期与 Daytrace 品牌；动态读取公开详情。
+- [x] 私密或未知 ID 输出通用卡，不返回记录存在性或私密标题。
+- [x] 验证 Content-Type、PNG magic bytes 和公开／私密元数据负例，保存并实际查看中文 PNG；独立提交并推送。
 
 ### Task 3：双端正文偏好、全量验收与交接
 

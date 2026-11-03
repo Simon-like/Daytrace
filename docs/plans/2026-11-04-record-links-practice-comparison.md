@@ -1,6 +1,6 @@
 # Record Links and Practice Comparison Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking. 本仓库禁止子 Agent，实际由当前 Kimi owner 在 dev 内联执行。
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking. 本仓库禁止子 Agent，实际由当前 Kimi owner 在 dev 内联执行。
 
 **Goal:** 交付 F3 的人工记录关联与跨次菜谱实践对照，关联目标严格继承调用方阅读权限。
 
@@ -39,7 +39,7 @@
 - Consumes: 现有 `SourceRecord`、`ContentService.getPublicRecord()`、`getOwnerRecord()`。
 - Produces: `SourceFrontmatter.relatedRecords: readonly string[]`、`RecordDetail.relatedRecords: readonly RecordSummary[]`、`ContentService.projectDetail(record, scope: "public" | "owner"): RecordDetail`。
 
-- [ ] **Step 1: 写 frontmatter、快照和 HTTP 失败测试**
+- [x] **Step 1: 写 frontmatter、快照和 HTTP 失败测试**
 
 ```ts
 assert.deepEqual(parseFrontmatter(sourceWithRelated, file).metadata?.relatedRecords, [targetId]);
@@ -52,12 +52,12 @@ assert.deepEqual(ownerDetail.relatedRecords.map(item => item.id), [privateTarget
 
 HTTP 负例断言公开详情序列化不含私密目标的 ID、标题和摘要；主人详情包含相同私密目标，证明不是全局删除关联。
 
-- [ ] **Step 2: 运行并确认字段与投影尚不存在**
+- [x] **Step 2: 运行并确认字段与投影尚不存在**
 
 Run: `pnpm exec tsx --tsconfig apps/api/tsconfig.json --test apps/api/src/modules/content/frontmatter.test.ts apps/api/src/modules/content/content.snapshot.test.ts`
 Expected: FAIL，`relatedRecords` 是未知字段且详情没有关联投影。
 
-- [ ] **Step 3: 实现最小契约与快照校验**
+- [x] **Step 3: 实现最小契约与快照校验**
 
 ```ts
 const relatedRecords = data.relatedRecords ?? [];
@@ -70,7 +70,7 @@ if (!Array.isArray(relatedRecords) || relatedRecords.length > 16 ||
 
 快照建立 ID 集合后逐项检查目标存在性；`RecordDetail` 初始 `relatedRecords: []`，列表摘要必须剔除该详情字段。
 
-- [ ] **Step 4: 实现权限投影并运行测试**
+- [x] **Step 4: 实现权限投影并运行测试**
 
 ```ts
 projectDetail(record: SourceRecord, scope: "public" | "owner"): RecordDetail {
@@ -88,7 +88,7 @@ projectDetail(record: SourceRecord, scope: "public" | "owner"): RecordDetail {
 Run: `pnpm test:unit && pnpm test:integration`
 Expected: 全部通过，公开响应无私密目标，主人响应可见同一目标。
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add apps/api/src/modules/content packages/contracts/src tests/integration docs/architecture/contracts
@@ -116,16 +116,16 @@ git commit -m "feat(content): project authorized record relationships"
 - Consumes: `RecordDetail.relatedRecords`。
 - Produces: `RecordLinks({ record, owner })`；主人链接前缀 `/owner/records/`，H5 由 Next basePath 加 `/h5`。
 
-- [ ] **Step 1: 写双端失败路径**
+- [x] **Step 1: 写双端失败路径**
 
 桌面与 H5 测试打开公开麻婆豆腐，断言公开页没有第二份私密实践的标题和 ID；登录主人后打开相同记录，看到“第二次麻婆豆腐实践”，按日期顺序显示两次实践并进入私密正文。
 
-- [ ] **Step 2: 运行并确认关联 UI 不存在**
+- [x] **Step 2: 运行并确认关联 UI 不存在**
 
 Run: `pnpm test:browser && pnpm test:h5`
 Expected: FAIL，找不到“跨次实践”和第二次实践标题。
 
-- [ ] **Step 3: 实现关联与日期对照**
+- [x] **Step 3: 实现关联与日期对照**
 
 ```tsx
 const practices = [record, ...record.relatedRecords.filter(item => item.type === "recipe")]
@@ -134,12 +134,12 @@ const practices = [record, ...record.relatedRecords.filter(item => item.type ===
 
 关联区只渲染响应中的摘要；菜谱有两条及以上可见实践时展示日期、标题、摘要和链接，无日期显示“未记日期”，不得推断日期。
 
-- [ ] **Step 4: 运行双端和布局回归**
+- [x] **Step 4: 运行双端和布局回归**
 
 Run: `pnpm test:browser && pnpm test:h5 && pnpm typecheck && pnpm lint`
 Expected: 公开无私密关联，主人对照可用；390／430px 无整页溢出，键盘与减少动态效果不回归。
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add apps/site/src apps/h5/src apps/api/fixtures/demo tests/e2e
@@ -161,7 +161,7 @@ git commit -m "feat(reader): compare linked recipe practices on both apps"
 - Consumes: Task 1 的 `SourceFrontmatter.relatedRecords`。
 - Produces: 导入、更新、恢复与导出均保留相同关联 ID；不改变默认私密草稿行为。
 
-- [ ] **Step 1: 写更新与导出失败测试**
+- [x] **Step 1: 写更新与导出失败测试**
 
 ```ts
 assert.deepEqual(updated.metadata.relatedRecords, previous.metadata.relatedRecords);
@@ -169,7 +169,7 @@ assert.ok(exportedMarkdown.includes(`relatedRecords:`));
 assert.equal(updated.metadata.visibility, "private");
 ```
 
-- [ ] **Step 2: 保留更新时未显式提交的关联**
+- [x] **Step 2: 保留更新时未显式提交的关联**
 
 ```ts
 relatedRecords: data.relatedRecords ?? previous?.metadata.relatedRecords ?? [],
@@ -177,11 +177,11 @@ status: "draft",
 visibility: "private",
 ```
 
-- [ ] **Step 3: 全量验证**
+- [x] **Step 3: 全量验证**
 
 Run: `pnpm lint && pnpm typecheck && pnpm test:unit && pnpm test:integration && pnpm test:content && pnpm test:browser && pnpm test:h5 && pnpm build && python3 scripts/project_check.py`
 Expected: 全部通过；读取 dev 最新托管 CI，运行未完成或失败不得写 success。
 
-- [ ] **Step 4: 写证据并完成中央交接**
+- [x] **Step 4: 写证据并完成中央交接**
 
 报告区分公开／主人关联、合成／真实数据、Chromium／真机和本地／生产；submit／complete LINK-001 后提交文档并推送 dev。

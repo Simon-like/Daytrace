@@ -17,3 +17,11 @@
 ## 未完成与后续
 
 阅读页 142838 gzip bytes 仍超过 81920 预算，UI-002 的 52ms 长事件仍 blocked；真实 Auth0、iPhone/Safari、社交爬虫、生产 HTTPS、备份恢复和回滚未验证。QA-001 与 RELEASE-001 继续保持独立，不因本任务 done 自动完成。
+
+## 第二阶段独立复审增量（2026-11-04）
+
+本轮按用户选择使用独立子 Agent 实现对照和第二阶段评审。Task 1、Task 2 初审与复审均 approve；Task 3 复审最初 reject，指出移动媒体查询固定字号覆盖偏好，以及 `window.localStorage` getter 异常未被捕获。实现者先复现并补测试，再以本地提交 `2fc74c3` 修复；原评审者复审 approve，两项拒绝均关闭。
+
+最终九项本地门禁通过：单元 63、集成 31、内容管理 11、桌面 23／56、H5 6／28，以及 lint、typecheck、build、文档 215 份检查。独立复核确认最终 JSON 无失败、无脚本错误，`formalReleaseReady=false`，性能预算仍为 `budgetMet=false`，最新值 142850 bytes。
+
+本轮 approve 仅表示本地实现与验证证据可信。`2fc74c3` 和后续文档提交因 GitHub 认证不可用尚未推送，当前提交的托管 CI 未核验；上文“最新 dev 托管 CI 已通过”仅属于原始自检时点和历史提交 `80b069b`，不延伸至本轮新提交。

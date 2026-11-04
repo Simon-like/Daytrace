@@ -38,3 +38,14 @@
 - 桌面阅读页必要脚本 gzip 为 142838 bytes，仍高于 81920 bytes 初始预算；功能与 CI 通过不等于性能预算通过。UI-002 的 Select 52ms 长事件也继续 blocked。
 
 下一步进入独立 QA-001：按完整 PRD 的 18 组 AC／NFR 和真实设备清单逐项验收，再决定 RELEASE-001 的部署、备份恢复与回滚工作。
+
+## 第二阶段复审增量（2026-11-04）
+
+按子 Agent 驱动方式对四个任务进行实现者与独立评审者双阶段复核。Task 1、Task 2 无功能缺口；Task 3 的独立评审发现两个原测试未覆盖的问题，已在本地提交 `2fc74c3ec97121da57bcabce9d2443b4a4684931` 修复：
+
+- 桌面站移动媒体查询用固定 `1.0625rem` 覆盖字号变量，导致 390／430px 下“特大”仍为 17px；移除固定覆盖后，两种视口均实际断言为 21.2px。
+- `window.localStorage` getter 自身抛出 `SecurityError` 时，异常发生在原读取函数的保护区之外；新增 `readBrowserReadingFontSize(getStorage)` 延迟求值并回退标准，写入被拒绝时仍保留当次内存偏好。浏览器负例确认无 `pageerror`，控件和 ARIA 状态可用。
+
+最终本地复验：lint、typecheck、build 通过；单元 **63／63**、HTTP／Demo **12＋14＋5**、内容管理 **11／11**；桌面 **23 条路径／56 组视口**、H5 **6 组检查／28 组布局**通过且无脚本错误；文档检查 **215 份**无错误。[复验清单](../evidence/SHARE-001/revalidation-2fc74c3.json)、[桌面证据](../evidence/SHARE-001/browser-results.json)、[H5 证据](../evidence/SHARE-001/h5/browser-results.json)。
+
+当前阅读页必要及请求脚本为 **142850 gzip bytes**，仍高于 81920 bytes 预算。`2fc74c3` 因 GitHub SSH agent 和 CLI 均未认证而**尚未推送，托管 CI 未核验**；上文运行 `41687143244` 仍只证明历史提交 `80b069b` 成功。未合并 `main`、未部署，QA-001、RELEASE-001、UI-002 和其他外部门槛状态不变。

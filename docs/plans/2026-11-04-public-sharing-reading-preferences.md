@@ -17,7 +17,7 @@
 - 分享卡使用本地完整中文字体和许可证，不调用第三方图片运行时；私密、草稿和未知 ID 使用相同通用品牌卡。
 - 字号偏好 key 为 `daytrace.readingFontSize.v1`，值为 `standard | large | xlarge`；非法值和存储异常回退标准，仅调整正文，不缩放导航和控件。
 - 本地 Chromium、合成内容和托管 CI 不等于真实 iPhone/Safari、社交爬虫、性能预算或生产发布验收；QA-001、RELEASE-001 保持独立。
-- 当前状态：F4 已由 `beb4f2d`、`634eeaf`、`80b069b` 实现并完成验证。本计划用于从 LINK-001 完成后的基线复现和评审；在当前 `dev` 上不得重复实施。
+- 当前状态：F4 已由 `beb4f2d`、`634eeaf`、`80b069b` 实现；第二阶段复审以本地提交 `2fc74c3` 补齐窄屏字号和存储 getter 异常回归。本计划用于从 LINK-001 完成后的基线复现和评审；在当前 `dev` 上不得重复实施。
 
 ---
 
@@ -591,7 +591,7 @@ git push origin dev
 
 **Interfaces:**
 - Consumes: 浏览器 `localStorage`、`StorageEvent` 和现有双端 Reader DOM。
-- Produces: `ReadingFontSize = "standard" | "large" | "xlarge"`、`READING_FONT_SIZE_KEY`、`parseReadingFontSize(value)`、`readReadingFontSize(storage)`、`readingFontSizeBootScript`、`ReadingFontSizeControl()`。
+- Produces: `ReadingFontSize = "standard" | "large" | "xlarge"`、`READING_FONT_SIZE_KEY`、`parseReadingFontSize(value)`、`readReadingFontSize(storage)`、`readBrowserReadingFontSize(getStorage)`、`readingFontSizeBootScript`、`ReadingFontSizeControl()`。
 
 - [ ] **Step 1: 写偏好白名单、存储异常和预恢复失败测试**
 
@@ -602,6 +602,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
   parseReadingFontSize,
+  readBrowserReadingFontSize,
   readReadingFontSize,
   READING_FONT_SIZE_KEY,
   readingFontSizeBootScript,
@@ -619,6 +620,11 @@ test("reading preferences fall back to standard for unavailable or invalid stora
   assert.equal(readReadingFontSize({ getItem: () => { throw new Error("denied"); } }), "standard");
   assert.equal(readReadingFontSize({ getItem: key => key === READING_FONT_SIZE_KEY ? "large" : null }), "large");
   assert.equal(readReadingFontSize({ getItem: () => "invalid" }), "standard");
+});
+
+test("browser storage reads fall back when the localStorage getter is denied", () => {
+  assert.equal(readBrowserReadingFontSize(() => { throw new Error("SecurityError"); }), "standard");
+  assert.equal(readBrowserReadingFontSize(() => ({ getItem: key => key === READING_FONT_SIZE_KEY ? "large" : null })), "large");
 });
 
 test("pre-restore script is self contained and uses the stable storage key", () => {
@@ -669,6 +675,14 @@ export function readReadingFontSize(storage: ReadingFontSizeStorage | null): Rea
   }
 }
 
+export function readBrowserReadingFontSize(getStorage: () => ReadingFontSizeStorage | null): ReadingFontSize {
+  try {
+    return readReadingFontSize(getStorage());
+  } catch {
+    return "standard";
+  }
+}
+
 export const readingFontSizeBootScript = `(()=>{let v="standard";try{const s=localStorage.getItem(${JSON.stringify(READING_FONT_SIZE_KEY)});if(s==="large"||s==="xlarge"||s==="standard")v=s;}catch{}document.documentElement.dataset.readingFontSize=v;})();`;
 ```
 
@@ -680,7 +694,7 @@ Run:
 npx --yes pnpm@11.23.0 exec tsx --tsconfig apps/api/tsconfig.json --test tests/unit/reader/reading-preferences.test.ts
 ```
 
-Expected: 3 个测试全部 PASS。
+Expected: 4 个测试全部 PASS。
 
 - [ ] **Step 5: 写桌面与 H5 持久化、键盘和布局失败测试**
 
@@ -708,13 +722,43 @@ await check("reader font preferences restore, reject invalid values and stay key
   assert.equal(await xlarge.getAttribute("aria-pressed"), "true");
   for (const width of [390, 430]) {
     await page.setViewportSize({ width, height: 844 });
+    assert.equal(await fontSize(), "21.2px", `mobile xlarge body font at ${width}px`);
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
   }
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await page.evaluate(() => localStorage.setItem("daytrace.readingFontSize.v1", "not-a-size"));
   await page.reload();
   await page.waitForLoadState("networkidle");
   assert.equal(await fontSize(), "17.2px");
   assert.equal(await page.getByRole("button", { name: "标准", exact: true }).getAttribute("aria-pressed"), "true");
+});
+
+await check("reader font preferences stay usable when localStorage access is denied", async () => {
+  const denied = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+  const deniedPage = await denied.newPage();
+  const errors = [];
+  deniedPage.on("pageerror", error => errors.push(error.message));
+  try {
+    await deniedPage.addInitScript(() => {
+      Object.defineProperty(window, "localStorage", {
+        configurable: true,
+        get() { throw new DOMException("synthetic storage denial", "SecurityError"); },
+      });
+    });
+    await deniedPage.goto(base + tech);
+    await deniedPage.waitForLoadState("networkidle");
+    const body = deniedPage.getByText("这是一份演示复盘。", { exact: false }).first();
+    const fontSize = () => body.evaluate(node => getComputedStyle(node.parentElement).fontSize);
+    assert.equal(await fontSize(), "17.2px");
+    assert.equal(await deniedPage.getByRole("button", { name: "标准", exact: true }).getAttribute("aria-pressed"), "true");
+    const large = deniedPage.getByRole("button", { name: "较大", exact: true });
+    await large.click();
+    assert.equal(await fontSize(), "19.2px");
+    assert.equal(await large.getAttribute("aria-pressed"), "true");
+    assert.deepEqual(errors, []);
+  } finally {
+    await denied.close();
+  }
 });
 ```
 
@@ -769,7 +813,7 @@ import {
   READING_FONT_SIZE_KEY,
   READING_FONT_SIZE_OPTIONS,
   parseReadingFontSize,
-  readReadingFontSize,
+  readBrowserReadingFontSize,
   type ReadingFontSize,
 } from "./reading-preferences";
 
@@ -781,7 +825,7 @@ export function ReadingFontSizeControl() {
       document.documentElement.dataset.readingFontSize = value;
       setCurrent(value);
     };
-    apply(readReadingFontSize(window.localStorage));
+    apply(readBrowserReadingFontSize(() => window.localStorage));
     const onStorage = (event: StorageEvent) => {
       if (event.key === READING_FONT_SIZE_KEY) apply(parseReadingFontSize(event.newValue));
     };
@@ -858,7 +902,7 @@ export function ReadingFontSizeControl() {
 }
 ```
 
-桌面正文选择器使用 `font-size: var(--reader-font-size)`；H5 `.h5-reader-body` 使用 `font-size: var(--h5-reader-font-size)`，其余标题、导航和控件字号保持原值。
+桌面正文选择器使用 `font-size: var(--reader-font-size)`；H5 `.h5-reader-body` 使用 `font-size: var(--h5-reader-font-size)`。桌面移动媒体查询只能调整行高、字距等排版，不得重新设置固定 `font-size` 覆盖偏好变量；其余标题、导航和控件字号保持原值。
 
 - [ ] **Step 9: 接线预恢复和四个阅读入口**
 
@@ -896,7 +940,7 @@ npx --yes pnpm@11.23.0 lint
 npx --yes pnpm@11.23.0 typecheck
 ```
 
-Expected: 偏好单元 3／3 PASS；桌面 17.2／19.2／21.2px、H5 17／19／21px；刷新、跨端、非法值、键盘和 390／430px 布局检查 PASS。
+Expected: 偏好单元 4／4 PASS；桌面 17.2／19.2／21.2px、H5 17／19／21px；刷新、跨端、非法值、`localStorage` getter 拒绝、键盘和 390／430px 实际字号及布局检查 PASS。
 
 Commit:
 

@@ -1,0 +1,29 @@
+{
+  "recordedAt": "2026-11-04T10:43:03Z",
+  "headSha": "2fc74c3ec97121da57bcabce9d2443b4a4684931",
+  "branch": "dev",
+  "originDevSha": "61b6795b5abbf900f8ce39ac9fc9b754d222eeb8",
+  "pushed": false,
+  "hostedCiVerified": false,
+  "node": "24.22.1",
+  "declaredNode": "24.18.0",
+  "results": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "unit": { "passed": 63, "failed": 0 },
+    "integration": { "http": 12, "access": 14, "demo": 5, "failed": 0 },
+    "content": { "passed": 11, "failed": 0 },
+    "build": "passed",
+    "desktop": { "checks": 23, "layouts": 56, "consoleErrors": 0 },
+    "h5": { "checks": 6, "layouts": 28, "errors": 0 },
+    "documents": { "checked": 215, "errors": 0 }
+  },
+  "desktopEvidence": "docs/project/evidence/SHARE-001/browser-results.json",
+  "h5Evidence": "docs/project/evidence/SHARE-001/h5/browser-results.json",
+  "formalReleaseReady": false,
+  "production": "not deployed",
+  "realIphone": "not tested",
+  "performanceBudgetMet": false,
+  "necessaryAndRequestedJsGzipBytes": 142850,
+  "jsGzipBudgetBytes": 81920
+}

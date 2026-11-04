@@ -2,7 +2,7 @@
   "date": "2026-11-02",
   "scope": "Local functional demo; performance budget, real-device and production acceptance are separate",
   "formalReleaseReady": false,
-  "base": "http://127.0.0.1:3180",
+  "base": "http://127.0.0.1:3286",
   "browser": "156.0.8078.4",
   "data": "synthetic demonstration content only",
   "checks": [
@@ -60,6 +60,10 @@
     },
     {
       "name": "reader font preferences restore, reject invalid values and stay keyboard accessible",
+      "passed": true
+    },
+    {
+      "name": "reader font preferences stay usable when localStorage access is denied",
       "passed": true
     },
     {
@@ -686,7 +690,7 @@
   "consoleErrors": [],
   "resources": {
     "page": "/records/rec_11111111-1111-4111-8111-000000000001",
-    "necessaryAndRequestedJsGzipBytes": 142838,
+    "necessaryAndRequestedJsGzipBytes": 142850,
     "initialBudgetBytes": 81920,
     "budgetMet": false,
     "note": "Fresh browser script requests including any automatic route prefetch; local synthetic run, not field Core Web Vitals"

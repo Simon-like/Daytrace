@@ -24,5 +24,13 @@ export function readReadingFontSize(storage: ReadingFontSizeStorage | null): Rea
   }
 }
 
+export function readBrowserReadingFontSize(getStorage: () => ReadingFontSizeStorage | null): ReadingFontSize {
+  try {
+    return readReadingFontSize(getStorage());
+  } catch {
+    return "standard";
+  }
+}
+
 /** Restore only a fixed allowlist before React hydrates; storage may be unavailable. */
 export const readingFontSizeBootScript = `(()=>{let v="standard";try{const s=localStorage.getItem(${JSON.stringify(READING_FONT_SIZE_KEY)});if(s==="large"||s==="xlarge"||s==="standard")v=s;}catch{}document.documentElement.dataset.readingFontSize=v;})();`;

@@ -5,7 +5,7 @@ import {
   READING_FONT_SIZE_KEY,
   READING_FONT_SIZE_OPTIONS,
   parseReadingFontSize,
-  readReadingFontSize,
+  readBrowserReadingFontSize,
   type ReadingFontSize,
 } from "./reading-preferences";
 
@@ -17,7 +17,7 @@ export function ReadingFontSizeControl() {
       document.documentElement.dataset.readingFontSize = value;
       setCurrent(value);
     };
-    apply(readReadingFontSize(window.localStorage));
+    apply(readBrowserReadingFontSize(() => window.localStorage));
     const onStorage = (event: StorageEvent) => {
       if (event.key === READING_FONT_SIZE_KEY) apply(parseReadingFontSize(event.newValue));
     };

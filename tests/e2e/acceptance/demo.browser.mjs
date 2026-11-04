@@ -152,8 +152,18 @@ try{
   const large=page.getByRole("button",{name:"较大",exact:true});await large.click();assert.equal(await large.getAttribute("aria-pressed"),"true");assert.equal(await fontSize(),"19.2px");assert.equal(await page.evaluate(()=>localStorage.getItem("daytrace.readingFontSize.v1")),"large");
   await page.reload();await page.waitForLoadState("networkidle");assert.equal(await fontSize(),"19.2px");assert.equal(await page.getByRole("button",{name:"较大",exact:true}).getAttribute("aria-pressed"),"true");
   const xlarge=page.getByRole("button",{name:"特大",exact:true});await xlarge.focus();await page.keyboard.press("Space");assert.equal(await fontSize(),"21.2px");assert.equal(await xlarge.getAttribute("aria-pressed"),"true");
-  for(const width of [390,430]){await page.setViewportSize({width,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);}
+  for(const width of [390,430]){await page.setViewportSize({width,height:844});assert.equal(await fontSize(),"21.2px",`mobile xlarge body font at ${width}px`);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);}
   await page.setViewportSize({width:1440,height:1000});await page.evaluate(()=>localStorage.setItem("daytrace.readingFontSize.v1","not-a-size"));await page.reload();await page.waitForLoadState("networkidle");assert.equal(await fontSize(),"17.2px");assert.equal(await page.getByRole("button",{name:"标准",exact:true}).getAttribute("aria-pressed"),"true");
+ });
+ await check("reader font preferences stay usable when localStorage access is denied",async()=>{
+  const denied=await browser.newContext({viewport:{width:1440,height:1000}});const deniedPage=await denied.newPage();const errors=[];deniedPage.on("pageerror",error=>errors.push(error.message));
+  try{
+   await deniedPage.addInitScript(()=>{Object.defineProperty(window,"localStorage",{configurable:true,get(){throw new DOMException("synthetic storage denial","SecurityError");}});});
+   await deniedPage.goto(base+tech);await deniedPage.waitForLoadState("networkidle");
+   const body=deniedPage.getByText("这是一份演示复盘。",{exact:false}).first();const fontSize=()=>body.evaluate(node=>getComputedStyle(node.parentElement).fontSize);assert.equal(await fontSize(),"17.2px");
+   assert.equal(await deniedPage.getByRole("button",{name:"标准",exact:true}).getAttribute("aria-pressed"),"true");
+   const large=deniedPage.getByRole("button",{name:"较大",exact:true});await large.click();assert.equal(await fontSize(),"19.2px");assert.equal(await large.getAttribute("aria-pressed"),"true");assert.deepEqual(errors,[]);
+  }finally{await denied.close();}
  });
  await check("complete Markdown semantics stay readable, scroll locally and preserve mobile type",async()=>{
   await go(tech);assert.equal(await page.locator("[data-reader-code]").count(),2);await page.getByText("UNKNOWN-LANGUAGE",{exact:true}).waitFor();

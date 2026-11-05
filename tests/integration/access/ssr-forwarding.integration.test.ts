@@ -2,8 +2,9 @@ import "reflect-metadata";
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import type { Request } from "express";
-import { createOwnerApiClient } from "../../../apps/site/src/server/owner-api";
-import { PublicApiError } from "../../../apps/site/src/server/api";
+import { createOwnerApiClient } from "@daytrace/content/owner-api";
+import { PublicApiError } from "@daytrace/content/public-api";
+import { syntheticRecordListResponse } from "../../../packages/contracts/src/fixtures";
 import {
   assertNoStore,
   createHarness,
@@ -13,17 +14,36 @@ import {
   SyntheticOwnerContentController,
 } from "./support";
 
-test("Next server adapter forwards only the fixed session cookie to owner APIs", async () => {
+test("shared owner adapter accepts explicit fetch and origin ports", async () => {
+  const session = "s".repeat(43);
+  let observedUrl: URL | undefined;
+  let observedInit: RequestInit | undefined;
+  const client = createOwnerApiClient(session, {
+    apiInternalOrigin: "http://owner.internal",
+    fetch: async (input, init) => {
+      observedUrl = new URL(input instanceof Request ? input.url : input);
+      observedInit = init;
+      return Response.json(syntheticRecordListResponse());
+    },
+  });
+  await client.list();
+  assert.equal(observedUrl?.origin, "http://owner.internal");
+  assert.equal(observedUrl?.searchParams.get("scope"), "owner");
+  assert.equal(new Headers(observedInit?.headers).get("cookie"), `__Host-daytrace_session=${session}`);
+  assert.equal(new Headers(observedInit?.headers).get("authorization"), null);
+  assert.equal(observedInit?.cache, "no-store");
+  assert.equal(observedInit?.redirect, "manual");
+});
+
+test("shared owner adapter forwards only the fixed session cookie to owner APIs", async () => {
   const harness = await createHarness();
-  const previousOrigin = process.env.API_INTERNAL_ORIGIN;
   try {
     const session = await ownerLogin(harness);
-    process.env.API_INTERNAL_ORIGIN = harness.origin;
     let observed: Request | undefined;
     SyntheticOwnerContentController.observer = (request) => {
       observed = request;
     };
-    const client = createOwnerApiClient(session);
+    const client = createOwnerApiClient(session, { apiInternalOrigin: harness.origin });
     const list = await client.list();
     assert.equal(list.items.length, 1);
     assert.equal(list.items[0]?.visibility, "private");
@@ -48,26 +68,23 @@ test("Next server adapter forwards only the fixed session cookie to owner APIs",
     await response.body?.cancel();
   } finally {
     SyntheticOwnerContentController.observer = undefined;
-    if (previousOrigin === undefined) delete process.env.API_INTERNAL_ORIGIN;
-    else process.env.API_INTERNAL_ORIGIN = previousOrigin;
     await harness.close();
   }
 });
 
 test("SSR adapter denies missing and expired sessions without exposing private bytes", async () => {
   const harness = await createHarness();
-  const previousOrigin = process.env.API_INTERNAL_ORIGIN;
   try {
-    process.env.API_INTERNAL_ORIGIN = harness.origin;
+    const options = { apiInternalOrigin: harness.origin };
     await assert.rejects(
-      () => createOwnerApiClient(null).list(),
+      () => createOwnerApiClient(null, options).list(),
       (error: unknown) => error instanceof PublicApiError && error.status === 401 && error.code === "AUTH_REQUIRED",
     );
     const session = await ownerLogin(harness);
     harness.clock.now += 1_001;
-    assert.equal(await createOwnerApiClient(session).record(PRIVATE_ID), null);
+    assert.equal(await createOwnerApiClient(session, options).record(PRIVATE_ID), null);
     await assert.rejects(
-      () => createOwnerApiClient(session).list(),
+      () => createOwnerApiClient(session, options).list(),
       (error: unknown) => error instanceof PublicApiError && error.status === 401 && error.code === "AUTH_REQUIRED",
     );
     const visitor = await fetch(`${harness.origin}/api/v1/records/${PRIVATE_ID}?scope=owner`);
@@ -76,8 +93,6 @@ test("SSR adapter denies missing and expired sessions without exposing private b
     assert.ok(!body.includes(PRIVATE_CANARY));
     assertNoStore(visitor);
   } finally {
-    if (previousOrigin === undefined) delete process.env.API_INTERNAL_ORIGIN;
-    else process.env.API_INTERNAL_ORIGIN = previousOrigin;
     await harness.close();
   }
 });

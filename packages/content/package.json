@@ -6,6 +6,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./public-api": "./src/public-api.ts",
+    "./owner-api": "./src/owner-api.ts",
     "./search": "./src/search.ts",
     "./records": "./src/records.ts"
   },

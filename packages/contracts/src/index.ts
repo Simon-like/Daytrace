@@ -233,8 +233,10 @@ function parseAttachment(value: unknown): RecordAttachment {
   };
 }
 
-export function parsePublicRecordDetail(value: unknown): RecordDetail {
-  const summary = parsePublicRecordSummary(value);
+type RecordSummaryParser = (value: unknown) => RecordSummary;
+
+function parseRecordDetail(value: unknown, parseSummary: RecordSummaryParser): RecordDetail {
+  const summary = parseSummary(value);
   const record = object(value, "RECORD");
   const body = object(record.body, "RECORD_BODY");
   if (body.parseRevision !== MARKDOWN_PARSE_REVISION || !Array.isArray(body.toc) || !Array.isArray(record.attachments) || !Array.isArray(record.relatedRecords)) {
@@ -258,11 +260,15 @@ export function parsePublicRecordDetail(value: unknown): RecordDetail {
       parseRevision: MARKDOWN_PARSE_REVISION,
     },
     attachments: record.attachments.map(parseAttachment),
-    relatedRecords: record.relatedRecords.map(parsePublicRecordSummary),
+    relatedRecords: record.relatedRecords.map(parseSummary),
   };
 }
 
-export function parseRecordListResponse(value: unknown): RecordListResponse {
+export function parsePublicRecordDetail(value: unknown): RecordDetail {
+  return parseRecordDetail(value, parsePublicRecordSummary);
+}
+
+function parseListResponse(value: unknown, parseSummary: RecordSummaryParser): RecordListResponse {
   const envelope = success(value);
   const data = object(envelope.data, "LIST_DATA");
   const pageInfo = object(data.pageInfo, "PAGE_INFO");
@@ -275,7 +281,7 @@ export function parseRecordListResponse(value: unknown): RecordListResponse {
   return {
     schemaVersion: API_SCHEMA_VERSION,
     data: {
-      items: data.items.map(parsePublicRecordSummary),
+      items: data.items.map(parseSummary),
       pageInfo: {
         hasMore: pageInfo.hasMore,
         nextCursor: pageInfo.nextCursor as string | null,
@@ -285,11 +291,28 @@ export function parseRecordListResponse(value: unknown): RecordListResponse {
   };
 }
 
+export function parseRecordListResponse(value: unknown): RecordListResponse {
+  return parseListResponse(value, parsePublicRecordSummary);
+}
+
+export function parseOwnerRecordListResponse(value: unknown): RecordListResponse {
+  return parseListResponse(value, parseOwnerRecordSummary);
+}
+
 export function parseRecordDetailResponse(value: unknown): RecordDetailResponse {
   const envelope = success(value);
   return {
     schemaVersion: API_SCHEMA_VERSION,
-    data: parsePublicRecordDetail(envelope.data),
+    data: parseRecordDetail(envelope.data, parsePublicRecordSummary),
+    meta: parseMeta(envelope.meta),
+  };
+}
+
+export function parseOwnerRecordDetailResponse(value: unknown): RecordDetailResponse {
+  const envelope = success(value);
+  return {
+    schemaVersion: API_SCHEMA_VERSION,
+    data: parseRecordDetail(envelope.data, parseOwnerRecordSummary),
     meta: parseMeta(envelope.meta),
   };
 }

@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   parseApiErrorResponse,
+  parseOwnerRecordDetailResponse,
+  parseOwnerRecordListResponse,
   parseRecordDetailResponse,
   parseRecordListResponse,
 } from "./index";
@@ -43,6 +45,33 @@ test("public response parser rejects private data and incompatible shapes", () =
       relatedRecords: [{ ...relatedRecord, visibility: "private" }],
     },
   }));
+});
+
+test("owner response parsers accept private drafts and private related records", () => {
+  const list = syntheticRecordListResponse();
+  const privateSummary = {
+    ...list.data.items[0],
+    status: "draft" as const,
+    visibility: "private" as const,
+  };
+  const ownerList = {
+    ...list,
+    data: { ...list.data, items: [privateSummary] },
+  };
+  assert.deepEqual(parseOwnerRecordListResponse(ownerList), ownerList);
+
+  const detail = syntheticRecordDetailResponse();
+  const ownerDetail = {
+    ...detail,
+    data: {
+      ...detail.data,
+      status: "draft" as const,
+      visibility: "private" as const,
+      relatedRecords: [privateSummary],
+    },
+  };
+  assert.deepEqual(parseOwnerRecordDetailResponse(ownerDetail), ownerDetail);
+  assert.throws(() => parseRecordDetailResponse(ownerDetail));
 });
 
 test("compatible additive response fields remain readable", () => {

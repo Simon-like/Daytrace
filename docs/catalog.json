@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-03",
+  "updated": "2026-11-05",
   "documents": [
     {
       "id": "context",
@@ -89,6 +89,14 @@
       "purpose": "模块/数据/渲染/部署边界与分阶段实施",
       "status": "baseline",
       "owner_role": "架构与安全"
+    },
+    {
+      "id": "module-navigation",
+      "title": "模块导航",
+      "path": "docs/architecture/模块导航.md",
+      "purpose": "按业务概念定位实现入口、依赖边界与验证",
+      "status": "active",
+      "owner_role": "架构与集成"
     },
     {
       "id": "coordination",

@@ -37,6 +37,7 @@
 | [ADR-0001结构决策](architecture/decisions/ADR-0001-项目分层与协作边界.md) | 仓库组织与协作边界 | accepted | 集成 |
 | [ADR-0002全栈技术方向](architecture/decisions/ADR-0002-技术路线候选.md) | Next/Nest/monorepo决定、代价与待验证条件 | accepted | 架构 |
 | [全栈技术架构与研发路径](architecture/技术选型与研发路径.md) | 模块/数据/渲染/部署边界与分阶段实施 | baseline | 架构与安全 |
+| [模块导航](architecture/模块导航.md) | 按业务概念定位实现入口、依赖边界与验证 | active | 架构与集成 |
 | [Kimi / Codex共同协作协议](collaboration/README.md) | 唯一中央队列、认领、worktree、交接与评审 | active | 协调与集成 |
 | [工程知识库](knowledge/README.md) | 可复用经验与操作流程 | active | 各模块与集成 |
 | [个人内容库](development/content.md) | 站点正文、公开私密与样本隔离 | active | 内容与安全 |

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-03T17:51:44.819247+00:00",
+  "updated": "2026-11-05T03:34:03.641956+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -866,6 +866,40 @@
       ],
       "review": "docs/collaboration/reviews/SHARE-001-self-review.md",
       "reviewer": "kimi-F4-001-sharing"
+    },
+    {
+      "id": "ARCH-002",
+      "title": "主人读取深化与 AI 模块导航",
+      "status": "done",
+      "owner": "kimi-ARCH-002-owner-reader",
+      "depends_on": [
+        "OWNER-001",
+        "SHARE-001"
+      ],
+      "allowed_paths": [
+        "packages/contracts/src/index.ts",
+        "packages/contracts/src/index.test.ts",
+        "packages/content/src/owner-api.ts",
+        "packages/content/package.json",
+        "apps/site/src/server/owner-api.ts",
+        "apps/h5/src/server/owner-api.ts",
+        "tests/integration/access/ssr-forwarding.integration.test.ts",
+        "docs/plans/2026-11-05-owner-reading-architecture.md",
+        "docs/architecture/技术选型与研发路径.md",
+        "docs/architecture/contracts/api-v1.md",
+        "docs/architecture/模块导航.md",
+        "docs/project/reports/ARCH-002.md",
+        "docs/project/evidence/ARCH-002/",
+        "docs/collaboration/",
+        "docs/context/当前工作上下文.md",
+        "docs/project/项目进度.md"
+      ],
+      "card": "docs/collaboration/tasks/ARCH-002.md",
+      "evidence": [
+        "docs/project/reports/ARCH-002.md"
+      ],
+      "review": "docs/collaboration/reviews/ARCH-002-self-review.md",
+      "reviewer": "kimi-ARCH-002-owner-reader"
     }
   ],
   "history": [
@@ -1526,6 +1560,27 @@
       "action": "complete",
       "actor": "kimi-F4-001-sharing",
       "evidence": "docs/collaboration/reviews/SHARE-001-self-review.md"
+    },
+    {
+      "at": "2026-11-05T03:06:27.401907+00:00",
+      "task": "ARCH-002",
+      "action": "claim",
+      "actor": "kimi-ARCH-002-owner-reader",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-05T03:34:03.524833+00:00",
+      "task": "ARCH-002",
+      "action": "submit",
+      "actor": "kimi-ARCH-002-owner-reader",
+      "evidence": "docs/project/reports/ARCH-002.md"
+    },
+    {
+      "at": "2026-11-05T03:34:03.641956+00:00",
+      "task": "ARCH-002",
+      "action": "complete",
+      "actor": "kimi-ARCH-002-owner-reader",
+      "evidence": "docs/collaboration/reviews/ARCH-002-self-review.md"
     }
   ],
   "dispatch_policy": {

@@ -1,0 +1,95 @@
+{
+  "task": "ARCH-002",
+  "observedAt": "2026-11-05T11:29:55+08:00",
+  "validatedHead": "f0445e0b07b2177571535820bfb702caab77f806",
+  "environment": {
+    "nodeDeclared": "24.18.0",
+    "nodeObserved": "v24.22.1",
+    "pnpm": "11.23.0",
+    "engineWarning": "Commands reported the patch-version difference; all listed local gates exited 0."
+  },
+  "checks": [
+    {
+      "command": "npx --yes pnpm@11.23.0 lint",
+      "passed": true,
+      "result": "196 files, 0 warnings, 0 errors"
+    },
+    {
+      "command": "npx --yes pnpm@11.23.0 typecheck",
+      "passed": true,
+      "result": "config/contracts builds and api/site/h5 typechecks passed"
+    },
+    {
+      "command": "npx --yes pnpm@11.23.0 test:unit",
+      "passed": true,
+      "tests": 64,
+      "failures": 0
+    },
+    {
+      "command": "npx --yes pnpm@11.23.0 test:integration",
+      "passed": true,
+      "groups": [
+        { "name": "HTTP and search", "tests": 12, "failures": 0 },
+        { "name": "access and shared SSR forwarding", "tests": 15, "failures": 0 },
+        { "name": "demo", "tests": 5, "failures": 0 }
+      ]
+    },
+    {
+      "command": "npx --yes pnpm@11.23.0 test:content",
+      "passed": true,
+      "tests": 11,
+      "failures": 0
+    },
+    {
+      "command": "npx --yes pnpm@11.23.0 build",
+      "passed": true,
+      "result": "Nest, desktop Next and H5 Next production builds passed"
+    },
+    {
+      "command": "DEMO_MANAGED_SERVER=1 DEMO_PORT=3380 DEMO_API_PORT=3381 DEMO_EVIDENCE_DIR=docs/project/evidence/ARCH-002 npx --yes pnpm@11.23.0 test:browser",
+      "passed": true,
+      "checks": 23,
+      "layouts": 56,
+      "consoleErrors": 0,
+      "evidence": "docs/project/evidence/ARCH-002/browser-results.json",
+      "performance": {
+        "necessaryAndRequestedJsGzipBytes": 142850,
+        "initialBudgetBytes": 81920,
+        "budgetMet": false
+      }
+    },
+    {
+      "command": "H5_TEST_SITE_PORT=3390 H5_TEST_API_PORT=3391 H5_TEST_H5_PORT=3392 H5_TEST_EVIDENCE_DIR=docs/project/evidence/ARCH-002/h5 npx --yes pnpm@11.23.0 test:h5",
+      "passed": true,
+      "checks": 6,
+      "layouts": 28,
+      "errors": 0,
+      "evidence": "docs/project/evidence/ARCH-002/h5/browser-results.json"
+    },
+    {
+      "command": "python3 scripts/project_check.py",
+      "passed": true,
+      "documents": 218,
+      "catalogEntries": 39,
+      "tasks": 33,
+      "errors": 0
+    }
+  ],
+  "finalDocumentationCheck": {
+    "observedAt": "2026-11-05T11:34:32+08:00",
+    "command": "python3 scripts/project_check.py",
+    "passed": true,
+    "documents": 221,
+    "catalogEntries": 39,
+    "tasks": 33,
+    "errors": 0
+  },
+  "acceptanceLimits": {
+    "realIphone": "not tested",
+    "productionIdentity": "not tested",
+    "productionDeployment": "not deployed",
+    "formalQa": "not completed",
+    "performanceBudget": "still failing",
+    "hostedCiForValidatedHead": "not run; HEAD is local and has not been pushed"
+  }
+}

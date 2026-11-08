@@ -1,6 +1,6 @@
 import { type DynamicModule, Global, Module } from "@nestjs/common";
 import type { Auth0ProtocolClient, AuthRuntimeOptions } from "./auth.types";
-import { authOptionsFromEnvironment } from "./auth.config";
+import { authOptionsFromEnvironment, validateDevelopmentWriteOrigin } from "./auth.config";
 import { AuthController, AUTH_PUBLIC_ORIGIN, OIDC_PROVIDER } from "./auth.controller";
 import { OwnerGuard } from "./owner.guard";
 import { OwnerObjectGuard } from "./owner-object.guard";
@@ -19,7 +19,12 @@ export class AuthModule {
     if (options.environment === "production" && (!options.publicOrigin.startsWith("https:") || options.databasePath === ":memory:")) {
       throw new Error("production authentication requires HTTPS and persistent sessions");
     }
-    if (options.environment !== "test" && options.additionalWriteOrigins?.length) throw new Error("additional write origins are restricted to isolated tests");
+    if (options.environment === "production" && options.additionalWriteOrigins?.length) throw new Error("additional write origins are forbidden in production");
+    if (options.environment === "development") {
+      for (const origin of options.additionalWriteOrigins ?? []) {
+        if (validateDevelopmentWriteOrigin(options.publicOrigin, origin) !== origin) throw new Error("additional write origin must be canonical");
+      }
+    }
     const owners = new OwnerPolicy(options.ownerIdentities);
     const store = new SqliteSessionStore(options.databasePath);
     const sessions = new SessionService(store, owners, {

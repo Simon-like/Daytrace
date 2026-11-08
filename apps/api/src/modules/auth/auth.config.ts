@@ -34,6 +34,16 @@ function httpsOrigin(value: string, name: string, allowHttp: boolean): string {
   return url.origin;
 }
 
+export function validateDevelopmentWriteOrigin(publicOrigin: string, candidate: string): string {
+  const main = new URL(publicOrigin);
+  const extra = httpsOrigin(candidate, "LOCAL_H5_ORIGIN", true);
+  const h5 = new URL(extra);
+  if (!["localhost", "127.0.0.1"].includes(main.hostname) || h5.hostname !== main.hostname || h5.protocol !== main.protocol) {
+    throw new Error("LOCAL_H5_ORIGIN requires the same loopback host and protocol as PUBLIC_ORIGIN");
+  }
+  return extra;
+}
+
 function httpsIssuer(value: string, name: string): string {
   let url: URL;
   try {
@@ -89,6 +99,12 @@ export function authOptionsFromEnvironment(
   const production = environment === "production";
   const providerName = required(env, "AUTH_PROVIDER");
   const publicOrigin = httpsOrigin(required(env, "PUBLIC_ORIGIN"), "PUBLIC_ORIGIN", !production);
+  const publicUrl = new URL(publicOrigin);
+  if (environment === "development" && publicUrl.protocol === "http:" && !["localhost", "127.0.0.1"].includes(publicUrl.hostname)) {
+    throw new Error("development HTTP PUBLIC_ORIGIN must use a loopback host");
+  }
+  if (env.LOCAL_H5_ORIGIN !== undefined && environment !== "development") throw new Error("LOCAL_H5_ORIGIN is restricted to development");
+  const additionalWriteOrigins = env.LOCAL_H5_ORIGIN === undefined ? [] : [validateDevelopmentWriteOrigin(publicOrigin, required(env, "LOCAL_H5_ORIGIN"))];
   const databasePath = required(env, "SESSION_DATABASE_PATH");
   if (production && (!isAbsolute(databasePath) || databasePath === ":memory:")) {
     throw new Error("SESSION_DATABASE_PATH must be an absolute persistent file in production");
@@ -114,6 +130,7 @@ export function authOptionsFromEnvironment(
     publicOrigin,
     databasePath,
     ownerIdentities,
+    ...(additionalWriteOrigins.length ? { additionalWriteOrigins } : {}),
     provider: new Auth0OidcProvider(configuration, auth0Client),
   };
 }

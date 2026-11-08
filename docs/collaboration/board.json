@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-08T08:46:57.841432+00:00",
+  "updated": "2026-11-08T08:52:20.853322+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -1124,7 +1124,7 @@
     {
       "id": "CONTENT-004",
       "title": "内容库会话失效与预览恢复",
-      "status": "review",
+      "status": "done",
       "owner": "codex-CONTENT-004-main",
       "depends_on": [
         "CONTENT-003",
@@ -1144,6 +1144,32 @@
       "card": "docs/collaboration/tasks/CONTENT-004.md",
       "evidence": [
         "docs/project/reports/CONTENT-004.md"
+      ],
+      "review": "docs/collaboration/reviews/CONTENT-004-self-review.md",
+      "reviewer": "codex-CONTENT-004-self-review"
+    },
+    {
+      "id": "LOCAL-002",
+      "title": "真实 OIDC 本地双端来源",
+      "status": "review",
+      "owner": "codex-LOCAL-002-main",
+      "depends_on": [
+        "OWNER-001",
+        "MOBILE-002",
+        "LOCAL-001"
+      ],
+      "allowed_paths": [
+        "apps/api/src/modules/auth/",
+        "tests/integration/access/",
+        ".env.example",
+        "docs/development/",
+        "docs/collaboration/",
+        "docs/project/reports/LOCAL-002.md",
+        "docs/superpowers/plans/"
+      ],
+      "card": "docs/collaboration/tasks/LOCAL-002.md",
+      "evidence": [
+        "docs/project/reports/LOCAL-002.md"
       ]
     }
   ],
@@ -2071,6 +2097,34 @@
       "action": "submit",
       "actor": "codex-CONTENT-004-main",
       "evidence": "docs/project/reports/CONTENT-004.md"
+    },
+    {
+      "at": "2026-11-08T08:48:23.174551+00:00",
+      "task": "CONTENT-004",
+      "action": "complete",
+      "actor": "codex-CONTENT-004-self-review",
+      "evidence": "docs/collaboration/reviews/CONTENT-004-self-review.md"
+    },
+    {
+      "at": "2026-11-08T08:48:23.268769+00:00",
+      "task": "LOCAL-002",
+      "action": "create",
+      "actor": "codex-LOCAL-002-main",
+      "evidence": "docs/collaboration/tasks/LOCAL-002.md"
+    },
+    {
+      "at": "2026-11-08T08:48:23.368693+00:00",
+      "task": "LOCAL-002",
+      "action": "claim",
+      "actor": "codex-LOCAL-002-main",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-08T08:52:20.853322+00:00",
+      "task": "LOCAL-002",
+      "action": "submit",
+      "actor": "codex-LOCAL-002-main",
+      "evidence": "docs/project/reports/LOCAL-002.md"
     }
   ],
   "dispatch_policy": {

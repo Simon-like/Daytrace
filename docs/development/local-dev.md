@@ -58,3 +58,14 @@ pnpm docs:validate
 ## 主人内容库本地体验
 
 `pnpm dev -- --demo` 启动隔离合成身份与示例内容，打开 `/owner` 后进入“内容库”，可上传 Markdown、附件/ZIP，预览并保存或发布。此显式模式不改变默认 `pnpm dev` 的身份边界。资料存储与操作详见[内容库手册](content.md)，仅用合成资料验证；真实身份接入仍有独立门槛。
+
+
+## 本地 OIDC 与持久内容
+
+默认启动不注册主人登录；演示身份只用于合成数据。需要验证真实账户时，使用单独的 Auth0 开发应用与独立本地内容目录；不要将真实凭据或私密内容提交到 Git。Auth0 的回调地址必须与请求完全一致，见 [Auth0 回调地址说明](https://support.auth0.com/center/s/article/Callback-URL-Mismatch-Error-Is-Not-in-the-List-of-Allowed-Callback-URLs)。
+
+在被忽略的 `.env` 中按 `.env.example` 配置 `AUTH_PROVIDER=auth0`、Auth0 issuer、client ID、client secret 和精确的主人 issuer／subject；`SESSION_DATABASE_PATH` 指向绝对路径的本地私密文件，`CONTENT_ROOT` 指向仓库外的持久内容根（包括 `public` 和 `private`）。例如本机主站使用 `PUBLIC_ORIGIN=http://localhost:3000` 时，Auth0 开发应用的 Allowed Callback URLs 需包含 `http://localhost:3000/api/v1/auth/callback`。启动使用 `pnpm dev -- --host localhost`；域名、协议和端口应与实际访问地址一致。
+
+通过主站 `/h5/` 访问使用同一来源；若还需直连 `http://localhost:3002/h5/` 并在内容库写入，显式设置 `LOCAL_H5_ORIGIN=http://localhost:3002`。它仅在 development 接受与 `PUBLIC_ORIGIN` 相同的回环主机和协议；主站和 H5 使用相同主机名以共享 host-only Cookie。未设置时只有主站来源允许写入，生产不接受该变量。回环 HTTP 的 Secure Cookie 行为需在目标浏览器实测，不能将合成身份或 Chromium 视口当成真实账户及 iPhone 验收。
+
+完成真实账户登录后，应验证重启后的主人读取、导入私密草稿和访客拒绝，并独立备份整个内容根（包含 `.daytrace`）及会话数据库；操作和恢复边界见[内容库手册](content.md)。

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-05T03:34:03.641956+00:00",
+  "updated": "2026-11-08T07:56:46.173696+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -900,6 +900,31 @@
       ],
       "review": "docs/collaboration/reviews/ARCH-002-self-review.md",
       "reviewer": "kimi-ARCH-002-owner-reader"
+    },
+    {
+      "id": "ARCHIVE-001",
+      "title": "双端公开归档分页与完整标签",
+      "status": "review",
+      "owner": "codex-ARCHIVE-001-main",
+      "depends_on": [
+        "FIND-001",
+        "MOBILE-001"
+      ],
+      "allowed_paths": [
+        "apps/site/src/app/archive/",
+        "apps/site/src/features/records/",
+        "apps/h5/src/app/archive/",
+        "apps/h5/src/components/mobile-archive.tsx",
+        "packages/content/src/",
+        "tests/unit/find/",
+        "docs/collaboration/",
+        "docs/project/reports/ARCHIVE-001.md",
+        "docs/superpowers/plans/"
+      ],
+      "card": "docs/collaboration/tasks/ARCHIVE-001.md",
+      "evidence": [
+        "docs/project/reports/ARCHIVE-001.md"
+      ]
     }
   ],
   "history": [
@@ -1581,6 +1606,27 @@
       "action": "complete",
       "actor": "kimi-ARCH-002-owner-reader",
       "evidence": "docs/collaboration/reviews/ARCH-002-self-review.md"
+    },
+    {
+      "at": "2026-11-08T07:52:14.832606+00:00",
+      "task": "ARCHIVE-001",
+      "action": "create",
+      "actor": "codex-ARCHIVE-001-main",
+      "evidence": "docs/collaboration/tasks/ARCHIVE-001.md"
+    },
+    {
+      "at": "2026-11-08T07:52:26.222946+00:00",
+      "task": "ARCHIVE-001",
+      "action": "claim",
+      "actor": "codex-ARCHIVE-001-main",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-08T07:56:46.173696+00:00",
+      "task": "ARCHIVE-001",
+      "action": "submit",
+      "actor": "codex-ARCHIVE-001-main",
+      "evidence": "docs/project/reports/ARCHIVE-001.md"
     }
   ],
   "dispatch_policy": {

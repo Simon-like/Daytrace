@@ -21,8 +21,9 @@ export interface RecordsResult {
   readonly contentRevision: string;
 }
 
-export async function fetchPublicRecords(filters: DiscoveryFilters, signal?: AbortSignal): Promise<RecordsResult> {
+export async function fetchPublicRecords(filters: DiscoveryFilters, signal?: AbortSignal, cursor?: string): Promise<RecordsResult> {
   const params = new URLSearchParams({ limit: "50" });
+  if (cursor !== undefined) params.set("cursor", cursor);
   if (filters.type !== null) params.set("type", filters.type);
   filters.tags.forEach((tag) => params.append("tag", tag));
   let response: Response;

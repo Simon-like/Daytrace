@@ -25,6 +25,7 @@ interface RecordsDiscoveryProps {
   readonly initialContentRevision?: string;
   readonly initialFilters?: DiscoveryFilters;
   readonly availableTags?: readonly string[];
+  readonly tagsComplete?: boolean;
 }
 
 type LoadNavigation = "push" | "none";
@@ -34,6 +35,7 @@ export function RecordsDiscovery({
   initialContentRevision,
   initialFilters = EMPTY_DISCOVERY_FILTERS,
   availableTags,
+  tagsComplete = true,
 }: RecordsDiscoveryProps) {
   const normalizedInitial = normalizeDiscoveryFilters(initialFilters);
   const [snapshot, setSnapshot] = useState<DiscoverySnapshot>({
@@ -43,6 +45,7 @@ export function RecordsDiscovery({
   });
   const [selected, setSelected] = useState<DiscoveryFilters>(normalizedInitial);
   const [status, setStatus] = useState<"loading" | "ready" | "empty" | "error">(initialRecords.items.length === 0 ? "empty" : "ready");
+  const [moreStatus, setMoreStatus] = useState<"idle" | "loading" | "error">("idle");
   const [error, setError] = useState<{ code: string; requestId?: string } | null>(null);
   const snapshotRef = useRef(snapshot);
   const statusRef = useRef(status);
@@ -75,6 +78,7 @@ export function RecordsDiscovery({
     const controller = new AbortController();
     abortRef.current = controller;
     setSelected(normalized);
+    setMoreStatus("idle");
     statusRef.current = "loading";
     setStatus("loading");
     setError(null);
@@ -103,12 +107,33 @@ export function RecordsDiscovery({
       setError(failure);
     }
   }
+  async function loadMore(): Promise<void> {
+    const current = snapshotRef.current;
+    const cursor = current.records.pageInfo.nextCursor;
+    if (!cursor || moreStatus === "loading") return;
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+    setMoreStatus("loading");
+    try {
+      const response = await fetchPublicRecords(current.filters, controller.signal, cursor);
+      if (controller.signal.aborted) return;
+      const next = { ...current, records: { items: [...current.records.items, ...response.data.items], pageInfo: response.data.pageInfo }, contentRevision: response.contentRevision };
+      applySnapshot(next);
+      window.history.replaceState(mergeDiscoveryHistoryState(window.history.state, createDiscoveryEntry(next, window.scrollY)), "", window.location.href);
+      setMoreStatus("idle");
+    } catch {
+      if (!controller.signal.aborted) setMoreStatus("error");
+    }
+  }
   loadRef.current = load;
 
   useEffect(() => {
     const previousRestoration = window.history.scrollRestoration;
     window.history.scrollRestoration = "manual";
     const restore = (): void => {
+      abortRef.current?.abort();
+      setMoreStatus("idle");
       const filters = parseDiscoveryFilters(window.location.search);
       const entry = readDiscoveryEntry(window.history.state?.daytraceDiscovery);
       if (entry !== null && sameDiscoveryFilters(entry.snapshot.filters, filters)) {
@@ -156,8 +181,9 @@ export function RecordsDiscovery({
         onSubmit={() => { savePosition(); void load(selected, "push"); }}
         onClear={() => { savePosition(); void load(EMPTY_DISCOVERY_FILTERS, "push"); }}
       />
+      {!tagsComplete ? <p role="status">部分标签暂时无法读取，刷新页面可重试。</p> : null}
       <p className={styles.summary} aria-live="polite">
-        {status === "loading" ? "正在读取公开记录…" : status === "error" ? "公开记录读取失败" : `${snapshot.records.items.length} 篇公开记录`}
+        {status === "loading" ? "正在读取公开记录…" : status === "error" ? "公开记录读取失败" : `已显示 ${snapshot.records.items.length} 篇公开记录`}
       </p>
       {status === "loading" ? <p className={styles.loading} role="status">筛选条件已保留，正在更新列表。</p> : null}
       {status === "error" ? (
@@ -174,6 +200,7 @@ export function RecordsDiscovery({
           onRecordClick={savePosition}
         />
       ) : null}
+      {(status === "ready" || status === "empty") && snapshot.records.pageInfo.hasMore ? <div><Button type="button" variant="secondary" disabled={moreStatus === "loading"} onClick={() => void loadMore()}>{moreStatus === "loading" ? "正在读取…" : moreStatus === "error" ? "重试加载更多" : "加载更多"}</Button>{moreStatus === "error" ? <p role="alert">加载失败，记录可能已更新。可重试或重新筛选。</p> : null}{moreStatus === "error" ? <Button type="button" variant="ghost" onClick={() => void load(snapshot.filters)}>从头读取</Button> : null}</div> : null}
     </div>
   );
 }

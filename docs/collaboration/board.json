@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-08T08:00:11.323070+00:00",
+  "updated": "2026-11-08T08:02:45.190305+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -931,7 +931,7 @@
     {
       "id": "SEARCH-002",
       "title": "双端搜索结果分页",
-      "status": "review",
+      "status": "done",
       "owner": "codex-SEARCH-002-main",
       "depends_on": [
         "FIND-001",
@@ -949,6 +949,28 @@
       "card": "docs/collaboration/tasks/SEARCH-002.md",
       "evidence": [
         "docs/project/reports/SEARCH-002.md"
+      ],
+      "review": "docs/collaboration/reviews/SEARCH-002-self-review.md",
+      "reviewer": "codex-SEARCH-002-self-review"
+    },
+    {
+      "id": "LOCAL-001",
+      "title": "登录与持久内容贯通验证",
+      "status": "review",
+      "owner": "codex-LOCAL-001-main",
+      "depends_on": [
+        "OWNER-001",
+        "CONTENT-003"
+      ],
+      "allowed_paths": [
+        "tests/integration/access/",
+        "docs/collaboration/",
+        "docs/project/reports/LOCAL-001.md",
+        "docs/superpowers/plans/"
+      ],
+      "card": "docs/collaboration/tasks/LOCAL-001.md",
+      "evidence": [
+        "docs/project/reports/LOCAL-001.md"
       ]
     }
   ],
@@ -1680,6 +1702,34 @@
       "action": "submit",
       "actor": "codex-SEARCH-002-main",
       "evidence": "docs/project/reports/SEARCH-002.md"
+    },
+    {
+      "at": "2026-11-08T08:01:23.273553+00:00",
+      "task": "SEARCH-002",
+      "action": "complete",
+      "actor": "codex-SEARCH-002-self-review",
+      "evidence": "docs/collaboration/reviews/SEARCH-002-self-review.md"
+    },
+    {
+      "at": "2026-11-08T08:01:23.405947+00:00",
+      "task": "LOCAL-001",
+      "action": "create",
+      "actor": "codex-LOCAL-001-main",
+      "evidence": "docs/collaboration/tasks/LOCAL-001.md"
+    },
+    {
+      "at": "2026-11-08T08:01:23.543996+00:00",
+      "task": "LOCAL-001",
+      "action": "claim",
+      "actor": "codex-LOCAL-001-main",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-08T08:02:45.190305+00:00",
+      "task": "LOCAL-001",
+      "action": "submit",
+      "actor": "codex-LOCAL-001-main",
+      "evidence": "docs/project/reports/LOCAL-001.md"
     }
   ],
   "dispatch_policy": {

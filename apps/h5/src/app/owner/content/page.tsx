@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { PublicApiError } from "@daytrace/content/public-api";
-import { ContentManager } from "../../../../../site/src/features/content-management/content-manager";
+import { ContentManager } from "@daytrace/content/management";
 import { ownerApi } from "../../../server/owner-api";
 
 export const dynamic = "force-dynamic";

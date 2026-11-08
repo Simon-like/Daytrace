@@ -11,6 +11,10 @@
 !packages/config/**
 !packages/contracts/
 !packages/contracts/**
+!packages/content/
+!packages/content/**
+!packages/ui/
+!packages/ui/**
 !scripts/
 !scripts/ci/
 !scripts/ci/prepare-standalone.mjs

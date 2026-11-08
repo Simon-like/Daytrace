@@ -3,8 +3,8 @@
 import type { MouseEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 import type { TocItem } from "@daytrace/contracts";
-import { anchorIdFromHash, preferredScrollBehavior, resolveActiveHeadingId } from "./reader-interactions";
-import styles from "./reader.module.css";
+import { anchorIdFromHash, preferredScrollBehavior, resolveActiveHeadingId } from "@daytrace/content/reader-interactions";
+import styles from "@daytrace/content/reader.module.css";
 
 interface TableOfContentsProps {
   readonly items: readonly TocItem[];

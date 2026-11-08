@@ -12,7 +12,7 @@ const evidence = process.env.H5_TEST_EVIDENCE_DIR ?? "docs/project/evidence/MOBI
 await mkdir(evidence, { recursive: true });
 await mkdir(".local/h5-test", { recursive: true });
 const log = await open(".local/h5-test/server.log", "w");
-const managed = spawn(process.execPath, ["scripts/dev/run-dev.mjs", "--port", sitePort, "--h5-port", h5Port], {
+const managed = spawn(process.execPath, ["scripts/dev/run-dev.mjs", "--port", sitePort, "--h5-port", h5Port, "--demo"], {
   env: { ...process.env, API_PORT: apiPort, CONTENT_ROOT: "apps/api/fixtures/demo", DAYTRACE_DEMO: "1", PUBLIC_ORIGIN: base },
   stdio: ["ignore", log.fd, log.fd],
 });
@@ -60,7 +60,7 @@ try {
     assert.equal(await page.evaluate(() => document.body.style.overflow), "hidden");
     await page.getByRole("combobox", { name: "记录类别" }).click();
     await page.getByRole("listbox").getByRole("option", { name: "生活经验" }).click();
-    await page.getByRole("button", { name: /查看 \d+ 篇记录/ }).click();
+    await page.getByRole("button", { name: "查看记录" }).click();
     await page.waitForURL(/type=recipe/);
     await dialog.waitFor({ state: "hidden" });
     assert.notEqual(await page.evaluate(() => document.body.style.overflow), "hidden");
@@ -71,6 +71,7 @@ try {
     await page.goBack();
     await page.waitForLoadState("networkidle");
     assert.match(page.url(), /type=recipe/);
+    await page.waitForFunction(() => document.querySelector(".h5-filter-trigger")?.textContent?.includes("1"));
     assert.match(await page.getByRole("button", { name: /筛选记录/ }).textContent(), /1/);
   });
   await check("sheet Escape, repeated opening and reduced motion are immediate", async () => {
@@ -92,9 +93,13 @@ try {
     await go("/h5/search");
     const input = page.getByRole("searchbox");
     await input.fill("豆腐");
+    await page.getByLabel("搜索记录类型").selectOption("recipe");
     await page.getByRole("button", { name: "搜索", exact: true }).click();
     await page.getByRole("link", { name: "麻婆豆腐：把这次的火候留下来" }).waitFor();
-    assert.match(page.url(), /\/h5\/search\?q=/);
+    assert.match(page.url(), /searchType=recipe/);
+    await page.reload();
+    await page.getByRole("link", { name: "麻婆豆腐：把这次的火候留下来" }).waitFor();
+    assert.equal(await page.getByLabel("搜索记录类型").inputValue(), "recipe");
     await page.getByRole("button", { name: "清除搜索" }).click();
     assert.equal(await input.inputValue(), "");
     await page.getByRole("link", { name: "#豆腐" }).click();
@@ -109,10 +114,16 @@ try {
     await go(recipe);
     assert.ok(!(await page.locator("main").textContent()).includes(secondTitle));
     assert.ok(!(await page.locator("main").innerHTML()).includes(secondId));
-    await go("/h5/owner");
+    await go("/h5/owner/content");
+    await page.waitForURL(/\/h5\/owner\/?$/);
     await page.getByRole("link", { name: "进入演示主人空间" }).click();
     await page.waitForURL(/\/h5\/owner$/);
     await page.getByRole("button", { name: "退出主人空间" }).waitFor();
+    await page.getByRole("link", { name: "打开内容库" }).click();
+    await page.getByRole("heading", { name: /写好的/ }).waitFor();
+    await page.getByRole("searchbox", { name: "找一页" }).fill("阶段提醒");
+    await page.getByRole("link", { name: "写给自己的阶段提醒" }).waitFor();
+    await page.getByRole("link", { name: "← 主人空间" }).click();
     await go(recipe.replace("/h5/records/", "/h5/owner/records/"));
     const comparison = page.getByRole("region", { name: "跨次实践" });
     await comparison.waitFor();
@@ -131,6 +142,8 @@ try {
     await go("/h5/owner");
     const input = page.getByRole("searchbox");
     await input.fill("阶段提醒");
+    await page.getByLabel("搜索记录状态").selectOption("published");
+    await page.getByLabel("搜索公开范围").selectOption("private");
     await page.getByRole("button", { name: "搜索", exact: true }).click();
     const results = page.getByRole("list", { name: "主人搜索结果" });
     await results.getByRole("link", { name: "写给自己的阶段提醒" }).waitFor();

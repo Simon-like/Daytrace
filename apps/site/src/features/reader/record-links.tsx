@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { RecordDetail, RecordSummary } from "@daytrace/contracts";
-import styles from "./reader.module.css";
+import styles from "@daytrace/content/reader.module.css";
 
 function byPracticeDate(a: RecordSummary, b: RecordSummary): number {
   return (a.occurredOn ?? "9999-12-31").localeCompare(b.occurredOn ?? "9999-12-31") || a.id.localeCompare(b.id);

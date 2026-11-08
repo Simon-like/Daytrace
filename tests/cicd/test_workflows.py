@@ -44,7 +44,7 @@ class WorkflowContractTests(unittest.TestCase):
         raw = (WORKFLOWS / "ci.yml").read_text(encoding="utf-8")
         self.assertNotIn("secrets.", raw)
         self.assertNotIn("continue-on-error", raw)
-        for command in ("pnpm lint", "pnpm typecheck", "pnpm test:unit", "pnpm test:integration", "pnpm build", "privacy-check.mjs", "pnpm test:e2e", "pnpm test:h5"):
+        for command in ("pnpm lint", "pnpm typecheck", "pnpm test:unit", "pnpm test:integration", "pnpm test:content", "pnpm build", "privacy-check.mjs", "pnpm test:e2e", "pnpm test:h5"):
             self.assertIn(command, raw)
 
     def test_release_is_main_only_and_uses_immutable_manifest(self) -> None:
@@ -90,6 +90,13 @@ class WorkflowContractTests(unittest.TestCase):
             self.assertNotIn("design/", ignore.replace("!design/", ""))
             self.assertIn("USER node", dockerfile)
             self.assertIn("--frozen-lockfile", dockerfile)
+
+    def test_site_image_includes_shared_frontend_packages(self) -> None:
+        dockerfile = (ROOT / "ops/cicd/docker/site.Dockerfile").read_text(encoding="utf-8")
+        ignore = (ROOT / "ops/cicd/docker/site.Dockerfile.dockerignore").read_text(encoding="utf-8")
+        for package in ("content", "ui"):
+            self.assertIn(f"COPY packages/{package} ./packages/{package}", dockerfile)
+            self.assertIn(f"!packages/{package}/**", ignore)
 
     def test_delivery_shell_scripts_parse(self) -> None:
         scripts = ["remote-deploy.sh", "host-deploy.sh", "container-smoke.sh"]

@@ -1,5 +1,5 @@
 import type { RecordDetail } from "@daytrace/contracts";
-import { RecordBody } from "./record-body";
+import { RecordBody } from "@daytrace/content/record-body";
 import {
   createReaderToc,
   createRecipeQuickLinks,
@@ -8,7 +8,7 @@ import {
 } from "./reader-model";
 import { TableOfContents } from "./table-of-contents";
 import { RecordLinks } from "./record-links";
-import styles from "./reader.module.css";
+import styles from "@daytrace/content/reader.module.css";
 
 export interface ReaderArticleProps {
   readonly record: RecordDetail;

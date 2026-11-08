@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-08T08:21:51.074426+00:00",
+  "updated": "2026-11-08T08:31:46.016388+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -1039,7 +1039,7 @@
     {
       "id": "SEARCH-003",
       "title": "双端搜索筛选设置",
-      "status": "review",
+      "status": "done",
       "owner": "codex-SEARCH-003-main",
       "depends_on": [
         "SEARCH-002",
@@ -1059,6 +1059,40 @@
       "card": "docs/collaboration/tasks/SEARCH-003.md",
       "evidence": [
         "docs/project/reports/SEARCH-003.md"
+      ],
+      "review": "docs/collaboration/reviews/SEARCH-003-self-review.md",
+      "reviewer": "codex-SEARCH-003-self-review"
+    },
+    {
+      "id": "REGRESSION-001",
+      "title": "双端核心回归与 CI",
+      "status": "review",
+      "owner": "codex-REGRESSION-001-main",
+      "depends_on": [
+        "MOBILE-002",
+        "SEARCH-003"
+      ],
+      "allowed_paths": [
+        "tests/e2e/h5/",
+        ".github/workflows/ci.yml",
+        "docs/collaboration/",
+        "docs/project/reports/REGRESSION-001.md",
+        "docs/superpowers/plans/",
+        "tests/cicd/",
+        "apps/site/src/features/content-management/",
+        "apps/site/src/features/reader/",
+        "apps/site/src/app/owner/content/",
+        "apps/h5/src/app/owner/content/",
+        "packages/content/",
+        "pnpm-lock.yaml",
+        "ops/cicd/docker/site.Dockerfile",
+        "ops/cicd/docker/site.Dockerfile.dockerignore",
+        "tests/unit/reader/",
+        "docs/architecture/模块导航.md"
+      ],
+      "card": "docs/collaboration/tasks/REGRESSION-001.md",
+      "evidence": [
+        "docs/project/reports/REGRESSION-001.md"
       ]
     }
   ],
@@ -1902,6 +1936,34 @@
       "action": "submit",
       "actor": "codex-SEARCH-003-main",
       "evidence": "docs/project/reports/SEARCH-003.md"
+    },
+    {
+      "at": "2026-11-08T08:22:39.764326+00:00",
+      "task": "SEARCH-003",
+      "action": "complete",
+      "actor": "codex-SEARCH-003-self-review",
+      "evidence": "docs/collaboration/reviews/SEARCH-003-self-review.md"
+    },
+    {
+      "at": "2026-11-08T08:22:39.872052+00:00",
+      "task": "REGRESSION-001",
+      "action": "create",
+      "actor": "codex-REGRESSION-001-main",
+      "evidence": "docs/collaboration/tasks/REGRESSION-001.md"
+    },
+    {
+      "at": "2026-11-08T08:22:39.977871+00:00",
+      "task": "REGRESSION-001",
+      "action": "claim",
+      "actor": "codex-REGRESSION-001-main",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-08T08:31:46.016388+00:00",
+      "task": "REGRESSION-001",
+      "action": "submit",
+      "actor": "codex-REGRESSION-001-main",
+      "evidence": "docs/project/reports/REGRESSION-001.md"
     }
   ],
   "dispatch_policy": {

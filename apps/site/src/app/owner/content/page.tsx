@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ownerApi } from "../../../server/owner-api";
 import { PublicApiError } from "../../../server/api";
-import { ContentManager } from "../../../features/content-management/content-manager";
+import { ContentManager } from "@daytrace/content/management";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "内容库", robots: { index: false, follow: false } };
 export default async function ContentPage() {

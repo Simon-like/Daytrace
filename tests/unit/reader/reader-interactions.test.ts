@@ -9,7 +9,7 @@ import {
   restoreFocusAndScroll,
   type FocusTarget,
   type ViewportWindow,
-} from "../../../apps/site/src/features/reader/reader-interactions";
+} from "../../../packages/content/src/reader/reader-interactions";
 
 test("anchor IDs support encoded headings and reject malformed hashes", () => {
   assert.equal(anchorIdFromHash("#section-2"), "section-2");

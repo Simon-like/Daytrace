@@ -1,5 +1,5 @@
 export { ReaderArticle, type ReaderArticleProps } from "./reader-article";
-export { RecordBody } from "./record-body";
+export { RecordBody } from "@daytrace/content/record-body";
 export {
   createReaderToc,
   createRecipeQuickLinks,

@@ -4,6 +4,8 @@ RUN npm install --global pnpm@11.23.0
 COPY .npmrc package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY packages/config ./packages/config
 COPY packages/contracts ./packages/contracts
+COPY packages/content ./packages/content
+COPY packages/ui ./packages/ui
 COPY apps/site ./apps/site
 COPY scripts/ci/prepare-standalone.mjs ./scripts/ci/prepare-standalone.mjs
 RUN pnpm install --frozen-lockfile --filter @daytrace/site... \

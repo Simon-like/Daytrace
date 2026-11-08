@@ -8,7 +8,7 @@ import { AppModule } from "./app.module";
 import { ApiErrorFilter } from "./common/api-error.filter";
 import { RequestIdMiddleware } from "./common/request-id.middleware";
 
-export async function createApiApplication(contentRoot: string, logger = false, demoOrigin?: string, auth?: AuthRuntimeOptions): Promise<INestApplication> {
+export async function createApiApplication(contentRoot: string, logger = false, demoOrigin?: string, auth?: AuthRuntimeOptions, demoH5Origin?: string): Promise<INestApplication> {
   if (demoOrigin !== undefined && auth !== undefined) throw new Error("Choose either configured authentication or synthetic demo authentication");
   if (demoOrigin !== undefined) {
     const origin = new URL(demoOrigin);
@@ -17,7 +17,11 @@ export async function createApiApplication(contentRoot: string, logger = false, 
       throw new Error("Demo authentication requires a non-production loopback origin");
     }
   }
-  const app = await NestFactory.create(AppModule.register(contentRoot, demoOrigin, auth), new ExpressAdapter(), {
+  if (demoH5Origin !== undefined) {
+    const origin = new URL(demoH5Origin);
+    if (demoOrigin === undefined || origin.protocol !== "http:" || (!["127.0.0.1", "localhost"].includes(origin.hostname) || origin.hostname !== new URL(demoOrigin).hostname) || origin.username || origin.password || origin.pathname !== "/" || origin.search || origin.hash) throw new Error("Demo H5 origin must be loopback HTTP");
+  }
+  const app = await NestFactory.create(AppModule.register(contentRoot, demoOrigin, auth, demoH5Origin), new ExpressAdapter(), {
     abortOnError: false,
     logger: logger ? ["log", "error", "warn"] as ("log" | "error" | "warn")[] : false,
   });

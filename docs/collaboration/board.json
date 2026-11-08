@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-08T08:02:45.190305+00:00",
+  "updated": "2026-11-08T08:10:14.337473+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -956,7 +956,7 @@
     {
       "id": "LOCAL-001",
       "title": "登录与持久内容贯通验证",
-      "status": "review",
+      "status": "done",
       "owner": "codex-LOCAL-001-main",
       "depends_on": [
         "OWNER-001",
@@ -971,6 +971,38 @@
       "card": "docs/collaboration/tasks/LOCAL-001.md",
       "evidence": [
         "docs/project/reports/LOCAL-001.md"
+      ],
+      "review": "docs/collaboration/reviews/LOCAL-001-self-review.md",
+      "reviewer": "codex-LOCAL-001-self-review"
+    },
+    {
+      "id": "MOBILE-002",
+      "title": "移动内容库入口",
+      "status": "review",
+      "owner": "codex-MOBILE-002-main",
+      "depends_on": [
+        "MOBILE-001",
+        "CONTENT-003",
+        "OWNER-001"
+      ],
+      "allowed_paths": [
+        "apps/h5/src/",
+        "apps/site/src/features/content-management/",
+        "tests/e2e/h5/",
+        "docs/collaboration/",
+        "docs/project/reports/MOBILE-002.md",
+        "docs/superpowers/plans/",
+        "apps/api/src/app.module.ts",
+        "apps/api/src/bootstrap.ts",
+        "apps/api/src/main.ts",
+        "apps/api/src/modules/auth/",
+        "scripts/dev/run-dev.mjs",
+        "tests/integration/demo/",
+        "docs/development/content.md"
+      ],
+      "card": "docs/collaboration/tasks/MOBILE-002.md",
+      "evidence": [
+        "docs/project/reports/MOBILE-002.md"
       ]
     }
   ],
@@ -1730,6 +1762,34 @@
       "action": "submit",
       "actor": "codex-LOCAL-001-main",
       "evidence": "docs/project/reports/LOCAL-001.md"
+    },
+    {
+      "at": "2026-11-08T08:03:46.601068+00:00",
+      "task": "LOCAL-001",
+      "action": "complete",
+      "actor": "codex-LOCAL-001-self-review",
+      "evidence": "docs/collaboration/reviews/LOCAL-001-self-review.md"
+    },
+    {
+      "at": "2026-11-08T08:03:46.701279+00:00",
+      "task": "MOBILE-002",
+      "action": "create",
+      "actor": "codex-MOBILE-002-main",
+      "evidence": "docs/collaboration/tasks/MOBILE-002.md"
+    },
+    {
+      "at": "2026-11-08T08:03:46.805373+00:00",
+      "task": "MOBILE-002",
+      "action": "claim",
+      "actor": "codex-MOBILE-002-main",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-08T08:10:14.337473+00:00",
+      "task": "MOBILE-002",
+      "action": "submit",
+      "actor": "codex-MOBILE-002-main",
+      "evidence": "docs/project/reports/MOBILE-002.md"
     }
   ],
   "dispatch_policy": {

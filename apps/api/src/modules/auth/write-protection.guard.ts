@@ -11,7 +11,7 @@ export const PUBLIC_ORIGIN = "ACCESS_PUBLIC_ORIGIN";
 export class OriginCsrfGuard implements CanActivate {
   constructor(
     @Inject(SessionService) private readonly sessions: SessionService,
-    @Inject(PUBLIC_ORIGIN) private readonly publicOrigin: string,
+    @Inject(PUBLIC_ORIGIN) private readonly allowedOrigins: readonly string[],
   ) {}
 
   canActivate(context: ExecutionContext): boolean {
@@ -20,7 +20,7 @@ export class OriginCsrfGuard implements CanActivate {
     noStore(response);
     const origin = request.headers.origin;
     const fetchSite = request.headers["sec-fetch-site"];
-    if (origin !== this.publicOrigin || fetchSite === "cross-site") throw csrfRejected();
+    if ((typeof origin !== "string" || !this.allowedOrigins.includes(origin)) || fetchSite === "cross-site") throw csrfRejected();
     const body = typeof request.body === "object" && request.body !== null
       ? request.body as Record<string, unknown>
       : {};

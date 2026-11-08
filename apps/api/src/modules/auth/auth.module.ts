@@ -19,6 +19,7 @@ export class AuthModule {
     if (options.environment === "production" && (!options.publicOrigin.startsWith("https:") || options.databasePath === ":memory:")) {
       throw new Error("production authentication requires HTTPS and persistent sessions");
     }
+    if (options.environment !== "test" && options.additionalWriteOrigins?.length) throw new Error("additional write origins are restricted to isolated tests");
     const owners = new OwnerPolicy(options.ownerIdentities);
     const store = new SqliteSessionStore(options.databasePath);
     const sessions = new SessionService(store, owners, {
@@ -35,7 +36,7 @@ export class AuthModule {
         { provide: SqliteSessionStore, useValue: store },
         { provide: SessionService, useValue: sessions },
         { provide: OIDC_PROVIDER, useValue: options.provider },
-        { provide: PUBLIC_ORIGIN, useValue: options.publicOrigin },
+        { provide: PUBLIC_ORIGIN, useValue: [options.publicOrigin, ...(options.additionalWriteOrigins ?? [])] },
         { provide: AUTH_PUBLIC_ORIGIN, useValue: options.publicOrigin },
         OwnerGuard,
         OwnerObjectGuard,

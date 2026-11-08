@@ -44,7 +44,7 @@ const environment = {
   API_INTERNAL_ORIGIN: process.env.API_INTERNAL_ORIGIN ?? `http://127.0.0.1:${apiPort}`,
   H5_INTERNAL_ORIGIN: process.env.H5_INTERNAL_ORIGIN ?? `http://${internalOriginHost}:${h5Port}`,
   CONTENT_ROOT: demo ? "./apps/api/fixtures/demo" : process.env.CONTENT_ROOT ?? "./apps/api/fixtures/content",
-  ...(demo ? { DAYTRACE_DEMO: "1", PUBLIC_ORIGIN: `http://${internalOriginHost}:${sitePort}`, API_HOST: "127.0.0.1" } : {}),
+  ...(demo ? { DAYTRACE_DEMO: "1", PUBLIC_ORIGIN: `http://${internalOriginHost}:${sitePort}`, API_HOST: "127.0.0.1", DEMO_H5_ORIGIN: `http://${internalOriginHost}:${h5Port}` } : {}),
 };
 const children = [];
 function launch(name, args, env = environment, directory = root) {

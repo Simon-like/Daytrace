@@ -15,7 +15,7 @@ async function bootstrap(): Promise<void> {
     ? undefined
     : authOptionsFromEnvironment(process.env, new OpenidAuth0Client());
   const app = await createApiApplication(resolve(process.cwd(), config.contentRoot), true,
-    demo ? process.env.PUBLIC_ORIGIN ?? "http://127.0.0.1:3000" : undefined, auth);
+    demo ? process.env.PUBLIC_ORIGIN ?? "http://127.0.0.1:3000" : undefined, auth, demo ? process.env.DEMO_H5_ORIGIN : undefined);
   await app.listen(config.port, config.host);
 }
 

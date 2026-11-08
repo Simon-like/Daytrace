@@ -19,6 +19,7 @@ export default async function H5OwnerPage({ searchParams }: { readonly searchPar
     {result.data ? <>
       <div className="h5-owner-toolbar"><span><Icon name="lock" size={15} />主人空间</span><OwnerSessionControls /></div>
       {demo ? <p className="h5-owner-note">当前使用隔离的演示身份与示例记录。</p> : null}
+      <Link className="h5-text-link" href="/owner/content">打开内容库 →</Link>
       <OwnerSearch key={typeof q === "string" ? q : ""} initialQuery={typeof q === "string" ? q : ""} />
       <section className="h5-owner-records" aria-label="全部主人记录"><div className="h5-section-title"><h2>全部记录</h2><span>{result.data.items.length} 篇</span></div><MobileRecordList records={result.data.items} hrefPrefix="/owner/records" showState /></section>
     </> : <section className="h5-empty h5-owner-empty"><Icon name="lock" size={31} /><h2>{unavailable ? "暂时无法打开这一页" : "先把门轻轻打开。"}</h2><p>{unavailable ? "主人空间暂时无法读取，请稍后重试。你的记录没有被当作空集合。" : "这里的内容需要主人身份才能查看，不会出现在公开归档或公开搜索中。"}</p>{unavailable ? <Link className="h5-text-link" href="/owner">重新打开主人空间 ↗</Link> : <><a className="h5-owner-login" href="/api/v1/auth/login?returnTo=/h5/owner">{demo ? "进入演示主人空间" : "登录主人空间"} ↗</a>{demo ? <small>演示身份仅在本机演示模式中启用，里面都是示例资料。</small> : null}</>}</section>}

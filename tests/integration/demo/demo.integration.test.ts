@@ -70,3 +70,22 @@ test("private validation failures do not publish private file paths", async () =
     assert.ok(!body.includes("写给自己的阶段提醒"));
   } finally { await failed?.close(); await rm(temporary,{recursive:true,force:true}); }
 });
+
+test("demo accepts only the explicitly configured same-host H5 write origin", async () => {
+  await assert.rejects(createApiApplication(root, false, publicOrigin, undefined, "http://evil.invalid:3002"), /loopback/);
+  await assert.rejects(createApiApplication(root, false, publicOrigin, undefined, "http://localhost:3002"), /loopback/);
+  const demoH5 = await createApiApplication(root, false, publicOrigin, undefined, "http://127.0.0.1:3002");
+  try {
+    await demoH5.listen(0, "127.0.0.1");
+    const url = `http://127.0.0.1:${demoH5.getHttpServer().address().port}/api/v1`;
+    const start = await fetch(`${url}/auth/login`, { redirect: "manual" });
+    const transaction = start.headers.getSetCookie()[0]!.split(";")[0]!;
+    const callback = new URL(start.headers.get("location")!);
+    const finish = await fetch(`${url}/auth/callback${callback.search}`, { redirect: "manual", headers: { cookie: transaction } });
+    const cookie = finish.headers.getSetCookie().find(value => value.startsWith("__Host-daytrace_session=") && !value.includes("Max-Age=0"))!.split(";")[0]!;
+    const csrf = (await (await fetch(`${url}/auth/csrf`, { headers: { cookie } })).json()).csrfToken;
+    const headers = { cookie, "x-csrf-token": csrf };
+    assert.equal((await fetch(`${url}/auth/logout`, { method: "POST", headers: { ...headers, origin: "http://127.0.0.1:3999" } })).status, 403);
+    assert.equal((await fetch(`${url}/auth/logout`, { method: "POST", headers: { ...headers, origin: "http://127.0.0.1:3002" } })).status, 204);
+  } finally { await demoH5.close(); }
+});

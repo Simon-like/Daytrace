@@ -50,6 +50,7 @@ export interface Auth0Configuration {
 export interface AuthRuntimeOptions {
   readonly environment: "test" | "development" | "production";
   readonly publicOrigin: string;
+  readonly additionalWriteOrigins?: readonly string[];
   readonly databasePath: string;
   readonly ownerIdentities: readonly OwnerIdentity[];
   readonly provider: OidcProvider;

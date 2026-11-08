@@ -7,7 +7,7 @@ import { SyntheticOidcProvider, SYNTHETIC_ISSUER } from "./modules/auth/oidc-pro
 
 @Module({})
 export class AppModule {
-  static register(contentRoot: string, demoOrigin?: string, auth?: AuthRuntimeOptions): DynamicModule {
+  static register(contentRoot: string, demoOrigin?: string, auth?: AuthRuntimeOptions, demoH5Origin?: string): DynamicModule {
     const ownerAccess = demoOrigin !== undefined || auth !== undefined;
     return {
       module: AppModule,
@@ -15,6 +15,7 @@ export class AppModule {
         ...(auth ? [AuthModule.register(auth)] : []),
         ...(demoOrigin === undefined ? [] : [AuthModule.register({
           environment: "test", publicOrigin: demoOrigin, databasePath: ":memory:",
+          ...(demoH5Origin ? { additionalWriteOrigins: [demoH5Origin] } : {}),
           ownerIdentities: [{ issuer: SYNTHETIC_ISSUER, subject: "owner" }],
           provider: new SyntheticOidcProvider(),
         })]),

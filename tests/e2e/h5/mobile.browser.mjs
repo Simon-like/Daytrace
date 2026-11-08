@@ -74,6 +74,49 @@ try {
     await page.waitForFunction(() => document.querySelector(".h5-filter-trigger")?.textContent?.includes("1"));
     assert.match(await page.getByRole("button", { name: /筛选记录/ }).textContent(), /1/);
   });
+  await check("archive restores loaded pages and position after reading", async () => {
+    const payload = await (await context.request.get(`${base}/api/v1/records?limit=50`)).json();
+    const original = payload.data.items[0];
+    assert.ok(original);
+    const records = Array.from({ length: 55 }, (_, index) => ({
+      ...original,
+      id: index === 54 ? original.id : `rec_44444444-4444-4444-8444-${String(index).padStart(12, "0")}`,
+      title: `合成历史记录 ${String(index).padStart(2, "0")}`,
+      slug: `history-test-${index}`,
+      oldSlugs: [],
+      tags: ["历史测试"],
+    }));
+    const handler = async route => {
+      const query = new URL(route.request().url()).searchParams;
+      if (!query.getAll("tag").includes("历史测试")) return route.continue();
+      const next = query.has("cursor");
+      await route.fulfill({ json: { ...payload, data: { items: next ? records.slice(50) : records.slice(0, 50), pageInfo: { hasMore: !next, nextCursor: next ? null : "synthetic-next" } } } });
+    };
+    await page.route("**/api/v1/records?**", handler);
+    try {
+      await go("/h5/archive?tag=历史测试");
+      await page.getByRole("link", { name: "合成历史记录 00" }).waitFor();
+      await page.getByRole("button", { name: "加载更多" }).click();
+      const last = page.getByRole("link", { name: "合成历史记录 54" });
+      await last.waitFor(); await last.scrollIntoViewIfNeeded();
+      const position = await page.evaluate(() => window.scrollY);
+      assert.ok(position > 500);
+      await last.click();
+      await page.waitForURL(/\/h5\/records\/rec_/);
+      await page.goBack();
+      await page.getByRole("link", { name: "合成历史记录 54" }).waitFor();
+      await page.waitForFunction(y => Math.abs(window.scrollY - y) < 100, position);
+      assert.match(page.url(), /tag=/);
+      await page.evaluate(() => {
+        const state = window.history.state;
+        state.daytraceH5Archive.snapshot.records.items[0].visibility = "private";
+        window.history.replaceState(state, "", window.location.href);
+      });
+      await page.reload();
+      await page.getByRole("link", { name: "合成历史记录 00" }).waitFor();
+      assert.equal(await page.getByRole("link", { name: "合成历史记录 54" }).count(), 0);
+    } finally { await page.unroute("**/api/v1/records?**", handler); }
+  });
   await check("sheet Escape, repeated opening and reduced motion are immediate", async () => {
     await go("/h5/archive");
     const trigger = page.getByRole("button", { name: /筛选记录/ });

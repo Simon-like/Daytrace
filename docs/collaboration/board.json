@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-08T08:31:46.016388+00:00",
+  "updated": "2026-11-08T08:39:12.602107+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -1066,7 +1066,7 @@
     {
       "id": "REGRESSION-001",
       "title": "双端核心回归与 CI",
-      "status": "review",
+      "status": "done",
       "owner": "codex-REGRESSION-001-main",
       "depends_on": [
         "MOBILE-002",
@@ -1093,6 +1093,30 @@
       "card": "docs/collaboration/tasks/REGRESSION-001.md",
       "evidence": [
         "docs/project/reports/REGRESSION-001.md"
+      ],
+      "review": "docs/collaboration/reviews/REGRESSION-001-self-review.md",
+      "reviewer": "codex-REGRESSION-001-self-review"
+    },
+    {
+      "id": "ARCHIVE-003",
+      "title": "H5 归档返回恢复",
+      "status": "review",
+      "owner": "codex-ARCHIVE-003-main",
+      "depends_on": [
+        "ARCHIVE-001",
+        "MOBILE-001"
+      ],
+      "allowed_paths": [
+        "apps/h5/src/components/mobile-archive.tsx",
+        "tests/unit/find/",
+        "tests/e2e/h5/",
+        "docs/collaboration/",
+        "docs/project/reports/ARCHIVE-003.md",
+        "docs/superpowers/plans/"
+      ],
+      "card": "docs/collaboration/tasks/ARCHIVE-003.md",
+      "evidence": [
+        "docs/project/reports/ARCHIVE-003.md"
       ]
     }
   ],
@@ -1964,6 +1988,34 @@
       "action": "submit",
       "actor": "codex-REGRESSION-001-main",
       "evidence": "docs/project/reports/REGRESSION-001.md"
+    },
+    {
+      "at": "2026-11-08T08:34:32.591456+00:00",
+      "task": "REGRESSION-001",
+      "action": "complete",
+      "actor": "codex-REGRESSION-001-self-review",
+      "evidence": "docs/collaboration/reviews/REGRESSION-001-self-review.md"
+    },
+    {
+      "at": "2026-11-08T08:34:32.689879+00:00",
+      "task": "ARCHIVE-003",
+      "action": "create",
+      "actor": "codex-ARCHIVE-003-main",
+      "evidence": "docs/collaboration/tasks/ARCHIVE-003.md"
+    },
+    {
+      "at": "2026-11-08T08:34:32.788492+00:00",
+      "task": "ARCHIVE-003",
+      "action": "claim",
+      "actor": "codex-ARCHIVE-003-main",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-08T08:39:12.602107+00:00",
+      "task": "ARCHIVE-003",
+      "action": "submit",
+      "actor": "codex-ARCHIVE-003-main",
+      "evidence": "docs/project/reports/ARCHIVE-003.md"
     }
   ],
   "dispatch_policy": {

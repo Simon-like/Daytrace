@@ -13,6 +13,7 @@ export interface SearchState {
   readonly contentRevision: string | null;
   readonly error: SearchFailure | null;
   readonly attempt: number;
+  readonly moreStatus: "idle" | "loading" | "error";
 }
 
 export const initialSearchState: SearchState = {
@@ -22,12 +23,16 @@ export const initialSearchState: SearchState = {
   contentRevision: null,
   error: null,
   attempt: 0,
+  moreStatus: "idle",
 };
 
 export type SearchAction =
   | { type: "start"; query: string }
   | { type: "success"; attempt: number; result: PublicSearchData; contentRevision: string }
   | { type: "failure"; attempt: number; error: SearchFailure }
+  | { type: "more-start"; attempt: number }
+  | { type: "more-success"; attempt: number; result: PublicSearchData; contentRevision: string }
+  | { type: "more-failure"; attempt: number; error: SearchFailure }
   | { type: "clear" };
 
 export function searchReducer(state: SearchState, action: SearchAction): SearchState {
@@ -35,7 +40,7 @@ export function searchReducer(state: SearchState, action: SearchAction): SearchS
     case "start": {
       const query = action.query.trim();
       if (query.length === 0) return { ...initialSearchState, attempt: state.attempt + 1 };
-      return { query, status: "loading", result: null, contentRevision: null, error: null, attempt: state.attempt + 1 };
+      return { query, status: "loading", result: null, contentRevision: null, error: null, attempt: state.attempt + 1, moreStatus: "idle" };
     }
     case "success":
       if (action.attempt !== state.attempt) return state;
@@ -49,6 +54,16 @@ export function searchReducer(state: SearchState, action: SearchAction): SearchS
     case "failure":
       if (action.attempt !== state.attempt) return state;
       return { ...state, status: "error", result: null, contentRevision: null, error: action.error };
+    case "more-start":
+      if (action.attempt !== state.attempt || state.status !== "results" || !state.result?.pageInfo.nextCursor || state.moreStatus === "loading") return state;
+      return { ...state, moreStatus: "loading", error: null };
+    case "more-success":
+      if (action.attempt !== state.attempt || state.moreStatus !== "loading" || !state.result) return state;
+      return { ...state, result: { items: [...state.result.items, ...action.result.items], pageInfo: action.result.pageInfo }, contentRevision: action.contentRevision, moreStatus: "idle" };
+    case "more-failure":
+      if (action.attempt !== state.attempt || state.moreStatus !== "loading") return state;
+      if (action.error.code === "AUTH_REQUIRED") return { ...state, status: "error", result: null, contentRevision: null, error: action.error, moreStatus: "idle" };
+      return { ...state, moreStatus: "error", error: action.error };
     case "clear":
       return { ...initialSearchState, attempt: state.attempt + 1 };
   }

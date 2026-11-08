@@ -15,9 +15,10 @@ export async function fetchPublicSearch(query: string, signal?: AbortSignal): Pr
   return fetchSearch(query, "public", signal);
 }
 
-export async function fetchSearch(query: string, scope: SearchScope, signal?: AbortSignal): Promise<PublicSearchResponse> {
+export async function fetchSearch(query: string, scope: SearchScope, signal?: AbortSignal, cursor?: string): Promise<PublicSearchResponse> {
   const params = new URLSearchParams({ q: query.trim(), limit: "20" });
   if (scope === "owner") params.set("scope", "owner");
+  if (cursor !== undefined) params.set("cursor", cursor);
   let response: Response;
   try {
     response = await fetch(`/api/v1/search?${params.toString()}`, {

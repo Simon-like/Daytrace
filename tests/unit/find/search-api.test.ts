@@ -58,3 +58,14 @@ test("owner session expiry is a distinct AUTH_REQUIRED failure", async (context)
     return true;
   });
 });
+
+test("search pagination preserves scope, query and cursor", async (context) => {
+  let url = "";
+  context.mock.method(globalThis, "fetch", async (input: string | URL | Request) => { url = String(input); return Response.json(emptyResponse); });
+  await fetchSearch("  记录  ", "owner", undefined, "signed+cursor");
+  const params = new URL(url, "http://local").searchParams;
+  assert.equal(params.get("q"), "记录");
+  assert.equal(params.get("scope"), "owner");
+  assert.equal(params.get("limit"), "20");
+  assert.equal(params.get("cursor"), "signed+cursor");
+});

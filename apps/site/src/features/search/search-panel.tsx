@@ -96,6 +96,22 @@ export function SearchPanel({ initialQuery = "", onClose, scope = "public" }: Se
       });
     }
   }
+  async function loadMore(): Promise<void> {
+    const current = stateRef.current;
+    const cursor = current.result?.pageInfo.nextCursor;
+    if (!cursor || current.moreStatus === "loading" || current.status !== "results") return;
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+    dispatch({ type: "more-start", attempt: current.attempt });
+    try {
+      const response = await fetchSearch(current.query, scope, controller.signal, cursor);
+      if (!controller.signal.aborted) dispatch({ type: "more-success", attempt: current.attempt, result: response.data, contentRevision: response.meta.contentRevision });
+    } catch (cause: unknown) {
+      if (controller.signal.aborted || (cause instanceof DOMException && cause.name === "AbortError")) return;
+      dispatch({ type: "more-failure", attempt: current.attempt, error: cause instanceof SearchRequestError ? cause.failure : { code: "API_UNAVAILABLE" } });
+    }
+  }
   runRef.current = run;
 
   useEffect(() => {
@@ -156,7 +172,7 @@ export function SearchPanel({ initialQuery = "", onClose, scope = "public" }: Se
         {state.status === "idle" ? "输入关键词开始查找。" :
           state.status === "loading" ? `正在搜索“${state.query}”…` :
           state.status === "empty" ? `没有找到与“${state.query}”匹配的${owner ? "主人" : "公开"}记录。` :
-          state.status === "results" ? `找到 ${state.result?.items.length ?? 0} 条当前页结果。` :
+          state.status === "results" ? `已显示 ${state.result?.items.length ?? 0} 条结果。` :
           expired ? "主人会话已失效，私密结果已清除。" :
           state.status === "error" ? "搜索服务暂时失败，这不表示没有结果。" : ""}
       </p>
@@ -168,6 +184,10 @@ export function SearchPanel({ initialQuery = "", onClose, scope = "public" }: Se
         </div>
       ) : null}
       {state.status === "results" && state.result !== null ? <SearchResults items={state.result.items} onRecordClick={savePosition} scope={scope} /> : null}
+      {state.status === "results" && state.result?.pageInfo.hasMore ? <div>
+        <Button type="button" variant="secondary" disabled={state.moreStatus === "loading"} onClick={() => void loadMore()}>{state.moreStatus === "loading" ? "正在读取…" : state.moreStatus === "error" ? "重试加载更多" : "加载更多"}</Button>
+        {state.moreStatus === "error" ? <><p role="alert">加载失败，结果可能已更新。</p><Button type="button" variant="ghost" onClick={() => void run(state.query)}>从头搜索</Button></> : null}
+      </div> : null}
     </section>
   );
 }

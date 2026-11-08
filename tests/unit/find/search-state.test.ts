@@ -51,3 +51,22 @@ test("stale responses cannot replace a newer query", () => {
   assert.equal(stale.query, "微前端");
   assert.equal(stale.status, "loading");
 });
+
+test("pagination appends results, rejects stale pages and clears owner results on expiry", () => {
+  const revision = `sha256:${"b".repeat(64)}`;
+  const item = { record: { id: "rec_11111111-1111-4111-8111-000000000001", type: "engineering" as const, title: "记录", slug: "record", oldSlugs: [], occurredOn: null, updatedAt: "2026-11-01T00:00:00Z", revision: 1, tags: [], summary: null, status: "published" as const, visibility: "public" as const }, matches: [] };
+  const start = searchReducer(initialSearchState, { type: "start", query: "记录" });
+  const ready = searchReducer(start, { type: "success", attempt: start.attempt, result: { items: [item], pageInfo: { hasMore: true, nextCursor: "next" } }, contentRevision: revision });
+  const loading = searchReducer(ready, { type: "more-start", attempt: ready.attempt });
+  const appended = searchReducer(loading, { type: "more-success", attempt: ready.attempt, result: { items: [item], pageInfo: { hasMore: false, nextCursor: null } }, contentRevision: revision });
+  assert.equal(appended.result?.items.length, 2);
+  const changed = searchReducer(loading, { type: "start", query: "新查询" });
+  assert.equal(searchReducer(changed, { type: "more-success", attempt: ready.attempt, result: emptyResult, contentRevision: revision }), changed);
+  const expired = searchReducer(loading, { type: "more-failure", attempt: ready.attempt, error: { code: "AUTH_REQUIRED" } });
+  assert.equal(expired.status, "error");
+  assert.equal(expired.result, null);
+  assert.equal(expired.contentRevision, null);
+  const failed = searchReducer(loading, { type: "more-failure", attempt: ready.attempt, error: { code: "API_UNAVAILABLE" } });
+  assert.equal(failed.moreStatus, "error");
+  assert.equal(failed.result?.items.length, 1);
+});

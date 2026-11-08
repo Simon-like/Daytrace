@@ -58,6 +58,22 @@ export function MobileSearch({ initialQuery, scope = "public" }: { readonly init
       dispatch({ type: "failure", attempt, error: error instanceof SearchRequestError ? error.failure : { code: "API_UNAVAILABLE" } });
     }
   }
+  async function loadMore(): Promise<void> {
+    const current = stateRef.current;
+    const cursor = current.result?.pageInfo.nextCursor;
+    if (!cursor || current.moreStatus === "loading" || current.status !== "results") return;
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+    dispatch({ type: "more-start", attempt: current.attempt });
+    try {
+      const response = await fetchSearch(current.query, scope, controller.signal, cursor);
+      if (!controller.signal.aborted) dispatch({ type: "more-success", attempt: current.attempt, result: response.data, contentRevision: response.meta.contentRevision });
+    } catch (cause: unknown) {
+      if (controller.signal.aborted || (cause instanceof DOMException && cause.name === "AbortError")) return;
+      dispatch({ type: "more-failure", attempt: current.attempt, error: cause instanceof SearchRequestError ? cause.failure : { code: "API_UNAVAILABLE" } });
+    }
+  }
   const runRef = useRef(run);
   runRef.current = run;
   useEffect(() => {
@@ -76,8 +92,9 @@ export function MobileSearch({ initialQuery, scope = "public" }: { readonly init
       <p><kbd>Enter</kbd> {owner ? "检索公开、私密与草稿，结果不会进入公开索引。" : "只检索公开记录，私密内容仍留在主人空间。"}</p>
     </form>
     {owner ? null : <nav className="h5-suggestions" aria-label="搜索建议"><span>不妨试试</span>{["微前端", "豆腐", "记录"].map(word => <Link key={word} href={`/search?q=${encodeURIComponent(word)}`} onClick={event => { event.preventDefault(); void run(word); }}>#{word}</Link>)}</nav>}
-    <div className="h5-search-status" aria-live="polite">{state.status === "loading" ? "正在循着这点点线索翻找…" : state.status === "results" ? `找到 ${state.result?.items.length ?? 0} 条相关记录` : state.status === "empty" ? `没有找到相符的${owner ? "主人" : "公开"}记录` : expired ? "主人会话已失效，私密结果已清除" : state.status === "error" ? "搜索暂时不可用" : "从一个词开始就好"}</div>
+    <div className="h5-search-status" aria-live="polite">{state.status === "loading" ? "正在循着这点点线索翻找…" : state.status === "results" ? `已显示 ${state.result?.items.length ?? 0} 条相关记录` : state.status === "empty" ? `没有找到相符的${owner ? "主人" : "公开"}记录` : expired ? "主人会话已失效，私密结果已清除" : state.status === "error" ? "搜索暂时不可用" : "从一个词开始就好"}</div>
     {state.status === "error" ? <div className="h5-error" role="alert"><p>{expired ? "请重新登录后再检索主人记录。" : "服务失败不等于没有结果。"}</p>{expired ? <a className="h5-text-link" href="/api/v1/auth/login?returnTo=/h5/owner">重新登录主人空间 ↗</a> : <Button variant="secondary" onClick={() => void run(state.query, false)}>重新搜索</Button>}</div> : null}
     {state.result ? <ul className="h5-search-results" aria-label={owner ? "主人搜索结果" : "公开搜索结果"}>{state.result.items.map(item => <li key={item.record.id}><article><div className="h5-record-meta"><span>{TYPE_LABELS[item.record.type]}{owner ? ` · ${item.record.status === "draft" ? "草稿" : item.record.visibility === "private" ? "私密" : "公开"}` : ""}</span><time>{item.record.occurredOn ?? "未记日期"}</time></div><h2><Link href={`${owner ? "/owner/records" : "/records"}/${item.record.id}/`}>{item.record.title}</Link></h2>{item.matches.slice(0, 2).map((match, index) => <p className="h5-match" key={`${match.field}-${index}`}><span>{match.field === "title" ? "标题" : match.field === "tag" ? "标签" : "正文"}</span><span><Highlight match={match} /></span></p>)}</article></li>)}</ul> : null}
+    {state.status === "results" && state.result?.pageInfo.hasMore ? <div><Button variant="secondary" disabled={state.moreStatus === "loading"} onClick={() => void loadMore()}>{state.moreStatus === "loading" ? "正在读取…" : state.moreStatus === "error" ? "重试加载更多" : "加载更多"}</Button>{state.moreStatus === "error" ? <><p role="alert">加载失败，结果可能已更新。</p><Button variant="ghost" onClick={() => void run(state.query, false)}>从头搜索</Button></> : null}</div> : null}
   </section>;
 }

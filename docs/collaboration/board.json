@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-08T08:39:12.602107+00:00",
+  "updated": "2026-11-08T08:46:57.841432+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -1100,7 +1100,7 @@
     {
       "id": "ARCHIVE-003",
       "title": "H5 归档返回恢复",
-      "status": "review",
+      "status": "done",
       "owner": "codex-ARCHIVE-003-main",
       "depends_on": [
         "ARCHIVE-001",
@@ -1117,6 +1117,33 @@
       "card": "docs/collaboration/tasks/ARCHIVE-003.md",
       "evidence": [
         "docs/project/reports/ARCHIVE-003.md"
+      ],
+      "review": "docs/collaboration/reviews/ARCHIVE-003-self-review.md",
+      "reviewer": "codex-ARCHIVE-003-self-review"
+    },
+    {
+      "id": "CONTENT-004",
+      "title": "内容库会话失效与预览恢复",
+      "status": "review",
+      "owner": "codex-CONTENT-004-main",
+      "depends_on": [
+        "CONTENT-003",
+        "MOBILE-002"
+      ],
+      "allowed_paths": [
+        "packages/content/src/management/",
+        "tests/unit/find/",
+        "tests/e2e/h5/",
+        "docs/collaboration/",
+        "docs/project/reports/CONTENT-004.md",
+        "docs/superpowers/plans/",
+        "apps/api/src/modules/content-management/",
+        "packages/contracts/src/",
+        "docs/architecture/contracts/"
+      ],
+      "card": "docs/collaboration/tasks/CONTENT-004.md",
+      "evidence": [
+        "docs/project/reports/CONTENT-004.md"
       ]
     }
   ],
@@ -2016,6 +2043,34 @@
       "action": "submit",
       "actor": "codex-ARCHIVE-003-main",
       "evidence": "docs/project/reports/ARCHIVE-003.md"
+    },
+    {
+      "at": "2026-11-08T08:40:23.924420+00:00",
+      "task": "ARCHIVE-003",
+      "action": "complete",
+      "actor": "codex-ARCHIVE-003-self-review",
+      "evidence": "docs/collaboration/reviews/ARCHIVE-003-self-review.md"
+    },
+    {
+      "at": "2026-11-08T08:40:24.019658+00:00",
+      "task": "CONTENT-004",
+      "action": "create",
+      "actor": "codex-CONTENT-004-main",
+      "evidence": "docs/collaboration/tasks/CONTENT-004.md"
+    },
+    {
+      "at": "2026-11-08T08:40:24.117039+00:00",
+      "task": "CONTENT-004",
+      "action": "claim",
+      "actor": "codex-CONTENT-004-main",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-08T08:46:57.841432+00:00",
+      "task": "CONTENT-004",
+      "action": "submit",
+      "actor": "codex-CONTENT-004-main",
+      "evidence": "docs/project/reports/CONTENT-004.md"
     }
   ],
   "dispatch_policy": {

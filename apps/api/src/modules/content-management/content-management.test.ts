@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { after, before, test } from "node:test";
-import { cp, mkdtemp, rm } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { zipSync, unzipSync } from "fflate";
@@ -159,4 +159,23 @@ test("update and export preserve record links while updates remain private draft
   for (const relatedId of linked.metadata.relatedRecords) assert.ok(markdown.includes(relatedId));
   assert.equal(service.content.getOwnerRecord(linked.metadata.id).metadata.status, "draft");
   assert.equal(service.content.getOwnerRecord(linked.metadata.id).metadata.visibility, "private");
+});
+
+
+test("missing import is 404 while invalid IDs and corrupt manifests remain distinct", async () => {
+  const missingId = "11111111-1111-4111-8111-111111111111";
+  const missing = await fetch(`${origin}/owner/imports/${missingId}`, { headers: { cookie } });
+  assert.equal(missing.status, 404);
+  assert.equal((await missing.json()).error.code, "IMPORT_NOT_FOUND");
+  assert.equal((await fetch(`${origin}/owner/imports/invalid`, { headers: { cookie } })).status, 422);
+  const store = new ContentManagementService(app.get(ContentService)).store;
+  const directory = store.path("imports", missingId);
+  await mkdir(directory, { recursive: true });
+  assert.equal((await fetch(`${origin}/owner/imports/${missingId}`, { headers: { cookie } })).status, 500);
+  await writeFile(join(directory, "manifest.json"), "{invalid");
+  const corrupt = await fetch(`${origin}/owner/imports/${missingId}`, { headers: { cookie } });
+  assert.equal(corrupt.status, 500);
+  assert.equal((await corrupt.json()).error.code, "INTERNAL_ERROR");
+  await rm(join(store.root, "imports"), { recursive: true, force: true });
+  assert.equal((await fetch(`${origin}/owner/imports/${missingId}`, { headers: { cookie } })).status, 500);
 });

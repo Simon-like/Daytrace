@@ -170,6 +170,7 @@ slug 与旧链接属于网页路由层：公开 `/records/<slug>/` 可解析到�
 | 403 | `OWNER_REQUIRED` | 已认证身份不是主人；响应不包含记录信息 |
 | 404 | `RECORD_NOT_FOUND` | 记录不存在或当前调用方不可见 |
 | 404 | `ASSET_NOT_FOUND` | 资产不存在、已撤销或当前调用方不可见 |
+| 404 | `IMPORT_NOT_FOUND` | 主人导入预览批次不存在；存储故障不使用此错误 |
 | 409 | `CONTENT_REVISION_CONFLICT` | 后续维护操作要求的内容修订已变化；v1 只读接口不使用 |
 | 503 | `CONTENT_SNAPSHOT_INVALID` | 当前快照未通过协议校验；不能用部分内容或空列表代替 |
 | 503 | `CONTENT_SNAPSHOT_UNAVAILABLE` | 快照存储暂时不可读 |

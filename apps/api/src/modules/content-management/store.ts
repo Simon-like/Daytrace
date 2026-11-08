@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { mkdir, readFile, writeFile, readdir, open, rename, rm } from "node:fs/promises";
+import { mkdir, readFile, writeFile, readdir, open, rename, rm, stat } from "node:fs/promises";
 import { join, dirname } from "node:path";
 import matter from "gray-matter";
 import type { ContentSnapshot, SourceRecord, SourceFrontmatter } from "../content/content.types";
@@ -7,6 +7,7 @@ import { stateRoot, SNAPSHOT_ID, activeContentRoot } from "../content/content.re
 import { loadContentSnapshot } from "../content/content.snapshot";
 import { ContentService } from "../content/content.service";
 import { invalid } from "./files";
+import { ApiError } from "../../common/api-error";
 import { conflict } from "./normalize";
 
 export interface Manifest { id: string; baseRevision: string; ids: string[]; createdAt: string; fingerprint?: string; committed?: string }
@@ -34,8 +35,19 @@ export class ContentStore {
     return join(this.root, kind, id);
   }
   async readManifest(id: string): Promise<Manifest> {
-    try { return JSON.parse(await readFile(join(this.path("imports", id), "manifest.json"), "utf8")) as Manifest; }
-    catch { throw invalid("导入批次不存在，请重新上传"); }
+    const directory = this.path("imports", id);
+    try { return JSON.parse(await readFile(join(directory, "manifest.json"), "utf8")) as Manifest; }
+    catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+      // A missing storage root or manifest may indicate a damaged or unavailable store.
+      // Only an absent batch under an accessible imports directory is a definitive 404.
+      await stat(join(this.root, "imports"));
+      try { await stat(directory); } catch (cause) {
+        if ((cause as NodeJS.ErrnoException).code === "ENOENT") throw new ApiError(404, "IMPORT_NOT_FOUND", "导入批次不存在，请重新上传");
+        throw cause;
+      }
+      throw error;
+    }
   }
   async exclusive<T>(work: () => Promise<T>): Promise<T> {
     await mkdir(this.root, { recursive: true, mode: 0o700 });

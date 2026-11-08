@@ -70,3 +70,15 @@ test("pagination appends results, rejects stale pages and clears owner results o
   assert.equal(failed.moreStatus, "error");
   assert.equal(failed.result?.items.length, 1);
 });
+
+test("search filters round-trip through history and discard invalid or owner-only public values", async () => {
+  const { parseSearchFilters } = await import("../../../packages/content/src/search-state");
+  const filters = { type: "recipe" as const, status: "draft" as const, visibility: "private" as const };
+  const url = createSearchUrl("/owner", "?keep=1&cursor=old", "记录", filters, true);
+  assert.equal(url, "/owner?keep=1&searchType=recipe&searchStatus=draft&searchVisibility=private&q=%E8%AE%B0%E5%BD%95");
+  assert.deepEqual(parseSearchFilters(url.split("?")[1]!, true), filters);
+  assert.deepEqual(parseSearchFilters(url.split("?")[1]!, false), { type: "recipe", status: null, visibility: null });
+  assert.deepEqual(parseSearchFilters("?searchType=invalid&searchStatus=invalid&searchVisibility=invalid", true), { type: null, status: null, visibility: null });
+  const state = searchReducer(initialSearchState, { type: "start", query: "记录", filters });
+  assert.deepEqual(state.filters, filters);
+});

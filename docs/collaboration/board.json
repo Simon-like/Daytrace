@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-08T08:15:41.733871+00:00",
+  "updated": "2026-11-08T08:21:51.074426+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -1010,7 +1010,7 @@
     {
       "id": "ARCHIVE-002",
       "title": "公开标签聚合",
-      "status": "review",
+      "status": "done",
       "owner": "codex-ARCHIVE-002-main",
       "depends_on": [
         "ARCHIVE-001"
@@ -1032,6 +1032,33 @@
       "card": "docs/collaboration/tasks/ARCHIVE-002.md",
       "evidence": [
         "docs/project/reports/ARCHIVE-002.md"
+      ],
+      "review": "docs/collaboration/reviews/ARCHIVE-002-self-review.md",
+      "reviewer": "codex-ARCHIVE-002-self-review"
+    },
+    {
+      "id": "SEARCH-003",
+      "title": "双端搜索筛选设置",
+      "status": "review",
+      "owner": "codex-SEARCH-003-main",
+      "depends_on": [
+        "SEARCH-002",
+        "OWNER-001"
+      ],
+      "allowed_paths": [
+        "apps/site/src/features/search/",
+        "apps/h5/src/components/mobile-search.tsx",
+        "apps/h5/src/app/globals.css",
+        "packages/content/src/",
+        "tests/unit/find/",
+        "tests/e2e/find/",
+        "docs/collaboration/",
+        "docs/project/reports/SEARCH-003.md",
+        "docs/superpowers/plans/"
+      ],
+      "card": "docs/collaboration/tasks/SEARCH-003.md",
+      "evidence": [
+        "docs/project/reports/SEARCH-003.md"
       ]
     }
   ],
@@ -1847,6 +1874,34 @@
       "action": "submit",
       "actor": "codex-ARCHIVE-002-main",
       "evidence": "docs/project/reports/ARCHIVE-002.md"
+    },
+    {
+      "at": "2026-11-08T08:16:33.615576+00:00",
+      "task": "ARCHIVE-002",
+      "action": "complete",
+      "actor": "codex-ARCHIVE-002-self-review",
+      "evidence": "docs/collaboration/reviews/ARCHIVE-002-self-review.md"
+    },
+    {
+      "at": "2026-11-08T08:16:33.713254+00:00",
+      "task": "SEARCH-003",
+      "action": "create",
+      "actor": "codex-SEARCH-003-main",
+      "evidence": "docs/collaboration/tasks/SEARCH-003.md"
+    },
+    {
+      "at": "2026-11-08T08:16:33.812691+00:00",
+      "task": "SEARCH-003",
+      "action": "claim",
+      "actor": "codex-SEARCH-003-main",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-08T08:21:51.074426+00:00",
+      "task": "SEARCH-003",
+      "action": "submit",
+      "actor": "codex-SEARCH-003-main",
+      "evidence": "docs/project/reports/SEARCH-003.md"
     }
   ],
   "dispatch_policy": {

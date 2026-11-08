@@ -69,3 +69,15 @@ test("search pagination preserves scope, query and cursor", async (context) => {
   assert.equal(params.get("limit"), "20");
   assert.equal(params.get("cursor"), "signed+cursor");
 });
+
+test("search filters bind pagination and public scope excludes owner-only parameters", async (context) => {
+  const urls: string[] = [];
+  context.mock.method(globalThis, "fetch", async (input: string | URL | Request) => { urls.push(String(input)); return Response.json(emptyResponse); });
+  const filters = { type: "recipe" as const, status: "draft" as const, visibility: "private" as const };
+  await fetchSearch("记录", "owner", undefined, "cursor", filters);
+  await fetchSearch("记录", "public", undefined, "cursor", filters);
+  const owner = new URL(urls[0]!, "http://local").searchParams;
+  assert.equal(owner.get("type"), "recipe"); assert.equal(owner.get("status"), "draft"); assert.equal(owner.get("visibility"), "private"); assert.equal(owner.get("cursor"), "cursor");
+  const publicQuery = new URL(urls[1]!, "http://local").searchParams;
+  assert.equal(publicQuery.get("type"), "recipe"); assert.equal(publicQuery.get("status"), null); assert.equal(publicQuery.get("visibility"), null);
+});

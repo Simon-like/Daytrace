@@ -105,3 +105,7 @@
   .form { gap: 6px; padding: 5px; border-radius: 16px; }
   .form > button { min-width: 92px; padding-inline: 12px; }
 }
+
+.filters { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; }
+.filters label { display: grid; gap: 4px; color: var(--muted); font-size: 12px; }
+.filters select { min-height: 44px; padding: 8px 32px 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper); color: var(--ink); font: inherit; font-size: 14px; }

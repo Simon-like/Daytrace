@@ -1,6 +1,6 @@
 import { parseApiErrorResponse } from "@daytrace/contracts";
 import { parseOwnerSearchResponse, parsePublicSearchResponse, type PublicSearchResponse } from "./search-contract";
-import type { SearchFailure } from "./search-state";
+import { EMPTY_SEARCH_FILTERS, normalizeSearchFilters, type SearchFailure, type SearchFilters } from "./search-state";
 
 export class SearchRequestError extends Error {
   constructor(readonly failure: SearchFailure) {
@@ -15,10 +15,14 @@ export async function fetchPublicSearch(query: string, signal?: AbortSignal): Pr
   return fetchSearch(query, "public", signal);
 }
 
-export async function fetchSearch(query: string, scope: SearchScope, signal?: AbortSignal, cursor?: string): Promise<PublicSearchResponse> {
+export async function fetchSearch(query: string, scope: SearchScope, signal?: AbortSignal, cursor?: string, filters: SearchFilters = EMPTY_SEARCH_FILTERS): Promise<PublicSearchResponse> {
   const params = new URLSearchParams({ q: query.trim(), limit: "20" });
   if (scope === "owner") params.set("scope", "owner");
   if (cursor !== undefined) params.set("cursor", cursor);
+  const normalized = normalizeSearchFilters(filters, scope === "owner");
+  if (normalized.type) params.set("type", normalized.type);
+  if (normalized.status) params.set("status", normalized.status);
+  if (normalized.visibility) params.set("visibility", normalized.visibility);
   let response: Response;
   try {
     response = await fetch(`/api/v1/search?${params.toString()}`, {

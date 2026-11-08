@@ -82,3 +82,11 @@ test("compatible additive response fields remain readable", () => {
   };
   assert.equal(parseRecordListResponse(withFutureField).data.items.length, 1);
 });
+
+test("public tag response validates its envelope and tag values", async () => {
+  const { parsePublicTagsResponse } = await import("./index");
+  const payload = { schemaVersion: "1.0", data: { tags: ["公开标签"] }, meta: { requestId: "request-001", contentRevision: `sha256:${"a".repeat(64)}` } };
+  assert.deepEqual(parsePublicTagsResponse(payload), payload);
+  assert.throws(() => parsePublicTagsResponse({ ...payload, data: { tags: [""] } }));
+  assert.throws(() => parsePublicTagsResponse({ ...payload, meta: { ...payload.meta, contentRevision: "invalid" } }));
+});

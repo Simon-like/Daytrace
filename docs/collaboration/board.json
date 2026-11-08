@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-11-08T08:10:14.337473+00:00",
+  "updated": "2026-11-08T08:15:41.733871+00:00",
   "tasks": [
     {
       "id": "FOUND-001",
@@ -978,7 +978,7 @@
     {
       "id": "MOBILE-002",
       "title": "移动内容库入口",
-      "status": "review",
+      "status": "done",
       "owner": "codex-MOBILE-002-main",
       "depends_on": [
         "MOBILE-001",
@@ -1003,6 +1003,35 @@
       "card": "docs/collaboration/tasks/MOBILE-002.md",
       "evidence": [
         "docs/project/reports/MOBILE-002.md"
+      ],
+      "review": "docs/collaboration/reviews/MOBILE-002-self-review.md",
+      "reviewer": "codex-MOBILE-002-self-review"
+    },
+    {
+      "id": "ARCHIVE-002",
+      "title": "公开标签聚合",
+      "status": "review",
+      "owner": "codex-ARCHIVE-002-main",
+      "depends_on": [
+        "ARCHIVE-001"
+      ],
+      "allowed_paths": [
+        "apps/api/src/modules/content/",
+        "apps/site/src/app/archive/",
+        "apps/h5/src/app/archive/",
+        "packages/content/src/",
+        "packages/contracts/src/",
+        "tests/integration/",
+        "tests/unit/find/",
+        "docs/architecture/contracts/",
+        "docs/collaboration/",
+        "docs/project/reports/ARCHIVE-002.md",
+        "docs/superpowers/plans/",
+        "apps/site/src/app/api/v1/"
+      ],
+      "card": "docs/collaboration/tasks/ARCHIVE-002.md",
+      "evidence": [
+        "docs/project/reports/ARCHIVE-002.md"
       ]
     }
   ],
@@ -1790,6 +1819,34 @@
       "action": "submit",
       "actor": "codex-MOBILE-002-main",
       "evidence": "docs/project/reports/MOBILE-002.md"
+    },
+    {
+      "at": "2026-11-08T08:11:07.388909+00:00",
+      "task": "MOBILE-002",
+      "action": "complete",
+      "actor": "codex-MOBILE-002-self-review",
+      "evidence": "docs/collaboration/reviews/MOBILE-002-self-review.md"
+    },
+    {
+      "at": "2026-11-08T08:11:07.494882+00:00",
+      "task": "ARCHIVE-002",
+      "action": "create",
+      "actor": "codex-ARCHIVE-002-main",
+      "evidence": "docs/collaboration/tasks/ARCHIVE-002.md"
+    },
+    {
+      "at": "2026-11-08T08:11:07.601508+00:00",
+      "task": "ARCHIVE-002",
+      "action": "claim",
+      "actor": "codex-ARCHIVE-002-main",
+      "evidence": null
+    },
+    {
+      "at": "2026-11-08T08:15:41.733871+00:00",
+      "task": "ARCHIVE-002",
+      "action": "submit",
+      "actor": "codex-ARCHIVE-002-main",
+      "evidence": "docs/project/reports/ARCHIVE-002.md"
     }
   ],
   "dispatch_policy": {

@@ -291,6 +291,12 @@ function parseListResponse(value: unknown, parseSummary: RecordSummaryParser): R
   };
 }
 
+export function parsePublicTagsResponse(value: unknown): ApiSuccess<{ readonly tags: readonly string[] }> {
+  const envelope = success(value);
+  const data = object(envelope.data, "TAGS_DATA");
+  return { schemaVersion: API_SCHEMA_VERSION, data: { tags: strings(data.tags, "TAG") }, meta: parseMeta(envelope.meta) };
+}
+
 export function parseRecordListResponse(value: unknown): RecordListResponse {
   return parseListResponse(value, parsePublicRecordSummary);
 }

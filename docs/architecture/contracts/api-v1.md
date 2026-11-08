@@ -110,6 +110,10 @@
 
 真正无结果时 `items: []` 且 HTTP 200。内容快照损坏、校验失败或不可读取时必须返回 `CONTENT_SNAPSHOT_INVALID` / `CONTENT_SNAPSHOT_UNAVAILABLE`，绝不能以空数组代替错误。
 
+### 公开标签
+
+`GET /records/tags` 返回 `data: { "tags": ["标签"] }`，标签从当前 published + public 快照汇总、去重并排序，不受 Cookie 或主人身份影响；空集合为 `[]`。`meta.contentRevision` 使用公开快照修订，快照不可用时返回错误而非空集合。
+
 ## 4. 详情与旧链接
 
 `GET /records/{recordId}?scope=public|owner`

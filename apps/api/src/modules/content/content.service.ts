@@ -26,6 +26,7 @@ export class ContentService implements OnModuleInit {
   private snapshot: ContentSnapshot | undefined;
   private failure: ApiError | undefined;
   private publicAliases = new Map<string, SourceRecord>();
+  private publicTags: readonly string[] = [];
   private readonly cursorKey = randomBytes(32);
 
   constructor(readonly contentRoot: string) {}
@@ -54,6 +55,7 @@ export class ContentService implements OnModuleInit {
   installSnapshot(candidate: ContentSnapshot): void {
     this.snapshot = candidate;
     this.failure = undefined;
+    this.publicTags = [...new Set(candidate.publicRecords.flatMap(record => record.metadata.tags))].sort();
     this.publicAliases = new Map(candidate.publicRecords.flatMap(record =>
       [record.metadata.slug, ...record.metadata.oldSlugs].map(alias => [alias, record] as const)));
   }
@@ -93,6 +95,11 @@ export class ContentService implements OnModuleInit {
       hasMore,
       nextCursor: hasMore ? this.encodeCursor(snapshot.publicContentRevision, fingerprint, offset + query.limit) : null,
     };
+  }
+
+  listPublicTags(): readonly string[] {
+    this.current();
+    return this.publicTags;
   }
 
   resolvePublicAlias(alias: string): RecordSummary {

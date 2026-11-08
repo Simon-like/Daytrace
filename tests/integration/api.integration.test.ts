@@ -1,14 +1,16 @@
 import assert from "node:assert/strict";
-import { cp, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { after, before, test } from "node:test";
 import type { INestApplication } from "@nestjs/common";
 import {
   parseApiErrorResponse,
+  parsePublicTagsResponse,
   parseRecordDetailResponse,
   parseRecordListResponse,
 } from "@daytrace/contracts";
+import { ContentService } from "../../apps/api/src/modules/content/content.service";
 import { createApiApplication } from "../../apps/api/src/bootstrap";
 
 const fixtureRoot = resolve(process.cwd(), "apps/api/fixtures/content");
@@ -94,6 +96,9 @@ test("invalid public snapshot returns located 503 errors, never an empty list", 
     assert.equal(response.status, 503);
     assert.equal(response.headers.get("cache-control"), "no-store");
     const payload = parseApiErrorResponse(await response.json());
+    const tagFailure = await fetch(`http://127.0.0.1:${address.port}/api/v1/records/tags`);
+    assert.equal(tagFailure.status, 503);
+    assert.equal(parseApiErrorResponse(await tagFailure.json()).error.code, "CONTENT_SNAPSHOT_INVALID");
     assert.equal(payload.error.code, "CONTENT_SNAPSHOT_INVALID");
     assert.equal(response.headers.get("x-request-id"), payload.error.requestId);
     assert.ok(payload.error.details.some((detail) =>
@@ -108,4 +113,34 @@ test("invalid public snapshot returns located 503 errors, never an empty list", 
     await brokenApp?.close();
     await rm(temporary, { recursive: true, force: true });
   }
+});
+
+test("tag aggregation includes later public records, excludes private and draft tags, and tracks snapshot updates", async () => {
+  const temporary = await mkdtemp(join(tmpdir(), "daytrace-public-tags-"));
+  let tagsApp: INestApplication | undefined;
+  try {
+    for (const group of ["public", "private"]) await mkdir(join(temporary, group));
+    const source = (i: number, tag: string, status = "published", visibility = "public") => `---\nschemaVersion: 1\nid: rec_11111111-1111-4111-8111-${String(i).padStart(12, "0")}\ntype: engineering\ntitle: 合成 ${i}\nslug: synthetic-${i}\noldSlugs: []\noccurredOn: 2026-01-01\nupdatedAt: "2026-01-01T00:00:00.000Z"\nrevision: 1\ntags: ${tag ? `[${tag}]` : "[]"}\nsummary: null\nstatus: ${status}\nvisibility: ${visibility}\nattachments: []\n---\n\n合成内容。\n`;
+    for (let i = 0; i < 55; i++) {
+      const dir = join(temporary, "public", `record-${i}`); await mkdir(dir);
+      await writeFile(join(dir, "index.md"), source(i, i === 54 ? "末页标签" : ""));
+    }
+    for (const [group, id, tag, status, visibility] of [["private", 100, "私密标签", "published", "private"], ["public", 101, "草稿标签", "draft", "private"]] as const) {
+      const dir = join(temporary, group, `record-${id}`); await mkdir(dir); await writeFile(join(dir, "index.md"), source(id, tag, status, visibility));
+    }
+    tagsApp = await createApiApplication(temporary); await tagsApp.listen(0, "127.0.0.1");
+    const url = `http://127.0.0.1:${tagsApp.getHttpServer().address().port}/api/v1/records/tags`;
+    const firstResponse = await fetch(url, { headers: { cookie: "__Host-daytrace_session=irrelevant" } });
+    assert.equal(firstResponse.status, 200);
+    const first = parsePublicTagsResponse(await firstResponse.json());
+    assert.deepEqual(first.data.tags, ["末页标签"]);
+    await writeFile(join(temporary, "public/record-54/index.md"), source(54, "更新标签"));
+    await tagsApp.get(ContentService).initialize();
+    const next = parsePublicTagsResponse(await (await fetch(url)).json());
+    assert.deepEqual(next.data.tags, ["更新标签"]);
+    assert.notEqual(next.meta.contentRevision, first.meta.contentRevision);
+    await writeFile(join(temporary, "public/record-54/index.md"), source(54, ""));
+    await tagsApp.get(ContentService).initialize();
+    assert.deepEqual(parsePublicTagsResponse(await (await fetch(url)).json()).data.tags, []);
+  } finally { await tagsApp?.close(); await rm(temporary, { recursive: true, force: true }); }
 });

@@ -2,7 +2,7 @@ import { parseSiteRuntimeConfig } from "@daytrace/config";
 
 export const dynamic = "force-dynamic";
 const ownerEndpoint = /^owner\/(?:content(?:\/rec_[0-9a-f-]{36}(?:\/(?:history|export))?)?|imports(?:\/[0-9a-f-]{36}(?:\/(?:commit|discard|assets\/ast_[0-9a-f-]{36}))?)?)$/;
-const allowed = /^(?:records(?:\/rec_[0-9a-f-]{36}|\/resolve\/[a-z0-9-]{1,80})?|search|assets\/ast_[0-9a-f-]{36}|auth\/(?:login|callback|session|csrf|logout|revoke-all)|health\/(?:live|ready))$/;
+const allowed = /^(?:records(?:\/tags|\/rec_[0-9a-f-]{36}|\/resolve\/[a-z0-9-]{1,80})?|search|assets\/ast_[0-9a-f-]{36}|auth\/(?:login|callback|session|csrf|logout|revoke-all)|health\/(?:live|ready))$/;
 
 async function proxy(request: Request, context: { params: Promise<{ path: string[] }> }) {
   const { path } = await context.params;

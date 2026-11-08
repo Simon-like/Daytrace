@@ -2,6 +2,7 @@ import { parseSiteRuntimeConfig } from "@daytrace/config";
 import {
   isRecordId,
   parseApiErrorResponse,
+  parsePublicTagsResponse,
   parseRecordDetailResponse,
   parseRecordListResponse,
   parsePublicRecordSummary,
@@ -64,6 +65,13 @@ export async function getPublicRecords(cursor?: string, limit?: number): Promise
   } catch {
     throw new PublicApiError(502, "CONTRACT_INVALID");
   }
+}
+
+export async function getPublicTags(): Promise<readonly string[]> {
+  const response = await request("/api/v1/records/tags");
+  if (!response.ok) throw await readError(response);
+  try { return parsePublicTagsResponse(await response.json()).data.tags; }
+  catch { throw new PublicApiError(502, "CONTRACT_INVALID"); }
 }
 
 export async function getAllPublicRecords(
